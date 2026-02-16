@@ -1,0 +1,26 @@
+const Footer = () => {
+  return (
+    <footer className="bg-secondary text-secondary-foreground mt-auto">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-center md:text-left">
+            <h3 className="font-display text-lg font-bold">Beyond Chalk & Talk</h3>
+            <p className="text-sm opacity-80 font-body">
+              Making learning fun for kids! 🌟
+            </p>
+          </div>
+          <div className="text-center md:text-right">
+            <p className="text-sm opacity-80 font-body">
+              © 2026 Beyond Chalk and Talk (OPC) Pvt. Ltd.
+            </p>
+            <p className="text-xs opacity-60 font-body mt-1">
+              Educational Games for Young Minds 🧒
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
