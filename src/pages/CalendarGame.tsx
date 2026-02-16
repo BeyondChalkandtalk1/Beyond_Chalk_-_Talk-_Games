@@ -5,6 +5,10 @@ import Footer from "../components/Footer";
 import ConfettiAnimation from "../components/ConfettiAnimation";
 import ResultModal from "../components/ResultModal";
 import { saveGameResult } from "../components/GameHistory";
+import ClockLayout from "../components/layouts/ClockLayout";
+import DiceLayout from "../components/layouts/DiceLayout";
+import ZodiacLayout from "../components/layouts/ZodiacLayout";
+import PizzaLayout from "../components/layouts/PizzaLayout";
 
 const MONTHS = [
   { name: "January", short: "Jan", emoji: "❄️", color: "hsl(200 70% 60%)" },
@@ -21,6 +25,31 @@ const MONTHS = [
   { name: "December", short: "Dec", emoji: "🎄", color: "hsl(140 60% 40%)" },
 ];
 
+// Each month card shows day name, week number, date — but NOT the month name
+const CARD_INFO = [
+  { day: "Monday", week: "Week 1", date: "1st" },
+  { day: "Tuesday", week: "Week 5", date: "14th" },
+  { day: "Wednesday", week: "Week 9", date: "8th" },
+  { day: "Thursday", week: "Week 14", date: "3rd" },
+  { day: "Friday", week: "Week 18", date: "22nd" },
+  { day: "Saturday", week: "Week 23", date: "10th" },
+  { day: "Sunday", week: "Week 27", date: "4th" },
+  { day: "Monday", week: "Week 31", date: "15th" },
+  { day: "Tuesday", week: "Week 36", date: "5th" },
+  { day: "Wednesday", week: "Week 40", date: "12th" },
+  { day: "Thursday", week: "Week 44", date: "7th" },
+  { day: "Friday", week: "Week 49", date: "25th" },
+];
+
+type LayoutType = "clock" | "dice" | "zodiac" | "pizza";
+
+const LAYOUT_OPTIONS: { type: LayoutType; label: string; emoji: string }[] = [
+  { type: "clock", label: "Clock", emoji: "🕐" },
+  { type: "dice", label: "Dice", emoji: "🎲" },
+  { type: "zodiac", label: "Zodiac", emoji: "♈" },
+  { type: "pizza", label: "Pizza", emoji: "🍕" },
+];
+
 const shuffleArray = <T,>(array: T[]): T[] => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -32,6 +61,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 const CalendarGame = () => {
   const navigate = useNavigate();
+  const [layout, setLayout] = useState<LayoutType>("clock");
   const [calendars, setCalendars] = useState(() =>
     shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i })))
   );
@@ -71,7 +101,6 @@ const CalendarGame = () => {
 
       setDraggedId(null);
 
-      // Check if all placed
       const newPlaced = { ...placed, [slotIndex]: draggedId };
       const filledCount = Object.keys(newPlaced).length;
 
@@ -96,10 +125,6 @@ const CalendarGame = () => {
     [draggedId, placed, results]
   );
 
-  const handleTouchStart = (id: number) => {
-    setDraggedId(id);
-  };
-
   const resetGame = () => {
     setCalendars(shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i }))));
     setPlaced({});
@@ -110,21 +135,81 @@ const CalendarGame = () => {
     setGameScore(0);
   };
 
-  // Clock positions for 12 items
-  const getClockPosition = (index: number) => {
-    const angle = (index * 30 - 90) * (Math.PI / 180);
-    const radius = 38;
-    const x = 50 + radius * Math.cos(angle);
-    const y = 50 + radius * Math.sin(angle);
-    return { x, y };
+  // Build slot elements
+  const buildSlot = (index: number) => {
+    const month = MONTHS[index];
+    const isPlaced = placed[index] !== undefined;
+    const result = results[index];
+    const isShaking = shakeSlot === index;
+
+    return (
+      <div
+        className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl border-3 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${
+          isPlaced
+            ? result === "correct"
+              ? "bg-success/20 border-success"
+              : "bg-destructive/20 border-destructive"
+            : "bg-card border-border hover:border-primary"
+        } ${isShaking ? "animate-shake" : ""} ${
+          isPlaced && result === "correct" ? "animate-bounce-in" : ""
+        }`}
+        style={{
+          boxShadow: isPlaced ? undefined : "var(--shadow-card)",
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.currentTarget.classList.add("drop-target-hover");
+        }}
+        onDragLeave={(e) => {
+          e.currentTarget.classList.remove("drop-target-hover");
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          e.currentTarget.classList.remove("drop-target-hover");
+          if (!isPlaced) handleDrop(index);
+        }}
+        onClick={() => {
+          if (!isPlaced && draggedId !== null) {
+            handleDrop(index);
+          }
+        }}
+      >
+        {isPlaced ? (
+          <>
+            <span className="text-lg">{MONTHS[placed[index]!].emoji}</span>
+            <span className="text-[10px] md:text-xs font-display font-bold leading-tight">
+              {MONTHS[placed[index]!].short}
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="text-xs font-display font-bold text-muted-foreground">
+              {index + 1}
+            </span>
+            <span className="text-[9px] md:text-[10px] text-muted-foreground font-body leading-tight">
+              {month.short}
+            </span>
+          </>
+        )}
+      </div>
+    );
   };
+
+  const slotElements = MONTHS.map((_, i) => buildSlot(i));
+
+  const LayoutComponent = {
+    clock: ClockLayout,
+    dice: DiceLayout,
+    zodiac: ZodiacLayout,
+    pizza: PizzaLayout,
+  }[layout];
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
 
       <main className="flex-1 container mx-auto px-4 py-6">
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary mb-2">
             📅 Calendar Game
           </h2>
@@ -133,81 +218,25 @@ const CalendarGame = () => {
           </p>
         </div>
 
-        {/* Clock Layout for Month Slots */}
-        <div className="relative w-full max-w-lg mx-auto aspect-square mb-8">
-          {/* Center decoration */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-primary flex items-center justify-center z-10">
-            <span className="text-primary-foreground font-display text-lg font-bold text-center leading-tight">
-              12<br />Months
-            </span>
-          </div>
-
-          {/* Clock circle outline */}
-          <div className="absolute inset-[10%] rounded-full border-4 border-dashed border-border" />
-
-          {/* Month slots on clock */}
-          {MONTHS.map((month, index) => {
-            const pos = getClockPosition(index);
-            const isPlaced = placed[index] !== undefined;
-            const result = results[index];
-            const isShaking = shakeSlot === index;
-
-            return (
-              <div
-                key={index}
-                className={`absolute w-16 h-16 md:w-20 md:h-20 -translate-x-1/2 -translate-y-1/2 rounded-2xl border-3 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${
-                  isPlaced
-                    ? result === "correct"
-                      ? "bg-success/20 border-success"
-                      : "bg-destructive/20 border-destructive"
-                    : "bg-card border-border hover:border-primary"
-                } ${isShaking ? "animate-shake" : ""} ${
-                  isPlaced && result === "correct" ? "animate-bounce-in" : ""
-                }`}
-                style={{
-                  left: `${pos.x}%`,
-                  top: `${pos.y}%`,
-                  boxShadow: isPlaced ? undefined : "var(--shadow-card)",
-                }}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  e.currentTarget.classList.add("drop-target-hover");
-                }}
-                onDragLeave={(e) => {
-                  e.currentTarget.classList.remove("drop-target-hover");
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  e.currentTarget.classList.remove("drop-target-hover");
-                  if (!isPlaced) handleDrop(index);
-                }}
-                onClick={() => {
-                  if (!isPlaced && draggedId !== null) {
-                    handleDrop(index);
-                  }
-                }}
-              >
-                {isPlaced ? (
-                  <>
-                    <span className="text-lg">{MONTHS[placed[index]!].emoji}</span>
-                    <span className="text-[10px] md:text-xs font-display font-bold leading-tight">
-                      {MONTHS[placed[index]!].short}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-xs font-display font-bold text-muted-foreground">
-                      {index + 1}
-                    </span>
-                    <span className="text-[9px] md:text-[10px] text-muted-foreground font-body leading-tight">
-                      {month.short}
-                    </span>
-                  </>
-                )}
-              </div>
-            );
-          })}
+        {/* Layout Switcher */}
+        <div className="flex justify-center gap-2 mb-6 flex-wrap">
+          {LAYOUT_OPTIONS.map((opt) => (
+            <button
+              key={opt.type}
+              onClick={() => setLayout(opt.type)}
+              className={`px-4 py-2 rounded-xl font-display font-bold text-sm transition-all ${
+                layout === opt.type
+                  ? "bg-primary text-primary-foreground scale-105"
+                  : "bg-card border-2 border-border text-foreground hover:border-primary"
+              }`}
+            >
+              {opt.emoji} {opt.label}
+            </button>
+          ))}
         </div>
+
+        {/* Layout */}
+        <LayoutComponent slots={slotElements} />
 
         {/* Draggable Calendars */}
         <div className="max-w-2xl mx-auto">
@@ -217,43 +246,46 @@ const CalendarGame = () => {
 
           {draggedId !== null && (
             <p className="text-center text-sm text-primary font-display font-bold mb-2 animate-pulse-glow inline-block mx-auto px-4 py-1 rounded-full bg-primary/10">
-              ✨ "{MONTHS[draggedId].name}" selected — ab upar clock pe month pe click karo!
+              ✨ Selected — ab upar month pe click karo!
             </p>
           )}
 
           <div className="flex flex-wrap gap-3 justify-center">
-            {availableCalendars.map((cal) => (
-              <div
-                key={cal.id}
-                draggable
-                onDragStart={() => handleDragStart(cal.id)}
-                onTouchStart={() => handleTouchStart(cal.id)}
-                onClick={() => {
-                  if (draggedId === cal.id) {
-                    setDraggedId(null);
-                  } else {
-                    setDraggedId(cal.id);
-                  }
-                }}
-                className={`px-4 py-3 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-105 select-none border-2 ${
-                  draggedId === cal.id
-                    ? "border-primary scale-110 ring-2 ring-primary/50"
-                    : "border-border hover:border-primary/50"
-                }`}
-                style={{
-                  backgroundColor: `${cal.color}20`,
-                  boxShadow: "var(--shadow-card)",
-                }}
-              >
-                <div className="text-2xl text-center">{cal.emoji}</div>
+            {availableCalendars.map((cal) => {
+              const info = CARD_INFO[cal.id];
+              return (
                 <div
-                  className="text-xs font-display font-bold text-center mt-1"
-                  style={{ color: cal.color }}
+                  key={cal.id}
+                  draggable
+                  onDragStart={() => handleDragStart(cal.id)}
+                  onTouchStart={() => handleDragStart(cal.id)}
+                  onClick={() => {
+                    if (draggedId === cal.id) {
+                      setDraggedId(null);
+                    } else {
+                      setDraggedId(cal.id);
+                    }
+                  }}
+                  className={`px-4 py-3 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-105 select-none border-2 min-w-[90px] ${
+                    draggedId === cal.id
+                      ? "border-primary scale-110 ring-2 ring-primary/50"
+                      : "border-border hover:border-primary/50"
+                  }`}
+                  style={{
+                    backgroundColor: `${cal.color}20`,
+                    boxShadow: "var(--shadow-card)",
+                  }}
                 >
-                  {cal.name}
+                  <div className="text-2xl text-center">{cal.emoji}</div>
+                  <div className="text-[10px] font-display font-bold text-center mt-1 text-foreground">
+                    {info.day}
+                  </div>
+                  <div className="text-[9px] font-body text-center text-muted-foreground">
+                    {info.week} • {info.date}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {availableCalendars.length === 0 && !showResult && (
