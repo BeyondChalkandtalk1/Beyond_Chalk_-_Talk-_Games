@@ -1,42 +1,28 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-interface UserProfile {
-  id: string;
-  username: string;
-  avatar: string;
-  isGuest: boolean;
-  createdAt: string;
-}
-
-interface AuthContextType {
-  user: UserProfile | null;
-  login: (username: string, password: string) => boolean;
-  register: (username: string, password: string, avatar: string) => boolean;
-  guestLogin: () => void;
-  logout: () => void;
-  updateProfile: (updates: Partial<UserProfile>) => void;
-}
-
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const AuthContext = createContext(null);
 
 const AVATARS = ["🦁", "🐯", "🐻", "🐼", "🐨", "🐸", "🦊", "🐰", "🐶", "🐱", "🦄", "🐲"];
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  return ctx || {};
+};
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<UserProfile | null>(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("currentUser");
     if (saved) setUser(JSON.parse(saved));
   }, []);
 
-  const saveUser = (u: UserProfile) => {
+  const saveUser = (u) => {
     setUser(u);
     localStorage.setItem("currentUser", JSON.stringify(u));
   };
 
-  const login = (username: string, password: string): boolean => {
+  const login = (username, password) => {
     const users = JSON.parse(localStorage.getItem("registeredUsers") || "{}");
     if (users[username] && users[username].password === password) {
       saveUser(users[username].profile);
@@ -45,10 +31,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return false;
   };
 
-  const register = (username: string, password: string, avatar: string): boolean => {
+  const register = (username, password, avatar) => {
     const users = JSON.parse(localStorage.getItem("registeredUsers") || "{}");
     if (users[username]) return false;
-    const profile: UserProfile = {
+    const profile = {
       id: Date.now().toString(),
       username,
       avatar,
@@ -63,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const guestLogin = () => {
     const avatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
-    const profile: UserProfile = {
+    const profile = {
       id: "guest-" + Date.now(),
       username: "Guest Player",
       avatar,
@@ -78,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("currentUser");
   };
 
-  const updateProfile = (updates: Partial<UserProfile>) => {
+  const updateProfile = (updates) => {
     if (!user) return;
     const updated = { ...user, ...updates };
     saveUser(updated);

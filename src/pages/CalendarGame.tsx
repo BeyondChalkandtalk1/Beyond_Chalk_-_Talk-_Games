@@ -25,7 +25,6 @@ const MONTHS = [
   { name: "December", short: "Dec", emoji: "🎄", color: "hsl(140 60% 40%)" },
 ];
 
-// Each month card shows day name, week number, date — but NOT the month name
 const CARD_INFO = [
   { day: "Monday", week: "Week 1", date: "1st" },
   { day: "Tuesday", week: "Week 5", date: "14th" },
@@ -41,16 +40,14 @@ const CARD_INFO = [
   { day: "Friday", week: "Week 49", date: "25th" },
 ];
 
-type LayoutType = "clock" | "dice" | "zodiac" | "pizza";
-
-const LAYOUT_OPTIONS: { type: LayoutType; label: string; emoji: string }[] = [
+const LAYOUT_OPTIONS = [
   { type: "clock", label: "Clock", emoji: "🕐" },
   { type: "dice", label: "Dice", emoji: "🎲" },
   { type: "zodiac", label: "Zodiac", emoji: "♈" },
   { type: "pizza", label: "Pizza", emoji: "🍕" },
 ];
 
-const shuffleArray = <T,>(array: T[]): T[] => {
+const shuffleArray = (array) => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -61,29 +58,29 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 const CalendarGame = () => {
   const navigate = useNavigate();
-  const [layout, setLayout] = useState<LayoutType>("clock");
+  const [layout, setLayout] = useState("clock");
   const [calendars, setCalendars] = useState(() =>
     shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i })))
   );
-  const [placed, setPlaced] = useState<Record<number, number | null>>({});
-  const [draggedId, setDraggedId] = useState<number | null>(null);
-  const [results, setResults] = useState<Record<number, "correct" | "wrong">>({});
+  const [placed, setPlaced] = useState({});
+  const [draggedId, setDraggedId] = useState(null);
+  const [results, setResults] = useState({});
   const [showResult, setShowResult] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [gameScore, setGameScore] = useState(0);
-  const [gameResult, setGameResult] = useState<"win" | "loss">("win");
-  const [shakeSlot, setShakeSlot] = useState<number | null>(null);
+  const [gameResult, setGameResult] = useState("win");
+  const [shakeSlot, setShakeSlot] = useState(null);
 
   const availableCalendars = calendars.filter(
     (c) => !Object.values(placed).includes(c.id)
   );
 
-  const handleDragStart = (id: number) => {
+  const handleDragStart = (id) => {
     setDraggedId(id);
   };
 
   const handleDrop = useCallback(
-    (slotIndex: number) => {
+    (slotIndex) => {
       if (draggedId === null) return;
 
       const isCorrect = draggedId === slotIndex;
@@ -135,8 +132,7 @@ const CalendarGame = () => {
     setGameScore(0);
   };
 
-  // Build slot elements
-  const buildSlot = (index: number) => {
+  const buildSlot = (index) => {
     const month = MONTHS[index];
     const isPlaced = placed[index] !== undefined;
     const result = results[index];
@@ -176,9 +172,9 @@ const CalendarGame = () => {
       >
         {isPlaced ? (
           <>
-            <span className="text-lg">{MONTHS[placed[index]!].emoji}</span>
+            <span className="text-lg">{MONTHS[placed[index]].emoji}</span>
             <span className="text-[10px] md:text-xs font-display font-bold leading-tight">
-              {MONTHS[placed[index]!].short}
+              {MONTHS[placed[index]].short}
             </span>
           </>
         ) : (
@@ -218,7 +214,6 @@ const CalendarGame = () => {
           </p>
         </div>
 
-        {/* Layout Switcher */}
         <div className="flex justify-center gap-2 mb-6 flex-wrap">
           {LAYOUT_OPTIONS.map((opt) => (
             <button
@@ -235,10 +230,8 @@ const CalendarGame = () => {
           ))}
         </div>
 
-        {/* Layout */}
-        <LayoutComponent slots={slotElements} />
+        <LayoutComponent slots={slotElements} centerContent={undefined} />
 
-        {/* Draggable Calendars */}
         <div className="max-w-2xl mx-auto">
           <h3 className="font-display text-lg font-bold text-foreground text-center mb-3">
             📦 Calendars - Drag karo! (ya click karo)

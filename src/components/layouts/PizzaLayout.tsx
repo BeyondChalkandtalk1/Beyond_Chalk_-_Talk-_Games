@@ -1,13 +1,5 @@
-import { ReactNode } from "react";
-
-interface LayoutProps {
-  slots: ReactNode[];
-  centerContent?: ReactNode;
-}
-
-// Pizza: 12 slices arranged in a circle, each slot at the tip of a slice
-const PizzaLayout = ({ slots, centerContent }: LayoutProps) => {
-  const getSlicePosition = (index: number) => {
+const PizzaLayout = ({ slots, centerContent }) => {
+  const getSlicePosition = (index) => {
     const angle = (index * 30 - 90) * (Math.PI / 180);
     const radius = 38;
     return {
@@ -18,16 +10,13 @@ const PizzaLayout = ({ slots, centerContent }: LayoutProps) => {
 
   return (
     <div className="relative w-full max-w-lg mx-auto aspect-square mb-8">
-      {/* Pizza crust (outer circle) */}
       <div className="absolute inset-[6%] rounded-full border-8 border-secondary/30" />
       
-      {/* Pizza base */}
       <div
         className="absolute inset-[8%] rounded-full"
         style={{ background: "linear-gradient(135deg, hsl(45 80% 70%), hsl(36 70% 60%))" }}
       />
 
-      {/* Slice lines */}
       {Array.from({ length: 12 }).map((_, i) => {
         const angle = i * 30;
         return (
@@ -42,7 +31,6 @@ const PizzaLayout = ({ slots, centerContent }: LayoutProps) => {
         );
       })}
 
-      {/* Center */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center z-10"
         style={{ background: "var(--gradient-maroon)" }}>
         {centerContent || (
@@ -52,7 +40,6 @@ const PizzaLayout = ({ slots, centerContent }: LayoutProps) => {
         )}
       </div>
 
-      {/* Toppings (small dots between slots) */}
       {Array.from({ length: 12 }).map((_, i) => {
         const angle = (i * 30 + 15 - 90) * (Math.PI / 180);
         const r = 25;
@@ -70,7 +57,6 @@ const PizzaLayout = ({ slots, centerContent }: LayoutProps) => {
         );
       })}
 
-      {/* Slots */}
       {slots.map((slot, index) => {
         const pos = getSlicePosition(index);
         return (

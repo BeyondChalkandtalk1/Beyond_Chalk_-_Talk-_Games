@@ -1,17 +1,6 @@
-import { ReactNode } from "react";
-
-interface LayoutProps {
-  slots: ReactNode[];
-  centerContent?: ReactNode;
-}
-
-// Dice pattern: 2 faces of 6 dots each arranged like dice pips
-// Face 1 (left): 6 dots in 3x2 grid
-// Face 2 (right): 6 dots in 3x2 grid
-const DiceLayout = ({ slots, centerContent }: LayoutProps) => {
+const DiceLayout = ({ slots, centerContent }) => {
   return (
     <div className="max-w-2xl mx-auto mb-8">
-      {/* Center label */}
       <div className="flex justify-center mb-4">
         <div className="px-6 py-2 rounded-full bg-primary flex items-center justify-center">
           {centerContent || (
@@ -23,7 +12,6 @@ const DiceLayout = ({ slots, centerContent }: LayoutProps) => {
       </div>
 
       <div className="flex gap-4 justify-center flex-wrap">
-        {/* Dice 1 */}
         <div
           className="bg-card border-4 border-border rounded-3xl p-4 inline-grid grid-cols-2 grid-rows-3 gap-3"
           style={{ boxShadow: "var(--shadow-card)" }}
@@ -35,7 +23,6 @@ const DiceLayout = ({ slots, centerContent }: LayoutProps) => {
           ))}
         </div>
 
-        {/* Dice 2 */}
         <div
           className="bg-card border-4 border-border rounded-3xl p-4 inline-grid grid-cols-2 grid-rows-3 gap-3"
           style={{ boxShadow: "var(--shadow-card)" }}
