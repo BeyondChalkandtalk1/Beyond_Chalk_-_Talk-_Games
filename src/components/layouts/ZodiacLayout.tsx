@@ -1,15 +1,7 @@
-import { ReactNode } from "react";
-
-interface LayoutProps {
-  slots: ReactNode[];
-  centerContent?: ReactNode;
-}
-
 const ZODIAC_SIGNS = ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"];
 
-// Zodiac wheel: slots on two concentric rings
-const ZodiacLayout = ({ slots, centerContent }: LayoutProps) => {
-  const getPosition = (index: number) => {
+const ZodiacLayout = ({ slots, centerContent }) => {
+  const getPosition = (index) => {
     const angle = (index * 30 - 90) * (Math.PI / 180);
     const radius = 40;
     return {
@@ -20,7 +12,6 @@ const ZodiacLayout = ({ slots, centerContent }: LayoutProps) => {
 
   return (
     <div className="relative w-full max-w-lg mx-auto aspect-square mb-8">
-      {/* Center Sun */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full flex items-center justify-center z-10"
         style={{ background: "var(--gradient-golden)" }}>
         {centerContent || (
@@ -30,11 +21,9 @@ const ZodiacLayout = ({ slots, centerContent }: LayoutProps) => {
         )}
       </div>
 
-      {/* Outer ring */}
       <div className="absolute inset-[8%] rounded-full border-2 border-primary/30" />
       <div className="absolute inset-[12%] rounded-full border-2 border-dashed border-accent/40" />
 
-      {/* Zodiac symbols between slots */}
       {ZODIAC_SIGNS.map((sign, index) => {
         const angle = (index * 30 + 15 - 90) * (Math.PI / 180);
         const r = 24;
@@ -51,7 +40,6 @@ const ZodiacLayout = ({ slots, centerContent }: LayoutProps) => {
         );
       })}
 
-      {/* Slots */}
       {slots.map((slot, index) => {
         const pos = getPosition(index);
         return (

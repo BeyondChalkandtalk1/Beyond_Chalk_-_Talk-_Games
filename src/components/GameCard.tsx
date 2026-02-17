@@ -1,20 +1,12 @@
 import { Link } from "react-router-dom";
 
-interface GameCardProps {
-  title: string;
-  description: string;
-  emoji: string;
-  path: string;
-  color: "primary" | "secondary" | "accent";
-}
-
 const colorMap = {
   primary: "bg-primary text-primary-foreground",
   secondary: "bg-secondary text-secondary-foreground",
   accent: "bg-accent text-accent-foreground",
 };
 
-const GameCard = ({ title, description, emoji, path, color }: GameCardProps) => {
+const GameCard = ({ title, description, emoji, path, color }) => {
   return (
     <Link to={path} className="group block">
       <div

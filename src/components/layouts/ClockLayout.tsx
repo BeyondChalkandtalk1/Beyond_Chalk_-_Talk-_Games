@@ -1,11 +1,4 @@
-import { ReactNode } from "react";
-
-interface LayoutProps {
-  slots: ReactNode[];
-  centerContent?: ReactNode;
-}
-
-const getClockPosition = (index: number) => {
+const getClockPosition = (index) => {
   const angle = (index * 30 - 90) * (Math.PI / 180);
   const radius = 38;
   return {
@@ -14,10 +7,9 @@ const getClockPosition = (index: number) => {
   };
 };
 
-const ClockLayout = ({ slots, centerContent }: LayoutProps) => {
+const ClockLayout = ({ slots, centerContent }) => {
   return (
     <div className="relative w-full max-w-lg mx-auto aspect-square mb-8">
-      {/* Center */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-primary flex items-center justify-center z-10">
         {centerContent || (
           <span className="text-primary-foreground font-display text-lg font-bold text-center leading-tight">
@@ -26,10 +18,8 @@ const ClockLayout = ({ slots, centerContent }: LayoutProps) => {
         )}
       </div>
 
-      {/* Circle outline */}
       <div className="absolute inset-[10%] rounded-full border-4 border-dashed border-border" />
 
-      {/* Slots */}
       {slots.map((slot, index) => {
         const pos = getClockPosition(index);
         return (

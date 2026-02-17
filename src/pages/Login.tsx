@@ -9,7 +9,7 @@ const Login = () => {
   const { login, guestLogin } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     setError("");
     if (!username.trim() || !password.trim()) {

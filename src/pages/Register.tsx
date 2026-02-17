@@ -13,7 +13,7 @@ const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = (e) => {
     e.preventDefault();
     setError("");
 
@@ -57,7 +57,6 @@ const Register = () => {
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
-          {/* Avatar Selection */}
           <div>
             <label className="font-display text-sm font-bold text-foreground block mb-2">
               🎨 Avatar Chuno

@@ -1,13 +1,4 @@
-interface ResultModalProps {
-  isOpen: boolean;
-  result: "win" | "loss";
-  score: number;
-  total: number;
-  onClose: () => void;
-  onPlayAgain: () => void;
-}
-
-const ResultModal = ({ isOpen, result, score, total, onClose, onPlayAgain }: ResultModalProps) => {
+const ResultModal = ({ isOpen, result, score, total, onClose, onPlayAgain }) => {
   if (!isOpen) return null;
 
   return (

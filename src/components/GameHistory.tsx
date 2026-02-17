@@ -1,14 +1,5 @@
-interface GameHistoryEntry {
-  gameName: string;
-  result: "win" | "loss";
-  score: number;
-  date: string;
-}
-
 const GameHistory = () => {
-  const history: GameHistoryEntry[] = JSON.parse(
-    localStorage.getItem("gameHistory") || "[]"
-  );
+  const history = JSON.parse(localStorage.getItem("gameHistory") || "[]");
 
   if (history.length === 0) {
     return (
@@ -63,11 +54,7 @@ const GameHistory = () => {
 
 export default GameHistory;
 
-export const saveGameResult = (
-  gameName: string,
-  result: "win" | "loss",
-  score: number
-) => {
+export const saveGameResult = (gameName, result, score) => {
   const history = JSON.parse(localStorage.getItem("gameHistory") || "[]");
   history.push({
     gameName,
