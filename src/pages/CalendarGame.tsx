@@ -25,19 +25,86 @@ const MONTHS = [
   { name: "December", short: "Dec", emoji: "🎄", color: "hsl(140 60% 40%)" },
 ];
 
-const CARD_INFO = [
-  { day: "Monday", week: "Week 1", date: "1st" },
-  { day: "Tuesday", week: "Week 5", date: "14th" },
-  { day: "Wednesday", week: "Week 9", date: "8th" },
-  { day: "Thursday", week: "Week 14", date: "3rd" },
-  { day: "Friday", week: "Week 18", date: "22nd" },
-  { day: "Saturday", week: "Week 23", date: "10th" },
-  { day: "Sunday", week: "Week 27", date: "4th" },
-  { day: "Monday", week: "Week 31", date: "15th" },
-  { day: "Tuesday", week: "Week 36", date: "5th" },
-  { day: "Wednesday", week: "Week 40", date: "12th" },
-  { day: "Thursday", week: "Week 44", date: "7th" },
-  { day: "Friday", week: "Week 49", date: "25th" },
+const CARD_STYLES = {
+  week: {
+    label: "Week & Day",
+    emoji: "📆",
+    data: [
+      { line1: "Monday", line2: "Week 1 • 1st" },
+      { line1: "Tuesday", line2: "Week 5 • 14th" },
+      { line1: "Wednesday", line2: "Week 9 • 8th" },
+      { line1: "Thursday", line2: "Week 14 • 3rd" },
+      { line1: "Friday", line2: "Week 18 • 22nd" },
+      { line1: "Saturday", line2: "Week 23 • 10th" },
+      { line1: "Sunday", line2: "Week 27 • 4th" },
+      { line1: "Monday", line2: "Week 31 • 15th" },
+      { line1: "Tuesday", line2: "Week 36 • 5th" },
+      { line1: "Wednesday", line2: "Week 40 • 12th" },
+      { line1: "Thursday", line2: "Week 44 • 7th" },
+      { line1: "Friday", line2: "Week 49 • 25th" },
+    ],
+  },
+  date: {
+    label: "Date & Day",
+    emoji: "📅",
+    data: [
+      { line1: "1 Jan", line2: "Wednesday" },
+      { line1: "14 Feb", line2: "Friday" },
+      { line1: "8 Mar", line2: "Saturday" },
+      { line1: "3 Apr", line2: "Thursday" },
+      { line1: "22 May", line2: "Thursday" },
+      { line1: "10 Jun", line2: "Tuesday" },
+      { line1: "4 Jul", line2: "Friday" },
+      { line1: "15 Aug", line2: "Friday" },
+      { line1: "5 Sep", line2: "Friday" },
+      { line1: "12 Oct", line2: "Sunday" },
+      { line1: "7 Nov", line2: "Friday" },
+      { line1: "25 Dec", line2: "Thursday" },
+    ],
+  },
+  season: {
+    label: "Season",
+    emoji: "🌤️",
+    data: [
+      { line1: "Winter ❄️", line2: "Thandi" },
+      { line1: "Winter 🧣", line2: "Pyaar" },
+      { line1: "Spring 🌸", line2: "Phool" },
+      { line1: "Spring 🌧️", line2: "Baarish" },
+      { line1: "Summer 🌻", line2: "Garmi" },
+      { line1: "Summer ☀️", line2: "Dhoop" },
+      { line1: "Monsoon 🌈", line2: "Sawan" },
+      { line1: "Monsoon 🌾", line2: "Fasal" },
+      { line1: "Autumn 📚", line2: "School" },
+      { line1: "Autumn 🎃", line2: "Tyohaar" },
+      { line1: "Pre-Winter 🍂", line2: "Patjhad" },
+      { line1: "Winter 🎄", line2: "Jashn" },
+    ],
+  },
+  festival: {
+    label: "Festival",
+    emoji: "🎉",
+    data: [
+      { line1: "Lohri 🔥", line2: "Makar Sankranti" },
+      { line1: "Valentine 💕", line2: "Basant Panchami" },
+      { line1: "Holi 🎨", line2: "Rang Barse" },
+      { line1: "Baisakhi 🌾", line2: "Nav Varsh" },
+      { line1: "Buddha 🙏", line2: "Purnima" },
+      { line1: "Eid 🌙", line2: "Mubarak" },
+      { line1: "Guru Purnima 📖", line2: "Independence" },
+      { line1: "Raksha 🧵", line2: "Bandhan" },
+      { line1: "Ganesh 🐘", line2: "Chaturthi" },
+      { line1: "Navratri 💃", line2: "Dussehra" },
+      { line1: "Diwali 🪔", line2: "Deepavali" },
+      { line1: "Christmas 🎄", line2: "New Year" },
+    ],
+  },
+};
+
+const CARD_STYLE_OPTIONS = [
+  { type: "week", label: "Week & Day", emoji: "📆" },
+  { type: "date", label: "Date & Day", emoji: "📅" },
+  { type: "season", label: "Season", emoji: "🌤️" },
+  { type: "festival", label: "Festival", emoji: "🎉" },
 ];
 
 const LAYOUT_OPTIONS = [
@@ -59,6 +126,7 @@ const shuffleArray = (array) => {
 const CalendarGame = () => {
   const navigate = useNavigate();
   const [layout, setLayout] = useState("clock");
+  const [cardStyle, setCardStyle] = useState("week");
   const [calendars, setCalendars] = useState(() =>
     shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i })))
   );
@@ -230,6 +298,22 @@ const CalendarGame = () => {
           ))}
         </div>
 
+        <div className="flex justify-center gap-2 mb-6 flex-wrap">
+          {CARD_STYLE_OPTIONS.map((opt) => (
+            <button
+              key={opt.type}
+              onClick={() => setCardStyle(opt.type)}
+              className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs transition-all ${
+                cardStyle === opt.type
+                  ? "bg-secondary text-secondary-foreground scale-105"
+                  : "bg-card border-2 border-border text-foreground hover:border-secondary"
+              }`}
+            >
+              {opt.emoji} {opt.label}
+            </button>
+          ))}
+        </div>
+
         <LayoutComponent slots={slotElements} centerContent={undefined} />
 
         <div className="max-w-2xl mx-auto">
@@ -245,7 +329,7 @@ const CalendarGame = () => {
 
           <div className="flex flex-wrap gap-3 justify-center">
             {availableCalendars.map((cal) => {
-              const info = CARD_INFO[cal.id];
+              const info = CARD_STYLES[cardStyle].data[cal.id];
               return (
                 <div
                   key={cal.id}
@@ -271,10 +355,10 @@ const CalendarGame = () => {
                 >
                   <div className="text-2xl text-center">{cal.emoji}</div>
                   <div className="text-[10px] font-display font-bold text-center mt-1 text-foreground">
-                    {info.day}
+                    {info.line1}
                   </div>
                   <div className="text-[9px] font-body text-center text-muted-foreground">
-                    {info.week} • {info.date}
+                    {info.line2}
                   </div>
                 </div>
               );
