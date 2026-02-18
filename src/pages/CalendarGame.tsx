@@ -128,7 +128,7 @@ const CalendarGame = () => {
   const [layout, setLayout] = useState("clock");
   const [cardStyle, setCardStyle] = useState("week");
   const [calendars, setCalendars] = useState(() =>
-    shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i })))
+    shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i }))),
   );
   const [placed, setPlaced] = useState({});
   const [draggedId, setDraggedId] = useState(null);
@@ -140,7 +140,7 @@ const CalendarGame = () => {
   const [shakeSlot, setShakeSlot] = useState(null);
 
   const availableCalendars = calendars.filter(
-    (c) => !Object.values(placed).includes(c.id)
+    (c) => !Object.values(placed).includes(c.id),
   );
 
   const handleDragStart = (id) => {
@@ -182,12 +182,16 @@ const CalendarGame = () => {
 
           if (isWin) setShowConfetti(true);
 
-          saveGameResult("Calendar Game 📅", isWin ? "win" : "loss", correctCount);
+          saveGameResult(
+            "Calendar Game 📅",
+            isWin ? "win" : "loss",
+            correctCount,
+          );
           setShowResult(true);
         }, 600);
       }
     },
-    [draggedId, placed, results]
+    [draggedId, placed, results],
   );
 
   const resetGame = () => {
@@ -320,6 +324,21 @@ const CalendarGame = () => {
           <h3 className="font-display text-lg font-bold text-foreground text-center mb-3">
             📦 Calendars - Drag karo! (ya click karo)
           </h3>
+          <div className="flex justify-center gap-2 mb-6 flex-wrap">
+            {CARD_STYLE_OPTIONS.map((opt) => (
+              <button
+                key={opt.type}
+                onClick={() => setCardStyle(opt.type)}
+                className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs transition-all ${
+                  cardStyle === opt.type
+                    ? "bg-secondary text-secondary-foreground scale-105"
+                    : "bg-card border-2 border-border text-foreground hover:border-secondary"
+                }`}
+              >
+                {opt.emoji} {opt.label}
+              </button>
+            ))}
+          </div>
 
           {draggedId !== null && (
             <p className="text-center text-sm text-primary font-display font-bold mb-2 animate-pulse-glow inline-block mx-auto px-4 py-1 rounded-full bg-primary/10">

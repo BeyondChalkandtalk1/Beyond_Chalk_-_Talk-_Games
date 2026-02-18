@@ -1,10 +1,13 @@
+import logo from "../assets/BCAT_logo.png"
 const GameHistory = () => {
   const history = JSON.parse(localStorage.getItem("gameHistory") || "[]");
 
   if (history.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-6xl mb-4">🎮</p>
+        <p className="text-6xl mb-4">
+          <img src={logo} alt="" className="w-20 h-20 mx-auto"/>
+        </p>
         <p className="font-display text-xl text-muted-foreground">
           Abhi tak koi game nahi khela!
         </p>

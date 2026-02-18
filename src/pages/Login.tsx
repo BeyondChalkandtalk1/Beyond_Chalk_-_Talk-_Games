@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import logo from "../assets/BCAT_logo.png"
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -35,8 +36,8 @@ const Login = () => {
         className="w-full max-w-md bg-card rounded-3xl p-8 border-2 border-border animate-bounce-in"
         style={{ boxShadow: "var(--shadow-hover)" }}
       >
-        <div className="text-center mb-6">
-          <div className="text-6xl mb-3 animate-float">🎮</div>
+        <div className="text-center items-center mb-6">
+          <div className="text-6xl mb-3 animate-float"><img src={logo} alt="" className="w-20 h-20 mx-auto"/></div>
           <h1 className="font-display text-3xl font-bold text-secondary">Welcome Back!</h1>
           <p className="text-muted-foreground font-body text-sm mt-1">
             Login karke games khelo! 🌟

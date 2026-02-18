@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import GameCard from "../components/GameCard";
 import GameHistory from "../components/GameHistory";
+import logo from "../assets/BCAT_logo.png"
 
 const GAMES = [
   {
@@ -26,7 +27,7 @@ const Index = () => {
           style={{ background: "var(--gradient-warm)" }}
         >
           <div className="container mx-auto px-4">
-            <div className="animate-float inline-block text-6xl mb-4">🎮</div>
+            <div className="animate-float inline-block text-6xl mb-4"><img src={logo} alt="" className="w-16 h-16"/></div>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary mb-3">
               Learning Games
             </h2>
@@ -37,7 +38,7 @@ const Index = () => {
         </section>
 
         {/* Games Section */}
-        <section className="py-10">
+        {/* <section className="py-10">
           <div className="container mx-auto px-4">
             <h3 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
               🎯 Games
@@ -48,10 +49,10 @@ const Index = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* History Section */}
-        <section className="py-10" style={{ background: "var(--gradient-warm)" }}>
+        {/* <section className="py-10" style={{ background: "var(--gradient-warm)" }}>
           <div className="container mx-auto px-4">
             <h3 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
               📊 Game History
@@ -63,7 +64,7 @@ const Index = () => {
               <GameHistory />
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
 
       <Footer />
