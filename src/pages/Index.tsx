@@ -27,9 +27,11 @@ const Index = () => {
           style={{ background: "var(--gradient-warm)" }}
         >
           <div className="container mx-auto px-4">
-            <div className="animate-float inline-block text-6xl mb-4"><img src={logo} alt="" className="w-16 h-16"/></div>
+            <div className="animate-float inline-block text-6xl mb-4">
+              <img src={logo} alt="" className="w-16 h-16" />
+            </div>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary mb-3">
-              Learning Games
+              Educational Games for Mathematical Learning
             </h2>
             <p className="text-lg text-muted-foreground font-body max-w-md mx-auto">
               Khel khel mein seekho! Fun educational games sirf tumhare liye 🌟

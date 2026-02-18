@@ -10,13 +10,15 @@ const Header = () => {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full  flex items-center justify-center text-primary-foreground font-display text-xl font-bold">
-            <img src={logo} alt="" className="w-full h-full"/>
+            <img src={logo} alt="" className="w-full h-full" />
           </div>
           <div>
             <h1 className="font-display text-xl font-bold text-secondary leading-tight">
-              Beyond Chalk & Talk
+              Beyond Chalk and Talk (OPC) Pvt. Ltd.
             </h1>
-            <p className="text-xs text-muted-foreground font-body">Fun Learning Games 🎮</p>
+            <p className="text-xs text-muted-foreground font-body">
+              Educational Games for Mathematical Learning 🎮
+            </p>
           </div>
         </Link>
         <nav className="flex items-center gap-3">
@@ -45,7 +47,7 @@ const Header = () => {
               className="px-4 py-2 rounded-xl font-display text-sm font-bold text-primary-foreground transition-all hover:scale-105"
               style={{ background: "var(--gradient-golden)" }}
             >
-              Login 🚀
+              Login 🎲
             </Link>
           )}
         </nav>
