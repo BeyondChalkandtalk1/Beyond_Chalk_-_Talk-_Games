@@ -13,7 +13,7 @@ const Footer = () => {
           </div>
           <div className="text-center md:text-right">
             <p className="text-sm opacity-80 font-body">
-              © 2023 Beyond Chalk and Talk (OPC) Pvt. Ltd.
+               Beyond Chalk and Talk (OPC) Pvt. Ltd.® 2023
             </p>
             <p className="text-xs opacity-60 font-body mt-1">
               Educational Games for Mathematical Learning 🧒

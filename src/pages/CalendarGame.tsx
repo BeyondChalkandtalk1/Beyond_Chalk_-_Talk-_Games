@@ -67,17 +67,17 @@ const CARD_STYLES = {
     emoji: "🌤️",
     data: [
       { line1: "Winter ❄️", line2: "Thandi" },
-      { line1: "Winter 🧣", line2: "Pyaar" },
+      { line1: "Winter 🧣", line2: "End winter" },
       { line1: "Spring 🌸", line2: "Phool" },
-      { line1: "Spring 🌧️", line2: "Baarish" },
+      { line1: "Spring 📚", line2: "School" },
       { line1: "Summer 🌻", line2: "Garmi" },
       { line1: "Summer ☀️", line2: "Dhoop" },
       { line1: "Monsoon 🌈", line2: "Sawan" },
       { line1: "Monsoon 🌾", line2: "Fasal" },
-      { line1: "Autumn 📚", line2: "School" },
+      { line1: "Autumn 🍂", line2: "Colorful Season" },
       { line1: "Autumn 🎃", line2: "Tyohaar" },
       { line1: "Pre-Winter 🍂", line2: "Patjhad" },
-      { line1: "Winter 🎄", line2: "Jashn" },
+      { line1: "Winter 🎄", line2: "Zeus" },
     ],
   },
   festival: {
@@ -102,16 +102,16 @@ const CARD_STYLES = {
 
 const CARD_STYLE_OPTIONS = [
   { type: "week", label: "Week & Day", emoji: "📆" },
-  { type: "date", label: "Date & Day", emoji: "📅" },
+  // { type: "date", label: "Date & Day", emoji: "📅" },
   { type: "season", label: "Season", emoji: "🌤️" },
-  { type: "festival", label: "Festival", emoji: "🎉" },
+  // { type: "festival", label: "Festival", emoji: "🎉" },
 ];
 
 const LAYOUT_OPTIONS = [
-  { type: "clock", label: "Clock", emoji: "🕐" },
+  // { type: "clock", label: "Clock", emoji: "🕐" },
   { type: "dice", label: "Dice", emoji: "🎲" },
   { type: "zodiac", label: "Zodiac", emoji: "♈" },
-  { type: "pizza", label: "Pizza", emoji: "🍕" },
+  // { type: "pizza", label: "Pizza", emoji: "🍕" },
 ];
 
 const shuffleArray = (array) => {
@@ -125,7 +125,7 @@ const shuffleArray = (array) => {
 
 const CalendarGame = () => {
   const navigate = useNavigate();
-  const [layout, setLayout] = useState("clock");
+  const [layout, setLayout] = useState("dice");
   const [cardStyle, setCardStyle] = useState("week");
   const [calendars, setCalendars] = useState(() =>
     shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i }))),
@@ -302,7 +302,7 @@ const CalendarGame = () => {
           ))}
         </div>
 
-        <div className="flex justify-center gap-2 mb-6 flex-wrap">
+        {/* <div className="flex justify-center gap-2 mb-6 flex-wrap">
           {CARD_STYLE_OPTIONS.map((opt) => (
             <button
               key={opt.type}
@@ -316,7 +316,7 @@ const CalendarGame = () => {
               {opt.emoji} {opt.label}
             </button>
           ))}
-        </div>
+        </div> */}
 
         <LayoutComponent slots={slotElements} centerContent={undefined} />
 

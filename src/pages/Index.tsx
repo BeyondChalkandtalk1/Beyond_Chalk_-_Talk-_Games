@@ -40,7 +40,7 @@ const Index = () => {
         </section>
 
         {/* Games Section */}
-        {/* <section className="py-10">
+        <section className="py-10">
           <div className="container mx-auto px-4">
             <h3 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
               🎯 Games
@@ -51,10 +51,10 @@ const Index = () => {
               ))}
             </div>
           </div>
-        </section> */}
+        </section>
 
         {/* History Section */}
-        {/* <section className="py-10" style={{ background: "var(--gradient-warm)" }}>
+        <section className="py-10" style={{ background: "var(--gradient-warm)" }}>
           <div className="container mx-auto px-4">
             <h3 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
               📊 Game History
@@ -66,7 +66,7 @@ const Index = () => {
               <GameHistory />
             </div>
           </div>
-        </section> */}
+        </section>
       </main>
 
       <Footer />
