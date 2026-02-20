@@ -6,8 +6,13 @@ const GAMES = [
   {
     title: "Calendar Game 📅",
     description:
-      "12 months ko sahi calendar se match karo! Clock pe drag & drop karo aur champion bano! 🏆",
+      "Match all 12 months with their correct calendars! Drag and drop them onto the clock and become the ultimate time master! 🏆",
     emoji: "📅",
+    about_game:
+      "Calendar Game is a fun drag-and-drop activity where players match each month with its correct calendar.",
+
+    learning_object:
+      "The objective is to help learners understand the sequence of the 12 months and improve their basic calendar knowledge.",
     path: "/games/calendar",
     color: "primary" as const,
   },
