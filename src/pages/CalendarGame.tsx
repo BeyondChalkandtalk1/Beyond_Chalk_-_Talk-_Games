@@ -5,10 +5,10 @@ import Footer from "../components/Footer";
 import ConfettiAnimation from "../components/ConfettiAnimation";
 import ResultModal from "../components/ResultModal";
 import { saveGameResult } from "../components/GameHistory";
-import ClockLayout from "../components/layouts/ClockLayout";
+import CalendarStoryIntro from "../components/CalendarStoryIntro";
+import CalendarLeafGame from "../components/CalendarLeafGame";
 import DiceLayout from "../components/layouts/DiceLayout";
 import ZodiacLayout from "../components/layouts/ZodiacLayout";
-import PizzaLayout from "../components/layouts/PizzaLayout";
 
 const MONTHS = [
   { name: "January", short: "Jan", emoji: "❄️", color: "hsl(200 70% 60%)" },
@@ -80,38 +80,17 @@ const CARD_STYLES = {
       { line1: "Winter 🎄", line2: "Zeus" },
     ],
   },
-  festival: {
-    label: "Festival",
-    emoji: "🎉",
-    data: [
-      { line1: "Lohri 🔥", line2: "Makar Sankranti" },
-      { line1: "Valentine 💕", line2: "Basant Panchami" },
-      { line1: "Holi 🎨", line2: "Rang Barse" },
-      { line1: "Baisakhi 🌾", line2: "Nav Varsh" },
-      { line1: "Buddha 🙏", line2: "Purnima" },
-      { line1: "Eid 🌙", line2: "Mubarak" },
-      { line1: "Guru Purnima 📖", line2: "Independence" },
-      { line1: "Raksha 🧵", line2: "Bandhan" },
-      { line1: "Ganesh 🐘", line2: "Chaturthi" },
-      { line1: "Navratri 💃", line2: "Dussehra" },
-      { line1: "Diwali 🪔", line2: "Deepavali" },
-      { line1: "Christmas 🎄", line2: "New Year" },
-    ],
-  },
 };
 
 const CARD_STYLE_OPTIONS = [
   { type: "week", label: "Week & Day", emoji: "📆" },
-  // { type: "date", label: "Date & Day", emoji: "📅" },
+  { type: "date", label: "Date & Day", emoji: "📅" },
   { type: "season", label: "Season", emoji: "🌤️" },
-  // { type: "festival", label: "Festival", emoji: "🎉" },
 ];
 
 const LAYOUT_OPTIONS = [
-  // { type: "clock", label: "Clock", emoji: "🕐" },
   { type: "dice", label: "Dice", emoji: "🎲" },
   { type: "zodiac", label: "Zodiac", emoji: "♈" },
-  // { type: "pizza", label: "Pizza", emoji: "🍕" },
 ];
 
 const shuffleArray = (array) => {
@@ -123,12 +102,15 @@ const shuffleArray = (array) => {
   return shuffled;
 };
 
-const CalendarGame = () => {
+// ──────────────────────────────────────────────
+// Level 2: Dice / Zodiac month-matching game
+// ──────────────────────────────────────────────
+const Level2Game = ({ story, onFinish }) => {
   const navigate = useNavigate();
   const [layout, setLayout] = useState("dice");
   const [cardStyle, setCardStyle] = useState("week");
   const [calendars, setCalendars] = useState(() =>
-    shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i }))),
+    shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i })))
   );
   const [placed, setPlaced] = useState({});
   const [draggedId, setDraggedId] = useState(null);
@@ -140,17 +122,12 @@ const CalendarGame = () => {
   const [shakeSlot, setShakeSlot] = useState(null);
 
   const availableCalendars = calendars.filter(
-    (c) => !Object.values(placed).includes(c.id),
+    (c) => !Object.values(placed).includes(c.id)
   );
-
-  const handleDragStart = (id) => {
-    setDraggedId(id);
-  };
 
   const handleDrop = useCallback(
     (slotIndex) => {
       if (draggedId === null) return;
-
       const isCorrect = draggedId === slotIndex;
 
       setPlaced((prev) => ({ ...prev, [slotIndex]: draggedId }));
@@ -182,16 +159,12 @@ const CalendarGame = () => {
 
           if (isWin) setShowConfetti(true);
 
-          saveGameResult(
-            "Calendar Game 📅",
-            isWin ? "win" : "loss",
-            correctCount,
-          );
+          saveGameResult("Calendar Game 📅", isWin ? "win" : "loss", correctCount);
           setShowResult(true);
         }, 600);
       }
     },
-    [draggedId, placed, results],
+    [draggedId, placed, results]
   );
 
   const resetGame = () => {
@@ -212,34 +185,23 @@ const CalendarGame = () => {
 
     return (
       <div
-        className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl border-3 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${
+        className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl border-2 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${
           isPlaced
             ? result === "correct"
-              ? "bg-success/20 border-success"
-              : "bg-destructive/20 border-destructive"
+              ? "bg-green-100 border-green-500"
+              : "bg-red-100 border-red-500"
             : "bg-card border-border hover:border-primary"
         } ${isShaking ? "animate-shake" : ""} ${
           isPlaced && result === "correct" ? "animate-bounce-in" : ""
         }`}
-        style={{
-          boxShadow: isPlaced ? undefined : "var(--shadow-card)",
-        }}
-        onDragOver={(e) => {
-          e.preventDefault();
-          e.currentTarget.classList.add("drop-target-hover");
-        }}
-        onDragLeave={(e) => {
-          e.currentTarget.classList.remove("drop-target-hover");
-        }}
+        style={{ boxShadow: isPlaced ? undefined : "var(--shadow-card)" }}
+        onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
-          e.currentTarget.classList.remove("drop-target-hover");
           if (!isPlaced) handleDrop(index);
         }}
         onClick={() => {
-          if (!isPlaced && draggedId !== null) {
-            handleDrop(index);
-          }
+          if (!isPlaced && draggedId !== null) handleDrop(index);
         }}
       >
         {isPlaced ? (
@@ -264,19 +226,19 @@ const CalendarGame = () => {
   };
 
   const slotElements = MONTHS.map((_, i) => buildSlot(i));
-
-  const LayoutComponent = {
-    clock: ClockLayout,
-    dice: DiceLayout,
-    zodiac: ZodiacLayout,
-    pizza: PizzaLayout,
-  }[layout];
+  const LayoutComponent = layout === "zodiac" ? ZodiacLayout : DiceLayout;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
-
       <main className="flex-1 container mx-auto px-4 py-6">
+        {/* Level badge */}
+        <div className="flex justify-center mb-3">
+          <span className="px-4 py-1 rounded-full bg-secondary text-secondary-foreground font-display font-bold text-sm">
+            🎮 Level 2 — Month Matching
+          </span>
+        </div>
+
         <div className="text-center mb-4">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary mb-2">
             📅 Calendar Game
@@ -286,7 +248,8 @@ const CalendarGame = () => {
           </p>
         </div>
 
-        <div className="flex justify-center gap-2 mb-6 flex-wrap">
+        {/* Layout switcher */}
+        <div className="flex justify-center gap-2 mb-4 flex-wrap">
           {LAYOUT_OPTIONS.map((opt) => (
             <button
               key={opt.type}
@@ -302,29 +265,15 @@ const CalendarGame = () => {
           ))}
         </div>
 
-        {/* <div className="flex justify-center gap-2 mb-6 flex-wrap">
-          {CARD_STYLE_OPTIONS.map((opt) => (
-            <button
-              key={opt.type}
-              onClick={() => setCardStyle(opt.type)}
-              className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs transition-all ${
-                cardStyle === opt.type
-                  ? "bg-secondary text-secondary-foreground scale-105"
-                  : "bg-card border-2 border-border text-foreground hover:border-secondary"
-              }`}
-            >
-              {opt.emoji} {opt.label}
-            </button>
-          ))}
-        </div> */}
-
         <LayoutComponent slots={slotElements} centerContent={undefined} />
 
         <div className="max-w-2xl mx-auto">
           <h3 className="font-display text-lg font-bold text-foreground text-center mb-3">
-            📦 Calendars - Drag karo! (ya click karo)
+            📦 Calendars — Drag karo! (ya click karo)
           </h3>
-          <div className="flex justify-center gap-2 mb-6 flex-wrap">
+
+          {/* Card style switcher */}
+          <div className="flex justify-center gap-2 mb-4 flex-wrap">
             {CARD_STYLE_OPTIONS.map((opt) => (
               <button
                 key={opt.type}
@@ -341,7 +290,7 @@ const CalendarGame = () => {
           </div>
 
           {draggedId !== null && (
-            <p className="text-center text-sm text-primary font-display font-bold mb-2 animate-pulse-glow inline-block mx-auto px-4 py-1 rounded-full bg-primary/10">
+            <p className="text-center text-sm text-primary font-display font-bold mb-2 animate-pulse">
               ✨ Selected — ab upar month pe click karo!
             </p>
           )}
@@ -353,15 +302,9 @@ const CalendarGame = () => {
                 <div
                   key={cal.id}
                   draggable
-                  onDragStart={() => handleDragStart(cal.id)}
-                  onTouchStart={() => handleDragStart(cal.id)}
-                  onClick={() => {
-                    if (draggedId === cal.id) {
-                      setDraggedId(null);
-                    } else {
-                      setDraggedId(cal.id);
-                    }
-                  }}
+                  onDragStart={() => setDraggedId(cal.id)}
+                  onTouchStart={() => setDraggedId(cal.id)}
+                  onClick={() => setDraggedId(draggedId === cal.id ? null : cal.id)}
                   className={`px-4 py-3 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-105 select-none border-2 min-w-[90px] ${
                     draggedId === cal.id
                       ? "border-primary scale-110 ring-2 ring-primary/50"
@@ -406,6 +349,34 @@ const CalendarGame = () => {
       />
     </div>
   );
+};
+
+// ──────────────────────────────────────────────
+// Main CalendarGame — orchestrates all screens
+// ──────────────────────────────────────────────
+const CalendarGame = () => {
+  // screen: "intro" | "level1" | "level2"
+  const [screen, setScreen] = useState("intro");
+  const [selectedStory, setSelectedStory] = useState(null);
+
+  const handleStoryStart = (story) => {
+    setSelectedStory(story);
+    setScreen("level1");
+  };
+
+  const handleLevel1Complete = () => {
+    setScreen("level2");
+  };
+
+  if (screen === "intro") {
+    return <CalendarStoryIntro onStart={handleStoryStart} />;
+  }
+
+  if (screen === "level1") {
+    return <CalendarLeafGame story={selectedStory} onComplete={handleLevel1Complete} />;
+  }
+
+  return <Level2Game story={selectedStory} onFinish={() => setScreen("intro")} />;
 };
 
 export default CalendarGame;
