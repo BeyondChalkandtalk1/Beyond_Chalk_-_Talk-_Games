@@ -230,7 +230,8 @@ const CalendarStoryIntro = ({ onStart }) => {
   const current = STORIES[selectedStory];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start py-8 px-4" style={{ background: "var(--gradient-warm)" }}>
+    <div className="flex flex-col items-center justify-start py-8 px-4" style={{ background: "var(--gradient-warm)" }}>
+
       {/* Title */}
       <div className="text-center mb-6">
         <h1 className="font-display text-4xl md:text-5xl font-bold text-secondary mb-2">
