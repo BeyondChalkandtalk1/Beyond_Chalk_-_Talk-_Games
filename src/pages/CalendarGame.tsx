@@ -1,7 +1,5 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import ConfettiAnimation from "../components/ConfettiAnimation";
 import ResultModal from "../components/ResultModal";
 import { saveGameResult } from "../components/GameHistory";
@@ -9,6 +7,7 @@ import CalendarStoryIntro from "../components/CalendarStoryIntro";
 import CalendarLeafGame from "../components/CalendarLeafGame";
 import DiceLayout from "../components/layouts/DiceLayout";
 import ZodiacLayout from "../components/layouts/ZodiacLayout";
+
 
 const MONTHS = [
   { name: "January", short: "Jan", emoji: "❄️", color: "hsl(200 70% 60%)" },
@@ -229,35 +228,57 @@ const Level2Game = ({ story, onFinish }) => {
   const LayoutComponent = layout === "zodiac" ? ZodiacLayout : DiceLayout;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Header />
-      <main className="flex-1 container mx-auto px-4 py-6">
-        {/* Level badge */}
-        <div className="flex justify-center mb-3">
-          <span className="px-4 py-1 rounded-full bg-secondary text-secondary-foreground font-display font-bold text-sm">
-            🎮 Level 2 — Month Matching
-          </span>
-        </div>
+    <div className="container mx-auto px-4 py-6">
+      {/* Level badge */}
+      <div className="flex justify-center mb-3">
+        <span className="px-4 py-1 rounded-full bg-secondary text-secondary-foreground font-display font-bold text-sm">
+          🎮 Level 2 — Month Matching
+        </span>
+      </div>
 
-        <div className="text-center mb-4">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary mb-2">
-            📅 Calendar Game
-          </h2>
-          <p className="text-muted-foreground font-body">
-            Calendar ko sahi month pe drag karke drop karo! 🎯
-          </p>
-        </div>
+      <div className="text-center mb-4">
+        <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary mb-2">
+          📅 Calendar Game
+        </h2>
+        <p className="text-muted-foreground font-body">
+          Calendar ko sahi month pe drag karke drop karo! 🎯
+        </p>
+      </div>
 
-        {/* Layout switcher */}
+      {/* Layout switcher */}
+      <div className="flex justify-center gap-2 mb-4 flex-wrap">
+        {LAYOUT_OPTIONS.map((opt) => (
+          <button
+            key={opt.type}
+            onClick={() => setLayout(opt.type)}
+            className={`px-4 py-2 rounded-xl font-display font-bold text-sm transition-all ${
+              layout === opt.type
+                ? "bg-primary text-primary-foreground scale-105"
+                : "bg-card border-2 border-border text-foreground hover:border-primary"
+            }`}
+          >
+            {opt.emoji} {opt.label}
+          </button>
+        ))}
+      </div>
+
+      <LayoutComponent slots={slotElements} centerContent={undefined} />
+
+      <div className="max-w-2xl mx-auto">
+        <h3 className="font-display text-lg font-bold text-foreground text-center mb-3">
+          📦 Calendars — Drag karo! (ya click karo)
+        </h3>
+
+        {/* Card style switcher */}
         <div className="flex justify-center gap-2 mb-4 flex-wrap">
-          {LAYOUT_OPTIONS.map((opt) => (
+          {CARD_STYLE_OPTIONS.map((opt) => (
             <button
               key={opt.type}
-              onClick={() => setLayout(opt.type)}
-              className={`px-4 py-2 rounded-xl font-display font-bold text-sm transition-all ${
-                layout === opt.type
-                  ? "bg-primary text-primary-foreground scale-105"
-                  : "bg-card border-2 border-border text-foreground hover:border-primary"
+              onClick={() => setCardStyle(opt.type)}
+              className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs transition-all ${
+                cardStyle === opt.type
+                  ? "bg-secondary text-secondary-foreground scale-105"
+                  : "bg-card border-2 border-border text-foreground hover:border-secondary"
               }`}
             >
               {opt.emoji} {opt.label}
@@ -265,77 +286,50 @@ const Level2Game = ({ story, onFinish }) => {
           ))}
         </div>
 
-        <LayoutComponent slots={slotElements} centerContent={undefined} />
+        {draggedId !== null && (
+          <p className="text-center text-sm text-primary font-display font-bold mb-2 animate-pulse">
+            ✨ Selected — ab upar month pe click karo!
+          </p>
+        )}
 
-        <div className="max-w-2xl mx-auto">
-          <h3 className="font-display text-lg font-bold text-foreground text-center mb-3">
-            📦 Calendars — Drag karo! (ya click karo)
-          </h3>
-
-          {/* Card style switcher */}
-          <div className="flex justify-center gap-2 mb-4 flex-wrap">
-            {CARD_STYLE_OPTIONS.map((opt) => (
-              <button
-                key={opt.type}
-                onClick={() => setCardStyle(opt.type)}
-                className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs transition-all ${
-                  cardStyle === opt.type
-                    ? "bg-secondary text-secondary-foreground scale-105"
-                    : "bg-card border-2 border-border text-foreground hover:border-secondary"
+        <div className="flex flex-wrap gap-3 justify-center">
+          {availableCalendars.map((cal) => {
+            const info = CARD_STYLES[cardStyle].data[cal.id];
+            return (
+              <div
+                key={cal.id}
+                draggable
+                onDragStart={() => setDraggedId(cal.id)}
+                onTouchStart={() => setDraggedId(cal.id)}
+                onClick={() => setDraggedId(draggedId === cal.id ? null : cal.id)}
+                className={`px-4 py-3 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-105 select-none border-2 min-w-[90px] ${
+                  draggedId === cal.id
+                    ? "border-primary scale-110 ring-2 ring-primary/50"
+                    : "border-border hover:border-primary/50"
                 }`}
+                style={{
+                  backgroundColor: `${cal.color}20`,
+                  boxShadow: "var(--shadow-card)",
+                }}
               >
-                {opt.emoji} {opt.label}
-              </button>
-            ))}
-          </div>
-
-          {draggedId !== null && (
-            <p className="text-center text-sm text-primary font-display font-bold mb-2 animate-pulse">
-              ✨ Selected — ab upar month pe click karo!
-            </p>
-          )}
-
-          <div className="flex flex-wrap gap-3 justify-center">
-            {availableCalendars.map((cal) => {
-              const info = CARD_STYLES[cardStyle].data[cal.id];
-              return (
-                <div
-                  key={cal.id}
-                  draggable
-                  onDragStart={() => setDraggedId(cal.id)}
-                  onTouchStart={() => setDraggedId(cal.id)}
-                  onClick={() => setDraggedId(draggedId === cal.id ? null : cal.id)}
-                  className={`px-4 py-3 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-105 select-none border-2 min-w-[90px] ${
-                    draggedId === cal.id
-                      ? "border-primary scale-110 ring-2 ring-primary/50"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                  style={{
-                    backgroundColor: `${cal.color}20`,
-                    boxShadow: "var(--shadow-card)",
-                  }}
-                >
-                  <div className="text-2xl text-center">{cal.emoji}</div>
-                  <div className="text-[10px] font-display font-bold text-center mt-1 text-foreground">
-                    {info.line1}
-                  </div>
-                  <div className="text-[9px] font-body text-center text-muted-foreground">
-                    {info.line2}
-                  </div>
+                <div className="text-2xl text-center">{cal.emoji}</div>
+                <div className="text-[10px] font-display font-bold text-center mt-1 text-foreground">
+                  {info.line1}
                 </div>
-              );
-            })}
-          </div>
-
-          {availableCalendars.length === 0 && !showResult && (
-            <p className="text-center text-muted-foreground font-body mt-4 animate-pulse">
-              Calculating result... ⏳
-            </p>
-          )}
+                <div className="text-[9px] font-body text-center text-muted-foreground">
+                  {info.line2}
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </main>
 
-      <Footer />
+        {availableCalendars.length === 0 && !showResult && (
+          <p className="text-center text-muted-foreground font-body mt-4 animate-pulse">
+            Calculating result... ⏳
+          </p>
+        )}
+      </div>
 
       {showConfetti && <ConfettiAnimation />}
 
@@ -350,6 +344,7 @@ const Level2Game = ({ story, onFinish }) => {
     </div>
   );
 };
+
 
 // ──────────────────────────────────────────────
 // Main CalendarGame — orchestrates all screens
