@@ -108,7 +108,7 @@ const MCQPopup = ({ monthIndex, onCorrect }) => {
     setSelected(idx);
     setAnswered(true);
     if (idx === mcq.correct) {
-      setTimeout(() => onCorrect(), 1800);
+      setTimeout(() => onCorrect(), 4000);
     }
   };
 

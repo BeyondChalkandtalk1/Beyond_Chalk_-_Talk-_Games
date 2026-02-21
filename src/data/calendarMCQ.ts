@@ -13,7 +13,7 @@ export const MONTH_MCQ = [
   },
   // 1 - February
   {
-    question: "February kiss liye famous hai? 💕",
+    question: "February kis liye famous hai? 💕",
     options: ["Halloween", "Maha Shivratri", "Diwali", "Christmas"],
     correct: 1,
     fact: "February me MahaShivratri manaya jaata hai! 💝",
