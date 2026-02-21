@@ -230,14 +230,18 @@ const CalendarStoryIntro = ({ onStart }) => {
   const current = STORIES[selectedStory];
 
   return (
-    <div className="flex flex-col items-center justify-start py-8 px-4" style={{ background: "var(--gradient-warm)" }}>
-
+    <div
+      className="flex flex-col items-center justify-start py-8 px-4"
+      style={{ background: "var(--gradient-warm)" }}
+    >
       {/* Title */}
       <div className="text-center mb-6">
         <h1 className="font-display text-4xl md:text-5xl font-bold text-secondary mb-2">
-          📅 Calendar Game
+          📅 The Lost Calendar Leaves
         </h1>
-        <p className="font-body text-muted-foreground text-lg">Ek kahani chuno aur khelo! 🌟</p>
+        <p className="font-body text-muted-foreground text-lg">
+          Ek kahani chuno aur khelo! 🌟
+        </p>
       </div>
 
       {/* Story selector tabs */}
@@ -284,9 +288,9 @@ const CalendarStoryIntro = ({ onStart }) => {
         {current.buttonText}
       </button>
 
-      <p className="text-xs text-muted-foreground font-body mt-4">
+      {/* <p className="text-xs text-muted-foreground font-body mt-4">
         Pehle HTML calendar game hai, phir aur bhi levels! 🎮
-      </p>
+      </p> */}
     </div>
   );
 };

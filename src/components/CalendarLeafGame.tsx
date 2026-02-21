@@ -41,7 +41,7 @@ const CalendarCard = ({ monthIndex, small = false }) => {
   return (
     <div className="w-full">
       <div className={`text-center font-display font-bold mb-1 ${small ? "text-[10px]" : "text-xs"} text-primary`}>
-        {/* {MONTH_EMOJIS[monthIndex]} {name} */}
+        {MONTH_EMOJIS[monthIndex]} {name}
       </div>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: small ? "8px" : "10px" }}>
         <thead>

@@ -4,12 +4,12 @@ import logo from "../assets/BCAT_logo.png"
 
 const GAMES = [
   {
-    title: "Calendar Game 📅",
+    title: "The Lost Calendar Leaves 📅",
     description:
       "Match all 12 months with their correct calendars! Drag and drop them onto the clock and become the ultimate time master! 🏆",
     emoji: "📅",
     about_game:
-      "Calendar Game is a fun drag-and-drop activity where players match each month with its correct calendar.",
+      "The Lost Calendar Leaves game is a fun drag-and-drop activity where players match each month with its correct calendar.",
 
     learning_object:
       "The objective is to help learners understand the sequence of the 12 months and improve their basic calendar knowledge.",

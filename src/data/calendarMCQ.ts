@@ -14,9 +14,9 @@ export const MONTH_MCQ = [
   // 1 - February
   {
     question: "February kiss liye famous hai? 💕",
-    options: ["Halloween", "Valentine's Day", "Diwali", "Christmas"],
+    options: ["Halloween", "Maha Shivratri", "Diwali", "Christmas"],
     correct: 1,
-    fact: "February 14 ko Valentine's Day manaya jaata hai! 💝",
+    fact: "February me MahaShivratri manaya jaata hai! 💝",
   },
   // 2 - March
   {
@@ -48,9 +48,9 @@ export const MONTH_MCQ = [
   },
   // 6 - July
   {
-    question: "India ka Independence Day kab hai? 🌈",
+    question: "America ka Independence Day kab hai? 🌈",
     options: ["July 4", "July 15", "July 26", "July 15"],
-    correct: 2,
+    correct: 0,
     fact: "Nahi! India ka Independence Day 15 August ko hota hai! Lekin America ka 4 July ko! 🇮🇳",
   },
   // 7 - August

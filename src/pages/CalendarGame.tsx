@@ -238,7 +238,7 @@ const Level2Game = ({ story, onFinish }) => {
 
       <div className="text-center mb-4">
         <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary mb-2">
-          📅 Calendar Game
+          📅 The Lost Calendar Leaves
         </h2>
         <p className="text-muted-foreground font-body">
           Calendar ko sahi month pe drag karke drop karo! 🎯

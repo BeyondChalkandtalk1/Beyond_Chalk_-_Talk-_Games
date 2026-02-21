@@ -50,7 +50,9 @@ const Register = () => {
       >
         <div className="text-center mb-5">
           <div className="text-6xl mb-3 animate-float">🎉</div>
-          <h1 className="font-display text-3xl font-bold text-secondary">Naya Account!</h1>
+          <h1 className="font-display text-3xl font-bold text-secondary">
+            Naya Account!
+          </h1>
           <p className="text-muted-foreground font-body text-sm mt-1">
             Register karo aur games ka maza lo! 🌟
           </p>
@@ -81,7 +83,31 @@ const Register = () => {
 
           <div>
             <label className="font-display text-sm font-bold text-foreground block mb-1">
-              👤 Username
+              🏫 School Name
+            </label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-background font-body text-foreground focus:border-primary focus:outline-none transition-colors"
+              placeholder="Apna cool naam likho..."
+            />
+          </div>
+          <div>
+            <label className="font-display text-sm font-bold text-foreground block mb-1">
+              🔢 Age
+            </label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-background font-body text-foreground focus:border-primary focus:outline-none transition-colors"
+              placeholder="Apna cool naam likho..."
+            />
+          </div>
+          <div>
+            <label className="font-display text-sm font-bold text-foreground block mb-1">
+              📧 Email
             </label>
             <input
               type="text"
@@ -135,7 +161,10 @@ const Register = () => {
 
         <p className="text-center mt-5 font-body text-sm text-muted-foreground">
           Pehle se account hai?{" "}
-          <Link to="/login" className="text-primary font-display font-bold hover:underline">
+          <Link
+            to="/login"
+            className="text-primary font-display font-bold hover:underline"
+          >
             Login Karo! 🚀
           </Link>
         </p>
