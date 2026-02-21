@@ -79,12 +79,31 @@ const CARD_STYLES = {
       { line1: "Winter 🎄", line2: "Zeus" },
     ],
   },
+  festival: {
+    label: "Festival",
+    emoji: "🎉",
+    data: [
+      { line1: "Lohri 🔥", line2: "Makkar Sankranti" },
+      { line1: "Valentine 💕", line2: "Basant Panchami" },
+      { line1: "Holi 🎨", line2: "Rang Barse" },
+      { line1: "Baisakhi 🌾", line2: "Naya Saal" },
+      { line1: "Buddha Purnima 🪷", line2: "Enlightenment" },
+      { line1: "Eid ☪️", line2: "Chand Raat" },
+      { line1: "Guru Purnima 🙏", line2: "Teacher's Day" },
+      { line1: "Raksha Bandhan 🧵", line2: "Bhai-Behen" },
+      { line1: "Ganesh Chaturthi 🐘", line2: "Ganapati Bappa" },
+      { line1: "Dussehra ⚔️", line2: "Ravan Dahan" },
+      { line1: "Diwali 🪔", line2: "Festival of Lights" },
+      { line1: "Christmas 🎄", line2: "Jingle Bells" },
+    ],
+  },
 };
 
 const CARD_STYLE_OPTIONS = [
   { type: "week", label: "Week & Day", emoji: "📆" },
   { type: "date", label: "Date & Day", emoji: "📅" },
   { type: "season", label: "Season", emoji: "🌤️" },
+  { type: "festival", label: "Festival", emoji: "🎉" },
 ];
 
 const LAYOUT_OPTIONS = [
