@@ -35,7 +35,7 @@ const GameCard = ({
         </h3>
         <p className="text-sm text-muted-foreground font-body mb-3">{description}</p>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-3">
           {/* About the Game - reveal on hover/click */}
           <div
             className="relative"
