@@ -43,7 +43,7 @@ const Index = () => {
       <section className="py-10">
         <div className="container mx-auto px-4">
           <h3 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
-            🎯 Games
+            🎯 Mathematical Games
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {GAMES.map((game) => (
