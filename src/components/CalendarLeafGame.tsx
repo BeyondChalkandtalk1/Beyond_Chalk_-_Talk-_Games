@@ -62,7 +62,7 @@ const CalendarCard = ({ monthIndex, small = false }: { monthIndex: number; small
       >
         {MONTH_EMOJIS[monthIndex]} {name}
       </div>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: small ? "11px" : "13px" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: small ? "16px" : "18px" }}>
         <thead>
           <tr>
             {days.map((d, i) => (
@@ -373,7 +373,7 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
       {/* Done — show timer quiz first, then next level */}
       {done ? (
         timerQuizPassed ? (
-          <div className="text-center py-8 animate-bounce-in">
+          <div className="text-center py-2 animate-bounce-in">
             <div className="text-6xl mb-4">🏆</div>
             <h3 className="font-display text-3xl font-bold text-primary mb-2">Level 1 Complete! 🌟</h3>
             <p className="font-body text-muted-foreground mb-6">Bonus challenge bhi clear! Ab next level khelo!</p>
@@ -399,7 +399,7 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
                 ✨ Selected! Ab neeche sahi month pe drop karo!
               </p>
             )}
-            <div className="flex flex-wrap gap-3 justify-center max-w-6xl mx-auto">
+            <div className="flex flex-wrap gap-3 justify-center max-w-11xl mx-auto">
               {availableLeaves.map((leafIdx) => (
                 <div
                   key={leafIdx}
@@ -412,7 +412,7 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
                       : "border-border hover:border-primary/50"
                   }`}
                   style={{
-                    width: "160px",
+                    width: "320px",
                     boxShadow: draggedLeaf === leafIdx ? "0 6px 20px rgba(0,0,0,0.2)" : "0 3px 12px rgba(0,0,0,0.1)",
                     background: MONTH_COLORS[leafIdx].bg,
                   }}
@@ -424,7 +424,7 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
           </div>
 
           {/* Drop Zones Grid */}
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-9xl mx-auto">
             <h3 className="font-display text-base font-bold text-center text-foreground mb-3">
               🗓️ Sahi month pe calendar drop karo!
             </h3>
@@ -466,7 +466,7 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
                     ) : (
                       <div className="text-center">
                         <div className="text-3xl mb-1">{MONTH_EMOJIS[idx]}</div>
-                        <div className="font-display text-sm font-bold" style={{ color: colors.header }}>{month}</div>
+                        <div className="font-display text-lg font-bold" style={{ color: colors.header }}>{month}</div>
                       </div>
                     )}
                   </div>

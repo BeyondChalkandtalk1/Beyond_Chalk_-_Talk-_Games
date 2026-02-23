@@ -7,17 +7,17 @@ const Header = () => {
 
   return (
     <header className="bg-card border-b-[3px] border-primary sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-1 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full  flex items-center justify-center text-primary-foreground font-display text-xl font-bold">
+          <div className="w-28 h-24 rounded-full  flex items-center justify-center text-primary-foreground font-display text-xl font-bold">
             <img src={logo} alt="" className="w-full h-full" />
           </div>
           <div>
-            <h1 className="font-display text-xl font-bold text-secondary leading-tight">
+            <h1 className="font-display text-2xl font-bold text-secondary leading-tight">
               Beyond Chalk and Talk (OPC) Pvt. Ltd.
             </h1>
-            <p className="text-xs text-muted-foreground font-body">
-              Educational Games for Mathematical Learning 🎮
+            <p className="text-sm text-muted-foreground font-body">
+              Interactive Math Games Designed for Conceptual Understanding.🎮
             </p>
           </div>
         </Link>

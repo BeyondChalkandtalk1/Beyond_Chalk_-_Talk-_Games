@@ -30,10 +30,17 @@ const GameCard = ({
         >
           {emoji}
         </div>
-        <h3 className="font-display text-xl font-bold text-foreground mb-2">
-          {title}
-        </h3>
-        <p className="text-sm text-muted-foreground font-body mb-3">{description}</p>
+
+        <div className="flex gap-1 text-sm items-center">
+          <h3 className="font-display text-xl font-bold text-foreground mb-2">
+            {title}
+          </h3>
+          <span>Age</span>
+          <span>7+ years</span>
+        </div>
+        <p className="text-sm text-muted-foreground font-body mb-3">
+          {description}
+        </p>
 
         <div className="flex flex-col gap-3">
           {/* About the Game - reveal on hover/click */}
@@ -55,7 +62,7 @@ const GameCard = ({
                   : "border-border bg-muted/50 text-foreground hover:border-primary/50"
               }`}
             >
-              📖 About Game
+              📖 Aim
             </button>
             <div
               className={`mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
@@ -87,16 +94,27 @@ const GameCard = ({
                   : "border-border bg-muted/50 text-foreground hover:border-accent/50"
               }`}
             >
-              🎓 Learning
+              🎓 Learning objective
             </button>
             <div
               className={`mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
-                showLearning ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                showLearning ? "max-h-50 opacity-100" : "max-h-0 opacity-0"
               }`}
             >
-              <p className="text-xs text-muted-foreground font-body bg-muted/30 rounded-xl p-3 border border-border">
+              {/* <p className="text-xs text-muted-foreground font-body bg-muted/30 rounded-xl p-3 border border-border">
                 {learning_object}
-              </p>
+              </p> */}
+              <div className="text-xs text-muted-foreground font-body bg-muted/30 rounded-xl p-3 border border-border">
+                <p className="font-semibold mb-2 text-foreground">
+                  {learning_object?.heading}
+                </p>
+
+                <ul className="list-decimal pl-4 space-y-1">
+                  {learning_object?.points?.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
