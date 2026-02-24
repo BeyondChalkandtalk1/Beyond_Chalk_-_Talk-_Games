@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { CalendarDays, BookOpen, GraduationCap, Play } from "lucide-react";
 
-const colorMap = {
-  primary: "bg-primary text-primary-foreground",
-  secondary: "bg-secondary text-secondary-foreground",
-  accent: "bg-accent text-accent-foreground",
+const iconMap = {
+  primary: <CalendarDays className="w-8 h-8 text-primary-foreground" />,
 };
 
 const GameCard = ({
@@ -22,93 +21,72 @@ const GameCard = ({
   return (
     <Link to={path} className="group block">
       <div
-        className="rounded-2xl p-6 transition-all duration-300 hover:scale-105 bg-card border-2 border-border hover:border-primary"
+        className="relative rounded-3xl p-6 pb-5 transition-all duration-300 hover:scale-[1.03] bg-card border-2 border-border hover:border-primary overflow-hidden"
         style={{ boxShadow: "var(--shadow-card)" }}
       >
-        <div
-          className={`w-16 h-16 rounded-2xl ${colorMap[color]} flex items-center justify-center text-3xl mb-4 group-hover:animate-wiggle`}
-        >
-          {emoji}
+        {/* Age badge - top right */}
+        <div className="absolute top-4 right-4 w-14 h-14 rounded-full bg-primary/15 border-2 border-primary flex flex-col items-center justify-center">
+          <span className="font-display text-sm font-extrabold text-primary leading-none">7+</span>
+          <span className="font-body text-[9px] font-bold text-primary/70 leading-none">years</span>
         </div>
 
-        <div className="flex gap-1 text-sm items-center">
-          <h3 className="font-display text-xl font-bold text-foreground mb-2">
-            {title}
-          </h3>
-          <span>Age</span>
-          <span>7+ years</span>
+        {/* Icon */}
+        <div
+          className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-4 group-hover:animate-wiggle shadow-md"
+        >
+          {iconMap[color] || <span className="text-2xl">{emoji}</span>}
         </div>
-        <p className="text-sm text-muted-foreground font-body mb-3">
+
+        <h3 className="font-display text-lg font-bold text-foreground mb-1 pr-16">
+          {title}
+        </h3>
+        <p className="text-sm text-muted-foreground font-body mb-4 leading-relaxed">
           {description}
         </p>
 
-        <div className="flex flex-col gap-3">
-          {/* About the Game - reveal on hover/click */}
+        <div className="flex flex-col gap-2">
+          {/* Aim */}
           <div
-            className="relative"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowAbout((v) => !v); }}
             onMouseEnter={() => setShowAbout(true)}
             onMouseLeave={() => setShowAbout(false)}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setShowAbout((v) => !v);
-            }}
           >
             <button
               type="button"
-              className={`w-full text-left px-3 py-2 rounded-xl border-2 transition-all duration-300 cursor-pointer font-display text-xs font-bold ${
+              className={`w-full flex items-center gap-2 text-left px-4 py-2.5 rounded-xl border-2 transition-all duration-300 cursor-pointer font-display text-sm font-bold ${
                 showAbout
                   ? "border-primary bg-primary/10 text-primary"
-                  : "border-border bg-muted/50 text-foreground hover:border-primary/50"
+                  : "border-border bg-muted/40 text-foreground hover:border-primary/50 hover:bg-primary/5"
               }`}
             >
-              📖 Aim
+              <BookOpen className="w-4 h-4 flex-shrink-0" /> Aim
             </button>
-            <div
-              className={`mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
-                showAbout ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-              }`}
-            >
-              <p className="text-xs text-muted-foreground font-body bg-muted/30 rounded-xl p-3 border border-border">
+            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${showAbout ? "max-h-40 opacity-100 mt-1.5" : "max-h-0 opacity-0"}`}>
+              <p className="text-xs text-muted-foreground font-body bg-muted/30 rounded-xl p-3 border border-border leading-relaxed">
                 {about_game}
               </p>
             </div>
           </div>
 
-          {/* Learning - reveal on hover/click */}
+          {/* Learning objective */}
           <div
-            className="relative"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowLearning((v) => !v); }}
             onMouseEnter={() => setShowLearning(true)}
             onMouseLeave={() => setShowLearning(false)}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setShowLearning((v) => !v);
-            }}
           >
             <button
               type="button"
-              className={`w-full text-left px-3 py-2 rounded-xl border-2 transition-all duration-300 cursor-pointer font-display text-xs font-bold ${
+              className={`w-full flex items-center gap-2 text-left px-4 py-2.5 rounded-xl border-2 transition-all duration-300 cursor-pointer font-display text-sm font-bold ${
                 showLearning
                   ? "border-accent bg-accent/10 text-accent-foreground"
-                  : "border-border bg-muted/50 text-foreground hover:border-accent/50"
+                  : "border-border bg-muted/40 text-foreground hover:border-accent/50 hover:bg-accent/5"
               }`}
             >
-              🎓 Learning objective
+              <GraduationCap className="w-4 h-4 flex-shrink-0" /> Learning objective
             </button>
-            <div
-              className={`mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
-                showLearning ? "max-h-50 opacity-100" : "max-h-0 opacity-0"
-              }`}
-            >
-              {/* <p className="text-xs text-muted-foreground font-body bg-muted/30 rounded-xl p-3 border border-border">
-                {learning_object}
-              </p> */}
+            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${showLearning ? "max-h-60 opacity-100 mt-1.5" : "max-h-0 opacity-0"}`}>
               <div className="text-xs text-muted-foreground font-body bg-muted/30 rounded-xl p-3 border border-border">
-                <p className="font-semibold mb-2 text-foreground">
-                  {learning_object?.heading}
-                </p>
-
+                <p className="font-semibold mb-2 text-foreground">{learning_object?.heading}</p>
                 <ul className="list-decimal pl-4 space-y-1">
                   {learning_object?.points?.map((item, index) => (
                     <li key={index}>{item}</li>
@@ -119,8 +97,8 @@ const GameCard = ({
           </div>
         </div>
 
-        <div className="mt-4 flex items-center gap-2 text-primary font-display text-sm font-semibold">
-          Play Now →
+        <div className="mt-5 flex items-center gap-2 text-primary font-display text-sm font-bold group-hover:gap-3 transition-all duration-300">
+          <Play className="w-4 h-4 fill-primary" /> Play Now →
         </div>
       </div>
     </Link>
