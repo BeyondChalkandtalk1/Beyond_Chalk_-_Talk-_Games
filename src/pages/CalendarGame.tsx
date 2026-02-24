@@ -7,6 +7,7 @@ import CalendarStoryIntro from "../components/CalendarStoryIntro";
 import CalendarLeafGame from "../components/CalendarLeafGame";
 import DiceLayout from "../components/layouts/DiceLayout";
 import ZodiacLayout from "../components/layouts/ZodiacLayout";
+import HintBubble from "../components/HintBubble";
 
 
 const MONTHS = [
@@ -138,6 +139,9 @@ const Level2Game = ({ story, onFinish }) => {
   const [gameScore, setGameScore] = useState(0);
   const [gameResult, setGameResult] = useState("win");
   const [shakeSlot, setShakeSlot] = useState(null);
+  const [lastInteraction, setLastInteraction] = useState(Date.now());
+
+  const trackInteraction = useCallback(() => setLastInteraction(Date.now()), []);
 
   const availableCalendars = calendars.filter(
     (c) => !Object.values(placed).includes(c.id)
@@ -146,6 +150,7 @@ const Level2Game = ({ story, onFinish }) => {
   const handleDrop = useCallback(
     (slotIndex) => {
       if (draggedId === null) return;
+      trackInteraction();
       const isCorrect = draggedId === slotIndex;
 
       setPlaced((prev) => ({ ...prev, [slotIndex]: draggedId }));
@@ -182,7 +187,7 @@ const Level2Game = ({ story, onFinish }) => {
         }, 600);
       }
     },
-    [draggedId, placed, results]
+    [draggedId, placed, results, trackInteraction]
   );
 
   const resetGame = () => {
@@ -318,9 +323,9 @@ const Level2Game = ({ story, onFinish }) => {
               <div
                 key={cal.id}
                 draggable
-                onDragStart={() => setDraggedId(cal.id)}
-                onTouchStart={() => setDraggedId(cal.id)}
-                onClick={() => setDraggedId(draggedId === cal.id ? null : cal.id)}
+                onDragStart={() => { setDraggedId(cal.id); trackInteraction(); }}
+                onTouchStart={() => { setDraggedId(cal.id); trackInteraction(); }}
+                onClick={() => { setDraggedId(draggedId === cal.id ? null : cal.id); trackInteraction(); }}
                 className={`px-4 py-3 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-105 select-none border-2 min-w-[90px] ${
                   draggedId === cal.id
                     ? "border-primary scale-110 ring-2 ring-primary/50"
@@ -349,6 +354,15 @@ const Level2Game = ({ story, onFinish }) => {
           </p>
         )}
       </div>
+
+      {/* Hint after 60s inactivity */}
+      {!showResult && (
+        <HintBubble
+          unplacedMonths={[...Array(12).keys()].filter(i => placed[i] === undefined)}
+          lastInteraction={lastInteraction}
+          delay={60000}
+        />
+      )}
 
       {showConfetti && <ConfettiAnimation />}
 
