@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import storyMaking from "@/assets/story/story-1-making.jpg";
 import storyWhoosh from "@/assets/story/story-2-whoosh.jpg";
 import storyRunning from "@/assets/story/story-3-running.jpg";
 import storySad from "@/assets/story/story-4-sad.jpg";
 import storyHelp from "@/assets/story/story-5-help.jpg";
 
-const STORY_SLIDES = [
+const STORY_PAGES = [
   {
     id: 1,
     image: storyMaking,
     text: "One bright morning, a young girl decided to make something special — her very own calendar! 📅 She brought colourful papers, sketch pens, and shiny stickers. Carefully, she designed each page with days and dates.",
     highlight: "But one important thing was still missing — the names of the months!",
     emoji: "✏️",
-    bgColor: "from-amber-50 to-orange-50",
+    imagePosition: "left" as const,
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const STORY_SLIDES = [
     text: "Just then, her playful dog Biscuit came running into the room! 🐶 His tail was wagging, his paws were muddy, and he was full of energy!",
     highlight: "WHOOSH! The papers flew off the table!",
     emoji: "💨",
-    bgColor: "from-yellow-50 to-amber-50",
+    imagePosition: "right" as const,
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ const STORY_SLIDES = [
     text: "Biscuit grabbed the calendar pages in his mouth and ran across the room! 🏃‍♂️ The pages scattered everywhere like flying leaves! 🍃",
     highlight: '"Oh no! My calendar pages!" cried the girl.',
     emoji: "🍂",
-    bgColor: "from-sky-50 to-blue-50",
+    imagePosition: "left" as const,
   },
   {
     id: 4,
@@ -36,7 +36,7 @@ const STORY_SLIDES = [
     text: "After a little chase, she finally managed to collect all the sheets. But now there was a new problem... 😟",
     highlight: "All the pages were completely mixed up! The months were no longer in order.",
     emoji: "😰",
-    bgColor: "from-pink-50 to-rose-50",
+    imagePosition: "right" as const,
   },
   {
     id: 5,
@@ -44,144 +44,277 @@ const STORY_SLIDES = [
     text: "The girl looked at the messy pile and thought... maybe someone smart can help her arrange them back! 🌟",
     highlight: "Can YOU help her fix the calendar? 🙋‍♂️",
     emoji: "🆘",
-    bgColor: "from-emerald-50 to-teal-50",
+    imagePosition: "left" as const,
   },
 ];
 
+type BookState = "closed" | "opening" | "open" | "turning";
+
 const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const slide = STORY_SLIDES[currentSlide];
-  const isLast = currentSlide === STORY_SLIDES.length - 1;
-  const isFirst = currentSlide === 0;
+  const [bookState, setBookState] = useState<BookState>("closed");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [turnDirection, setTurnDirection] = useState<"next" | "prev">("next");
+
+  const totalPages = STORY_PAGES.length;
+  const isLastPage = currentPage === totalPages - 1;
+  const isFirstPage = currentPage === 0;
+  const page = STORY_PAGES[currentPage];
+
+  const openBook = useCallback(() => {
+    setBookState("opening");
+    setTimeout(() => setBookState("open"), 600);
+  }, []);
+
+  const turnPage = useCallback(
+    (direction: "next" | "prev") => {
+      if (bookState === "turning") return;
+      setTurnDirection(direction);
+      setBookState("turning");
+      setTimeout(() => {
+        setCurrentPage((p) => (direction === "next" ? p + 1 : p - 1));
+        setBookState("open");
+      }, 500);
+    },
+    [bookState]
+  );
 
   const goNext = () => {
-    if (isLast) {
+    if (isLastPage) {
       onStart({ id: "paw_patch", title: "Paw Patch Calendar Quest" });
     } else {
-      setCurrentSlide((p) => p + 1);
+      turnPage("next");
     }
   };
 
   const goPrev = () => {
-    if (!isFirst) setCurrentSlide((p) => p - 1);
+    if (!isFirstPage) turnPage("prev");
   };
+
+  // ─── COVER ───
+  if (bookState === "closed" || bookState === "opening") {
+    return (
+      <div
+        className="min-h-screen flex flex-col items-center justify-center px-4"
+        style={{ background: "var(--gradient-warm)" }}
+      >
+        <div
+          onClick={openBook}
+          className={`
+            relative cursor-pointer select-none
+            w-[340px] md:w-[480px] aspect-[3/4]
+            rounded-r-2xl rounded-l-md
+            shadow-2xl
+            transition-transform duration-700 origin-left
+            ${bookState === "opening" ? "scale-x-0 opacity-0" : "hover:rotate-y-6 hover:shadow-[0_20px_60px_-10px_hsl(var(--secondary)/0.4)]"}
+          `}
+          style={{
+            background: "linear-gradient(135deg, hsl(0 60% 30%), hsl(0 55% 40%))",
+            transformStyle: "preserve-3d",
+            perspective: "1000px",
+          }}
+        >
+          {/* Spine effect */}
+          <div className="absolute left-0 top-0 bottom-0 w-6 md:w-8 rounded-l-md"
+            style={{ background: "linear-gradient(90deg, hsl(0 60% 25%), hsl(0 60% 32%))" }}
+          />
+
+          {/* Gold border inset */}
+          <div className="absolute inset-4 md:inset-6 left-10 md:left-12 border-2 border-[hsl(36,80%,55%)] rounded-xl flex flex-col items-center justify-center gap-4 md:gap-6 p-6">
+            {/* Decorative top */}
+            <div className="text-4xl md:text-5xl">📖</div>
+
+            <h1 className="font-display text-2xl md:text-4xl font-extrabold text-center leading-tight"
+              style={{ color: "hsl(36 80% 60%)" }}>
+              🐾 Paw Patch
+              <br />
+              Calendar Quest
+            </h1>
+
+            <div className="w-16 h-0.5 rounded-full" style={{ background: "hsl(36 80% 55%)" }} />
+
+            <p className="font-body text-sm md:text-base text-center leading-relaxed"
+              style={{ color: "hsl(36 80% 80%)" }}>
+              A fun story about a girl,
+              <br />
+              her naughty dog Biscuit,
+              <br />
+              and a mixed-up calendar!
+            </p>
+
+            {/* Tap to open hint */}
+            <div className="mt-2 flex flex-col items-center gap-1 animate-pulse">
+              <span className="text-xs md:text-sm font-display font-bold"
+                style={{ color: "hsl(36 80% 65%)" }}>
+                ✨ Tap to Open ✨
+              </span>
+              <span className="text-2xl animate-float">👆</span>
+            </div>
+          </div>
+
+          {/* Corner decorations */}
+          <div className="absolute top-2 right-2 text-lg opacity-60">🌟</div>
+          <div className="absolute bottom-2 right-2 text-lg opacity-60">🐶</div>
+        </div>
+
+        <p className="mt-6 font-body text-muted-foreground text-xs md:text-sm">
+          Click the book to start reading!
+        </p>
+      </div>
+    );
+  }
+
+  // ─── OPEN BOOK ───
+  const imageOnLeft = page.imagePosition === "left";
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-start py-6 px-4"
+      className="min-h-screen flex flex-col items-center justify-center py-6 px-4"
       style={{ background: "var(--gradient-warm)" }}
     >
-      {/* Title */}
-      <div className="text-center mb-4">
-        <h1 className="font-display text-3xl md:text-5xl font-extrabold text-secondary mb-1">
-          🐾 Paw Patch Calendar Quest
-        </h1>
-        <p className="font-body text-muted-foreground text-sm md:text-base">
-          Paw made the mess, smart minds patch the calendar! ✨
-        </p>
-      </div>
+      {/* Book title */}
+      <h2 className="font-display text-xl md:text-2xl font-bold text-secondary mb-3">
+        🐾 Paw Patch Calendar Quest
+      </h2>
 
-      {/* Progress dots */}
+      {/* Page indicator */}
       <div className="flex gap-2 mb-4">
-        {STORY_SLIDES.map((_, i) => (
-          <button
+        {STORY_PAGES.map((_, i) => (
+          <div
             key={i}
-            onClick={() => setCurrentSlide(i)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              i === currentSlide
-                ? "bg-primary scale-125 shadow-md"
-                : i < currentSlide
-                ? "bg-primary/50"
-                : "bg-border"
+            className={`h-1.5 rounded-full transition-all duration-500 ${
+              i === currentPage
+                ? "w-8 bg-primary"
+                : i < currentPage
+                ? "w-4 bg-primary/40"
+                : "w-4 bg-border"
             }`}
           />
         ))}
       </div>
 
-      {/* Story card */}
+      {/* The Book */}
       <div
-        key={slide.id}
-        className={`relative bg-gradient-to-br ${slide.bgColor} rounded-3xl overflow-hidden max-w-lg w-full shadow-xl border-2 border-white/60 animate-fade-in`}
-        style={{ boxShadow: "var(--shadow-hover)" }}
+        className={`
+          relative max-w-4xl w-full
+          bg-[hsl(40,40%,96%)]
+          rounded-2xl overflow-hidden
+          shadow-[0_10px_50px_-10px_hsl(var(--secondary)/0.3)]
+          border border-[hsl(35,40%,88%)]
+          transition-all duration-500
+          ${bookState === "turning"
+            ? turnDirection === "next"
+              ? "animate-page-turn-next"
+              : "animate-page-turn-prev"
+            : "animate-fade-in"
+          }
+        `}
+        style={{ minHeight: "420px" }}
       >
-        {/* Slide number badge */}
-        <div className="absolute top-3 left-3 z-10 bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center font-display font-bold text-sm shadow-md">
-          {currentSlide + 1}
-        </div>
+        {/* Book spine shadow */}
+        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border z-10 hidden md:block" />
+        <div className="absolute left-1/2 top-0 bottom-0 w-6 -translate-x-1/2 z-10 hidden md:block"
+          style={{ background: "linear-gradient(90deg, transparent, hsl(35 30% 85% / 0.5), transparent)" }}
+        />
 
-        {/* Image */}
-        <div className="relative w-full aspect-square overflow-hidden">
-          <img
-            src={slide.image}
-            alt={`Story scene ${slide.id}`}
-            className="w-full h-full object-cover transition-all duration-500"
-          />
-          {/* Gradient overlay at bottom for text readability */}
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/30 to-transparent" />
-        </div>
+        {/* Content grid */}
+        <div className={`grid grid-cols-1 md:grid-cols-2 min-h-[420px] ${!imageOnLeft ? "md:direction-rtl" : ""}`}>
+          {/* Image side */}
+          <div className={`relative overflow-hidden ${imageOnLeft ? "md:order-1" : "md:order-2"}`}>
+            <img
+              src={page.image}
+              alt={`Story scene ${page.id}`}
+              className="w-full h-full object-cover min-h-[250px] md:min-h-[420px]"
+            />
+            {/* Page number on image */}
+            <div className="absolute bottom-3 left-3 bg-secondary/80 text-secondary-foreground rounded-full w-8 h-8 flex items-center justify-center font-display font-bold text-sm backdrop-blur-sm">
+              {currentPage + 1}
+            </div>
+            {/* Subtle vignette */}
+            <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.1)]" />
+          </div>
 
-        {/* Text content */}
-        <div className="p-5 md:p-6">
-          <p className="font-body text-foreground/80 text-sm md:text-base leading-relaxed mb-3">
-            {slide.text}
-          </p>
-          <p className="font-display text-foreground font-bold text-base md:text-lg leading-snug bg-white/50 rounded-xl px-4 py-2 border-l-4 border-primary">
-            {slide.highlight}
-          </p>
+          {/* Text side */}
+          <div className={`flex flex-col justify-center p-6 md:p-10 ${imageOnLeft ? "md:order-2" : "md:order-1"} ${!imageOnLeft ? "md:direction-ltr" : ""}`}>
+            {/* Chapter emoji */}
+            <div className="text-4xl md:text-5xl mb-4 animate-float">
+              {page.emoji}
+            </div>
+
+            <p className="font-body text-foreground/80 text-sm md:text-base lg:text-lg leading-relaxed mb-5">
+              {page.text}
+            </p>
+
+            {/* Highlighted quote */}
+            <div className="relative bg-primary/10 rounded-xl px-5 py-4 border-l-4 border-primary">
+              <span className="absolute -top-3 -left-1 text-2xl opacity-50">❝</span>
+              <p className="font-display text-foreground font-bold text-sm md:text-base lg:text-lg leading-snug">
+                {page.highlight}
+              </p>
+            </div>
+
+            {/* Page corner fold effect */}
+            <div className="hidden md:block absolute bottom-0 right-0 w-12 h-12"
+              style={{
+                background: "linear-gradient(135deg, transparent 50%, hsl(35 30% 88%) 50%)",
+                borderTopLeftRadius: "8px",
+              }}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Navigation buttons */}
-      <div className="flex items-center gap-4 mt-5 w-full max-w-lg justify-between">
+      {/* Navigation */}
+      <div className="flex items-center gap-6 mt-6 w-full max-w-4xl justify-between">
         <button
           onClick={goPrev}
-          disabled={isFirst}
-          className={`px-5 py-3 rounded-2xl font-display font-bold text-sm transition-all ${
-            isFirst
+          disabled={isFirstPage}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl font-display font-bold text-sm transition-all duration-300 ${
+            isFirstPage
               ? "opacity-30 cursor-not-allowed bg-muted text-muted-foreground"
-              : "bg-card border-2 border-border text-foreground hover:border-primary hover:scale-105"
+              : "bg-card border-2 border-border text-foreground hover:border-primary hover:scale-105 hover:shadow-md"
           }`}
         >
-          ← Back
+          <span className="text-lg">📖</span> Previous Page
         </button>
 
-        <span className="font-body text-xs text-muted-foreground">
-          {currentSlide + 1} / {STORY_SLIDES.length}
+        <span className="font-display text-sm text-muted-foreground">
+          Page {currentPage + 1} of {totalPages}
         </span>
 
         <button
           onClick={goNext}
-          className={`px-6 py-3 rounded-2xl font-display font-bold text-sm transition-all shadow-lg hover:scale-105 ${
-            isLast
-              ? "bg-gradient-to-r from-primary to-accent text-primary-foreground animate-pulse text-base"
-              : "bg-primary text-primary-foreground"
+          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-display font-bold text-sm transition-all duration-300 shadow-lg hover:scale-105 ${
+            isLastPage
+              ? "bg-gradient-to-r from-primary to-accent text-primary-foreground animate-pulse-glow text-base"
+              : "bg-primary text-primary-foreground hover:shadow-xl"
           }`}
           style={{ boxShadow: "var(--shadow-card)" }}
         >
-          {isLast ? "🎮 Let's Play!" : "Next →"}
+          {isLastPage ? (
+            <>🎮 Let's Play!</>
+          ) : (
+            <>Turn Page <span className="text-lg">📄</span></>
+          )}
         </button>
       </div>
 
-      {/* Learning objectives - only on last slide */}
-      {isLast && (
-        <div className="mt-5 max-w-lg w-full bg-card/80 rounded-2xl p-4 border border-border animate-slide-up">
-          <h3 className="font-display text-sm font-bold text-secondary mb-2">
+      {/* Learning objectives - last page */}
+      {isLastPage && (
+        <div className="mt-5 max-w-4xl w-full bg-card/80 rounded-2xl p-5 border border-border animate-slide-up">
+          <h3 className="font-display text-sm font-bold text-secondary mb-3">
             🎯 What You'll Learn
           </h3>
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              "📅 Months in order",
-              "📆 Days & weeks",
-              "🧠 Logical thinking",
-              "🎉 Festivals & seasons",
-            ].map((item) => (
-              <div
-                key={item}
-                className="text-xs font-body text-foreground/70 bg-background/50 rounded-lg px-2 py-1.5"
-              >
-                {item}
-              </div>
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {["📅 Months in order", "📆 Days & weeks", "🧠 Logical thinking", "🎉 Festivals & seasons"].map(
+              (item) => (
+                <div
+                  key={item}
+                  className="text-xs font-body text-foreground/70 bg-background/50 rounded-lg px-3 py-2 text-center"
+                >
+                  {item}
+                </div>
+              )
+            )}
           </div>
         </div>
       )}
