@@ -15,7 +15,7 @@ const MONTH_NAMES = [
   "July","August","September","October","November","December"
 ];
 
-const HintBubble = ({ unplacedMonths, lastInteraction, delay = 60000 }: HintBubbleProps) => {
+const HintBubble = ({ unplacedMonths, lastInteraction, delay = 6000 }: HintBubbleProps) => {
   const [visible, setVisible] = useState(false);
   const [hintMonth, setHintMonth] = useState<number | null>(null);
   const [selected, setSelected] = useState<number | null>(null);

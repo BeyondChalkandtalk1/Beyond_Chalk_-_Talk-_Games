@@ -9,7 +9,7 @@ const Header = () => {
     <header className="bg-card border-b-[3px] border-primary sticky top-0 z-50">
       <div className="container mx-auto px-4 py-1 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
-          <div className="w-28 h-24 rounded-full  flex items-center justify-center text-primary-foreground font-display text-xl font-bold">
+          <div className="w-36 h-32 rounded-full  flex items-center justify-center text-primary-foreground font-display text-xl font-bold">
             <img src={logo} alt="" className="w-full h-full" />
           </div>
           <div>
