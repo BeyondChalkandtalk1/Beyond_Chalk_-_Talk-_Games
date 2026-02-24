@@ -42,13 +42,13 @@ const Index = () => {
       >
         <div className="container mx-auto px-4">
           <div className="animate-float inline-block text-6xl mb-4">
-            <img src={logo} alt="" className="w-24 h-20" />
+            <img src={logo} alt="" className="w-28 h-24" />
           </div>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary mb-3">
-            Educational Games for Mathematical Learning
+            Play is our brain’s favourite way of learning.
           </h2>
-          <p className="text-lg text-muted-foreground font-body max-w-md mx-auto">
-            Khel khel mein seekho! Fun educational games sirf tumhare liye 🌟
+          <p className="text-lg font-semibold font-body max-w-md mx-auto">
+            ~Diane Ackerman
           </p>
         </div>
       </section>
