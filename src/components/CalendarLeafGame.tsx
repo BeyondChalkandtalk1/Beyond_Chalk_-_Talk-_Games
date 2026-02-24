@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { MONTH_MCQ, enableMCQ } from "../data/calendarMCQ";
+import HintBubble from "./HintBubble";
 
 const MONTHS = [
   "January","February","March","April","May","June",
@@ -315,6 +316,10 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
 
   const [mcqMonthIndex, setMcqMonthIndex] = useState<number | null>(null);
   const [pendingPlaced, setPendingPlaced] = useState<{ slotMonthIndex: number; leafId: number } | null>(null);
+  const [lastInteraction, setLastInteraction] = useState(Date.now());
+
+  // Track user interactions for hint system
+  const trackInteraction = useCallback(() => setLastInteraction(Date.now()), []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -339,6 +344,7 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
   const handleDrop = useCallback((slotMonthIndex: number) => {
     if (draggedLeaf === null) return;
     if (placed[slotMonthIndex] !== undefined) return;
+    trackInteraction();
 
     if (draggedLeaf === slotMonthIndex) {
       setDraggedLeaf(null);
@@ -353,7 +359,9 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
       setTimeout(() => setWrongSlot(null), 600);
       setDraggedLeaf(null);
     }
-  }, [draggedLeaf, placed, confirmPlacement]);
+  }, [draggedLeaf, placed, confirmPlacement, trackInteraction]);
+
+  const unplacedMonths = [...Array(12).keys()].filter(i => placed[i] === undefined && pendingPlaced?.slotMonthIndex !== i);
 
   const correctCount = Object.keys(placed).length + (pendingPlaced ? 1 : 0);
 
@@ -404,8 +412,8 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
                 <div
                   key={leafIdx}
                   draggable
-                  onDragStart={() => setDraggedLeaf(leafIdx)}
-                  onClick={() => setDraggedLeaf(draggedLeaf === leafIdx ? null : leafIdx)}
+                  onDragStart={() => { setDraggedLeaf(leafIdx); trackInteraction(); }}
+                  onClick={() => { setDraggedLeaf(draggedLeaf === leafIdx ? null : leafIdx); trackInteraction(); }}
                   className={`cursor-grab active:cursor-grabbing rounded-2xl border-2 p-1 transition-all hover:scale-105 select-none ${
                     draggedLeaf === leafIdx
                       ? "border-primary ring-2 ring-primary/40 scale-110"
@@ -475,6 +483,15 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
             </div>
           </div>
         </>
+      )}
+
+      {/* Hint Bubble - shows after 60s inactivity */}
+      {!done && (
+        <HintBubble
+          unplacedMonths={unplacedMonths}
+          lastInteraction={lastInteraction}
+          delay={60000}
+        />
       )}
 
       {/* MCQ Popup */}
