@@ -31,14 +31,121 @@ const Index = () => {
       {/* Hero Video Slider */}
       <HeroVideoSlider />
 
- 
+      {/* About Us Section */}
+      <section className="py-10 md:py-14">
+        <div className="container mx-auto px-4">
+          <h3
+            className="text-2xl md:text-3xl font-bold text-secondary mb-3 text-center"
+            style={{ fontFamily: "'Times New Roman', var(--font-display)" }}
+          >
+            About Us
+          </h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+            {/* Left - Content */}
+            <div
+              className="lg:col-span-2 space-y-4 text-[15px] md:text-[20px] text-foreground leading-[1.6]"
+              style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+            >
+              <p>
+                <strong className="text-secondary font-bold">
+                  Beyond Chalk and Talk (OPC) Pvt. Ltd.
+                </strong>{" "}
+                is a DPIIT-registered, Startup India–recognised organisation
+                working to make mathematics meaningful, engaging, and joyful for
+                learners aged 3 years and above.
+              </p>
+              <p>
+                After spending nearly a decade training teachers and working
+                closely with students, we noticed something important:{" "}
+                <span
+                  className="text-secondary font-semibold"
+                  style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+                >
+                  many children struggle with mathematics not because they
+                  cannot learn it, but because they rarely get the chance to
+                  experience the ideas behind it.
+                </span>{" "}
+                Concepts often remain hidden behind procedures.
+              </p>
+              <p className="font-semibold text-primary">
+                That's where our games come in.
+              </p>
+              <p>
+                We created this platform to turn mathematical concepts into
+                interactive games and playful explorations.{" "}
+                <span className="text-secondary font-semibold">
+                  While there are many math games available online, most focus
+                  mainly on practice and repetition.
+                </span>{" "}
+                Our games are different. Each one is carefully designed to build
+                conceptual understanding, helping learners think, reason, and
+                discover rather than just arrive at answers. These games are not
+                just for classrooms. They are designed for anyone, anywhere —
+                students, teachers, parents, or curious minds who enjoy learning
+                through interaction and play.
+              </p>
+              <p>
+                Our work is strongly aligned with the vision of{" "}
+                <strong>NEP 2020</strong> and <strong>NCF 2023</strong>,
+                promoting experiential and competency-based learning where
+                understanding takes priority over rote methods.
+              </p>
+              <p>
+                At Beyond Chalk and Talk, we believe mathematics should not feel
+                distant or difficult. It should feel interactive, thoughtful,
+                and enjoyable to explore.
+              </p>
+            </div>
+
+            {/* Right - Photo & Info */}
+            <div
+              className="flex flex-col items-center gap-4 bg-card rounded-2xl p-5 border border-border"
+              style={{ boxShadow: "var(--shadow-card)" }}
+            >
+              <div className="w-full aspect-[3/4] max-w-[320px] rounded-xl bg-muted border-2 border-primary/20 overflow-hidden">
+                <img
+                  src={MamImage}
+                  alt="Ms. Divyanshi Dhawan"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="text-center space-y-0.5">
+                <h4
+                  className="text-lg font-bold text-secondary"
+                  style={{ fontFamily: "'Times New Roman', var(--font-display)" }}
+                >
+                  Ms. Divyanshi Dhawan
+                </h4>
+                <p
+                  className="text-lg text-primary font-semibold"
+                  style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+                >
+                  Director
+                </p>
+                <p
+                  className="text-lg text-muted-foreground leading-snug pt-1"
+                  style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+                >
+                  M.Sc. (Mathematics), University of Lucknow
+                </p>
+                <p
+                  className="text-lg text-muted-foreground leading-snug"
+                  style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+                >
+                  PhD at Centre for Education Technology, IIT Jodhpur (pursuing)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Games Section */}
       <section className="py-2">
         <div className="container mx-auto px-4">
           <h3
             className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-2"
-            style={{ fontFamily: "'Open Sans', var(--font-display)" }}
+            style={{ fontFamily: "'Times New Roman', var(--font-display)" }}
           >
             🎯 Mathematical Games
           </h3>
@@ -55,7 +162,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <h3
             className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-2"
-            style={{ fontFamily: "'Open Sans', var(--font-display)" }}
+            style={{ fontFamily: "'Times New Roman', var(--font-display)" }}
           >
             📊 Game History
           </h3>

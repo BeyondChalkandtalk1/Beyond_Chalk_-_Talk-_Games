@@ -185,8 +185,8 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
               i === currentPage
                 ? "w-8 bg-primary"
                 : i < currentPage
-                ? "w-4 bg-primary/40"
-                : "w-4 bg-border"
+                  ? "w-4 bg-primary/40"
+                  : "w-4 bg-border"
             }`}
           />
         ))}
@@ -201,25 +201,34 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
           shadow-[0_10px_50px_-10px_hsl(var(--secondary)/0.3)]
           border border-[hsl(35,40%,88%)]
           transition-all duration-500
-          ${bookState === "turning"
-            ? turnDirection === "next"
-              ? "animate-page-turn-next"
-              : "animate-page-turn-prev"
-            : "animate-fade-in"
+          ${
+            bookState === "turning"
+              ? turnDirection === "next"
+                ? "animate-page-turn-next"
+                : "animate-page-turn-prev"
+              : "animate-fade-in"
           }
         `}
         style={{ minHeight: "420px" }}
       >
         {/* Book spine shadow */}
         <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border z-10 hidden md:block" />
-        <div className="absolute left-1/2 top-0 bottom-0 w-6 -translate-x-1/2 z-10 hidden md:block"
-          style={{ background: "linear-gradient(90deg, transparent, hsl(35 30% 85% / 0.5), transparent)" }}
+        <div
+          className="absolute left-1/2 top-0 bottom-0 w-6 -translate-x-1/2 z-10 hidden md:block"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, hsl(35 30% 85% / 0.5), transparent)",
+          }}
         />
 
         {/* Content grid */}
-        <div className={`grid grid-cols-1 md:grid-cols-2 min-h-[420px] ${!imageOnLeft ? "md:direction-rtl" : ""}`}>
+        <div
+          className={`grid grid-cols-1 md:grid-cols-2 min-h-[420px] ${!imageOnLeft ? "md:direction-rtl" : ""}`}
+        >
           {/* Image side */}
-          <div className={`relative overflow-hidden ${imageOnLeft ? "md:order-1" : "md:order-2"}`}>
+          <div
+            className={`relative overflow-hidden ${imageOnLeft ? "md:order-1" : "md:order-2"}`}
+          >
             <img
               src={page.image}
               alt={`Story scene ${page.id}`}
@@ -234,7 +243,9 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
           </div>
 
           {/* Text side */}
-          <div className={`flex flex-col justify-center p-6 md:p-10 ${imageOnLeft ? "md:order-2" : "md:order-1"} ${!imageOnLeft ? "md:direction-ltr" : ""}`}>
+          <div
+            className={`flex flex-col justify-center p-6 md:p-10 ${imageOnLeft ? "md:order-2" : "md:order-1"} ${!imageOnLeft ? "md:direction-ltr" : ""}`}
+          >
             {/* Chapter emoji */}
             <div className="text-4xl md:text-5xl mb-4 animate-float">
               {page.emoji}
@@ -246,16 +257,20 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
 
             {/* Highlighted quote */}
             <div className="relative bg-primary/10 rounded-xl px-5 py-4 border-l-4 border-primary">
-              <span className="absolute -top-3 -left-1 text-2xl opacity-50">❝</span>
+              <span className="absolute -top-3 -left-1 text-2xl opacity-50">
+                ❝
+              </span>
               <p className="font-display text-foreground font-bold text-sm md:text-base lg:text-lg leading-snug">
                 {page.highlight}
               </p>
             </div>
 
             {/* Page corner fold effect */}
-            <div className="hidden md:block absolute bottom-0 right-0 w-12 h-12"
+            <div
+              className="hidden md:block absolute bottom-0 right-0 w-12 h-12"
               style={{
-                background: "linear-gradient(135deg, transparent 50%, hsl(35 30% 88%) 50%)",
+                background:
+                  "linear-gradient(135deg, transparent 50%, hsl(35 30% 88%) 50%)",
                 borderTopLeftRadius: "8px",
               }}
             />
@@ -293,28 +308,34 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
           {isLastPage ? (
             <>🎮 Let's Play!</>
           ) : (
-            <>Turn Page <span className="text-lg">📄</span></>
+            <>
+              Turn Page <span className="text-lg">📄</span>
+            </>
           )}
         </button>
       </div>
 
       {/* Learning objectives - last page */}
       {isLastPage && (
-        <div className="mt-5 max-w-4xl w-full bg-card/80 rounded-2xl p-5 border border-border animate-slide-up">
-          <h3 className="font-display text-sm font-bold text-secondary mb-3">
+        <div className="mt-5 max-w-4xl w-full bg-card/80 rounded-2xl p-3 border border-border animate-slide-up">
+          <h3 className="font-display text-lg font-bold text-secondary mb-1">
             🎯 What You'll Learn
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {["📅 Months in order", "📆 Days & weeks", "🧠 Logical thinking", "🎉 Festivals & seasons"].map(
-              (item) => (
-                <div
-                  key={item}
-                  className="text-xs font-body text-foreground/70 bg-background/50 rounded-lg px-3 py-2 text-center"
-                >
-                  {item}
-                </div>
-              )
-            )}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-0">
+            {[
+              "🗂️ Month Sequencing",
+              "📆 Calendar Understanding",
+              "🧠 Logical Reasoning",
+              "🏖️ Real-Life Application",
+              "🧩 Problem Solving Skills",
+            ].map((item) => (
+              <div
+                key={item}
+                className="text-lg font-body text-foreground/70 bg-background/50 rounded-lg px-1 py-2 text-center whitespace-nowrap"
+              >
+                {item}
+              </div>
+            ))}
           </div>
         </div>
       )}

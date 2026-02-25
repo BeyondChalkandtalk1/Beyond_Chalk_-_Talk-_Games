@@ -299,8 +299,12 @@ const GameCard = ({
   const [activeSection, setActiveSection] = useState(null);
 
   return (
-    // <Link to={path} className="group block">
-    <div className="group block">
+    <Link to={path} className="group block"
+      style={{ fontFamily: "'Times New Roman', var(--font-body)" }}>
+    {/* <div
+      className="group block"
+      style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+    > */}
       <div
         className="relative rounded-3xl p-6 pb-5 transition-all duration-300 hover:scale-105 
         bg-gradient-to-br from-yellow-100 via-pink-100 to-blue-100 
@@ -322,7 +326,7 @@ const GameCard = ({
 
         {/* Icon */}
         <div
-          className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-purple-400 to-pink-400 
+          className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-yellow-300 via-orange-300 to-pink-300
           flex items-center justify-center mb-4 shadow-lg group-hover:animate-bounce"
         >
           {iconMap[color] || (
@@ -388,15 +392,16 @@ const GameCard = ({
             }`}
           >
             {activeSection === "aim" && (
-              <div className="text-xs text-purple-800 bg-white/80 rounded-xl p-4 shadow">
+              <div className="text-lg text-purple-800 bg-white/80 rounded-xl p-4 shadow">
                 {about_game}
               </div>
             )}
 
             {activeSection === "learning" && (
-              <div className="text-xs text-purple-800 bg-white/80 rounded-xl p-4 shadow">
+              <div className="text-lg text-purple-800 bg-white/80 rounded-xl p-4 shadow">
                 <p className="font-bold mb-2">{learning_object?.heading}</p>
-                <ul className="list-decimal pl-4 space-y-1">
+
+                <ul className="list-decimal pl-4 space-y-1 max-h-40 overflow-y-auto hide-scrollbar pr-2">
                   {learning_object?.points?.map((item, index) => (
                     <li key={index}>{item}</li>
                   ))}
@@ -415,7 +420,7 @@ const GameCard = ({
           <Play className="w-4 h-4 fill-white" /> 🎮 Play Now
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

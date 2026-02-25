@@ -400,7 +400,7 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
           {/* Available Leaves */}
           <div className="mb-6">
             <h3 className="font-display text-base font-bold text-center text-foreground mb-3">
-              📦 Calendar Leaves — Drag ya Click karo!
+              📦 Calendar Leaves — Drag or select!
             </h3>
             {draggedLeaf !== null && (
               <p className="text-center text-sm text-primary font-bold mb-2 animate-pulse">

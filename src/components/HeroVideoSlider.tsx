@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import logo from "../assets/BCAT_logo.png"
 
 const SLIDES = [
   {
@@ -7,18 +8,18 @@ const SLIDES = [
     author: "Diane Ackerman",
   },
   {
-    video: "/videos/video1.mp4",
+    video: "/videos/video2.mp4",
     quote: "Pure mathematics is, in its way, the poetry of logical ideas.",
     author: "Albert Einstein",
   },
   {
-    video: "/videos/video1.mp4",
+    video: "/videos/video3.mp4",
     quote: "Mathematics is not about numbers, equations, computations, or algorithms: it is about understanding.",
     author: "William Paul Thurston",
   },
 ];
 
-const HeroVideoSlider = () => {
+const   HeroVideoSlider = () => {
   const [current, setCurrent] = useState(0);
   const [fade, setFade] = useState(true);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -63,7 +64,9 @@ const HeroVideoSlider = () => {
       {SLIDES.map((slide, i) => (
         <video
           key={i}
-          ref={(el) => { videoRefs.current[i] = el; }}
+          ref={(el) => {
+            videoRefs.current[i] = el;
+          }}
           src={slide.video}
           muted
           playsInline
@@ -84,10 +87,13 @@ const HeroVideoSlider = () => {
         }`}
       >
         <div className="max-w-3xl mx-auto">
-          <span className="text-5xl md:text-7xl text-white/30 font-serif leading-none select-none">"</span>
+          <span className="text-5xl md:text-7xl text-white/30 font-serif leading-none select-none text-center">
+            {/* " */}
+            <img src={logo} alt="" className="w-60 h-48 mx-auto"/>
+          </span>
           <h2
             className="text-xl md:text-3xl lg:text-4xl font-semibold text-white leading-snug mt-[-1rem]"
-            style={{ fontFamily: "'Open Sans', var(--font-body)" }}
+            style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
           >
             {SLIDES[current].quote}
           </h2>
@@ -95,7 +101,7 @@ const HeroVideoSlider = () => {
             <span className="w-10 h-[2px] bg-primary rounded-full" />
             <p
               className="text-sm md:text-base font-medium tracking-wide text-white/80 italic"
-              style={{ fontFamily: "'Open Sans', var(--font-body)" }}
+              style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
             >
               — {SLIDES[current].author}
             </p>

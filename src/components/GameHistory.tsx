@@ -6,13 +6,13 @@ const GameHistory = () => {
     return (
       <div className="text-center py-12">
         <p className="text-6xl mb-4">
-          <img src={logo} alt="" className="w-20 h-20 mx-auto"/>
+          <img src={logo} alt="" className="w-20 h-20 mx-auto" />
         </p>
         <p className="font-display text-xl text-muted-foreground">
-          Abhi tak koi game nahi khela!
+          Haven't played any games yet!
         </p>
         <p className="text-sm text-muted-foreground font-body mt-2">
-          Koi game khelo aur yahan apni history dekho 🌟
+          Play a game and check your history here. 🌟
         </p>
       </div>
     );
