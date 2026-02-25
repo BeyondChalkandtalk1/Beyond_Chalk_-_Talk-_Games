@@ -1,6 +1,6 @@
 import GameCard from "../components/GameCard";
 import GameHistory from "../components/GameHistory";
-import logo from "../assets/BCAT_logo.png"
+import HeroVideoSlider from "../components/HeroVideoSlider";
 import MamImage from "../assets/divyanshi_mam.jpeg";
 
 const GAMES = [
@@ -10,14 +10,6 @@ const GAMES = [
     emoji: "🐾",
     about_game:
       "To help children understand the structure and order of a calendar by arranging mixed calendar pages and solving simple logic-based questions related to days, weeks, and months.",
-
-//     learning_object: `After playing the game, learners will be able to:
-// 1.	Sequence the months of the year correctly.
-// 2.	Interpret basic calendar information (days, dates, weeks, months).
-// 3.	Use reasoning to answer calendar-based questions (before–after days, order of months, simple event timing).
-// 4.	Apply calendar knowledge to everyday contexts such as holidays, routines, and festivals.
-// 5.	Develop logical thinking and sequencing skills through a problem-solving task.
-// .`,
     learning_object: {
       heading: "After playing the game, learners will be able to:",
       points: [
@@ -36,35 +28,26 @@ const GAMES = [
 const Index = () => {
   return (
     <>
-      {/* Hero Section */}
-      <section
-        className="py-12 md:py-28 text-center"
-        style={{ background: "var(--gradient-warm)" }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="animate-float inline-block text-6xl mb-4">
-            <img src={logo} alt="" className="w-28 h-24" />
-          </div>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary mb-3">
-            Play is our brain’s favourite way of learning.
-          </h2>
-          <p className="text-lg font-semibold font-body max-w-md mx-auto">
-            ~Diane Ackerman
-          </p>
-        </div>
-      </section>
+      {/* Hero Video Slider */}
+      <HeroVideoSlider />
 
       {/* About Us Section */}
-      <section className="py-12 md:py-16">
+      <section className="py-10 md:py-14">
         <div className="container mx-auto px-4">
-          <h3 className="font-display text-3xl md:text-4xl font-bold text-secondary mb-10 text-center">
-            🏫 About Us
+          <h3
+            className="text-2xl md:text-3xl font-bold text-secondary mb-8 text-center"
+            style={{ fontFamily: "'Open Sans', var(--font-display)" }}
+          >
+            About Us
           </h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
             {/* Left - Content */}
-            <div className="lg:col-span-2 space-y-4 text-base md:text-[17px] font-body text-foreground leading-relaxed">
+            <div
+              className="lg:col-span-2 space-y-4 text-[15px] md:text-[16px] text-foreground leading-[1.8]"
+              style={{ fontFamily: "'Open Sans', var(--font-body)" }}
+            >
               <p>
-                <strong>Beyond Chalk and Talk (OPC) Pvt. Ltd.</strong> is a
+                <strong className="text-secondary">Beyond Chalk and Talk (OPC) Pvt. Ltd.</strong> is a
                 DPIIT-registered, Startup India–recognised organisation working
                 to make mathematics meaningful, engaging, and joyful for
                 learners aged 3 years and above.
@@ -111,28 +94,35 @@ const Index = () => {
 
             {/* Right - Photo & Info */}
             <div
-              className="flex flex-col items-center gap-5 bg-card rounded-3xl p-6 border border-border"
+              className="flex flex-col items-center gap-4 bg-card rounded-2xl p-5 border border-border"
               style={{ boxShadow: "var(--shadow-card)" }}
             >
-              <p className="font-display text-sm font-bold text-primary tracking-wide uppercase">
-                The brain behind these games
-              </p>
-              <div className="w-44 h-44 md:w-96 md:h-80 rounded-2xl bg-muted border-4 border-primary/20 overflow-hidden flex items-center justify-center">
-                {/* Placeholder - user will replace with actual photo */}
-                {/* <span className="text-7xl">👩‍🏫</span> */}
-                <img src={MamImage} alt="" className="w-full h-full object-fit"/>
+              <div className="w-full aspect-[3/4] max-w-[280px] rounded-xl bg-muted border-2 border-primary/20 overflow-hidden">
+                <img src={MamImage} alt="Ms. Divyanshi Dhawan" className="w-full h-full object-cover"/>
               </div>
-              <div className="text-center space-y-1">
-                <h4 className="font-display text-xl font-bold text-secondary">
+              <div className="text-center space-y-0.5">
+                <h4
+                  className="text-lg font-bold text-secondary"
+                  style={{ fontFamily: "'Open Sans', var(--font-display)" }}
+                >
                   Ms. Divyanshi Dhawan
                 </h4>
-                <p className="text-sm font-body text-primary font-bold">
+                <p
+                  className="text-sm text-primary font-semibold"
+                  style={{ fontFamily: "'Open Sans', var(--font-body)" }}
+                >
                   Director
                 </p>
-                <p className="text-xs font-body text-muted-foreground">
+                <p
+                  className="text-xs text-muted-foreground leading-snug pt-1"
+                  style={{ fontFamily: "'Open Sans', var(--font-body)" }}
+                >
                   M.Sc. (Mathematics), University of Lucknow
                 </p>
-                <p className="text-xs font-body text-muted-foreground">
+                <p
+                  className="text-xs text-muted-foreground leading-snug"
+                  style={{ fontFamily: "'Open Sans', var(--font-body)" }}
+                >
                   PhD at Centre for Education Technology, IIT Jodhpur (pursuing)
                 </p>
               </div>
@@ -144,7 +134,10 @@ const Index = () => {
       {/* Games Section */}
       <section className="py-2">
         <div className="container mx-auto px-4">
-          <h3 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+          <h3
+            className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-2"
+            style={{ fontFamily: "'Open Sans', var(--font-display)" }}
+          >
             🎯 Mathematical Games
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -158,7 +151,10 @@ const Index = () => {
       {/* History Section */}
       <section className="py-10" style={{ background: "var(--gradient-warm)" }}>
         <div className="container mx-auto px-4">
-          <h3 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+          <h3
+            className="text-xl md:text-2xl font-bold text-foreground mb-6 flex items-center gap-2"
+            style={{ fontFamily: "'Open Sans', var(--font-display)" }}
+          >
             📊 Game History
           </h3>
           <div
@@ -174,4 +170,3 @@ const Index = () => {
 };
 
 export default Index;
-
