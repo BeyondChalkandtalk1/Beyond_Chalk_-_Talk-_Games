@@ -4,6 +4,7 @@ import storyWhoosh from "@/assets/story/story-2-whoosh.jpg";
 import storyRunning from "@/assets/story/story-3-running.jpg";
 import storySad from "@/assets/story/story-4-sad.jpg";
 import storyHelp from "@/assets/story/story-5-help.jpg";
+import whitePaw from "../assets/whitePaw.png"
 
 const STORY_PAGES = [
   {
@@ -108,43 +109,60 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
             ${bookState === "opening" ? "scale-x-0 opacity-0" : "hover:rotate-y-6 hover:shadow-[0_20px_60px_-10px_hsl(var(--secondary)/0.4)]"}
           `}
           style={{
-            background: "linear-gradient(135deg, hsl(0 60% 30%), hsl(0 55% 40%))",
+            background:
+              "linear-gradient(135deg, hsl(0 60% 30%), hsl(0 55% 40%))",
             transformStyle: "preserve-3d",
             perspective: "1000px",
           }}
         >
           {/* Spine effect */}
-          <div className="absolute left-0 top-0 bottom-0 w-6 md:w-8 rounded-l-md"
-            style={{ background: "linear-gradient(90deg, hsl(0 60% 25%), hsl(0 60% 32%))" }}
+          <div
+            className="absolute left-0 top-0 bottom-0 w-6 md:w-8 rounded-l-md"
+            style={{
+              background:
+                "linear-gradient(90deg, hsl(0 60% 25%), hsl(0 60% 32%))",
+            }}
           />
 
           {/* Gold border inset */}
           <div className="absolute inset-4 md:inset-6 left-10 md:left-12 border-2 border-[hsl(36,80%,55%)] rounded-xl flex flex-col items-center justify-center gap-4 md:gap-6 p-6">
             {/* Decorative top */}
-            <div className="text-4xl md:text-5xl">📖</div>
+            <div className="text-4xl md:text-5xl">
+              <img src={whitePaw} alt="" className="w-20 h-16" />
+            </div>
 
-            <h1 className="font-display text-2xl md:text-4xl font-extrabold text-center leading-tight"
-              style={{ color: "hsl(36 80% 60%)" }}>
-              🐾 Paw Patch
+            <h1
+              className="font-display text-2xl md:text-4xl font-extrabold text-center leading-tight"
+              style={{ color: "hsl(36 80% 60%)" }}
+            >
+              Paw Patch
               <br />
               Calendar Quest
             </h1>
 
-            <div className="w-16 h-0.5 rounded-full" style={{ background: "hsl(36 80% 55%)" }} />
+            <div
+              className="w-16 h-0.5 rounded-full"
+              style={{ background: "hsl(36 80% 55%)" }}
+            />
 
-            <p className="font-body text-sm md:text-base text-center leading-relaxed"
-              style={{ color: "hsl(36 80% 80%)" }}>
-              A fun story about a girl,
+            <p
+              className="font-bold text-xl md:text-2xl text-center leading-relaxed"
+              style={{
+                color: "hsl(36 80% 80%)",
+                fontFamily: "'Times New Roman', var(--font-body)",
+              }}
+            >
+              Read the story and help
               <br />
-              her naughty dog Biscuit,
-              <br />
-              and a mixed-up calendar!
+              the girl patch the calendar!
             </p>
 
             {/* Tap to open hint */}
             <div className="mt-2 flex flex-col items-center gap-1 animate-pulse">
-              <span className="text-xs md:text-sm font-display font-bold"
-                style={{ color: "hsl(36 80% 65%)" }}>
+              <span
+                className="text-lg md:text-xl font-display font-bold"
+                style={{ color: "hsl(36 80% 65%)" }}
+              >
                 ✨ Tap to Open ✨
               </span>
               <span className="text-2xl animate-float">👆</span>
@@ -209,7 +227,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
               : "animate-fade-in"
           }
         `}
-        style={{ minHeight: "420px" }}
+        style={{ minHeight: "480px" }}
       >
         {/* Book spine shadow */}
         <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border z-10 hidden md:block" />
@@ -232,7 +250,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
             <img
               src={page.image}
               alt={`Story scene ${page.id}`}
-              className="w-full h-full object-cover min-h-[250px] md:min-h-[420px]"
+              className="w-full h-full object-cover min-h-[250px] md:min-h-[480px]"
             />
             {/* Page number on image */}
             <div className="absolute bottom-3 left-3 bg-secondary/80 text-secondary-foreground rounded-full w-8 h-8 flex items-center justify-center font-display font-bold text-sm backdrop-blur-sm">
@@ -244,14 +262,14 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
 
           {/* Text side */}
           <div
-            className={`flex flex-col justify-center p-6 md:p-10 ${imageOnLeft ? "md:order-2" : "md:order-1"} ${!imageOnLeft ? "md:direction-ltr" : ""}`}
+            className={`flex flex-col justify-center p-6 md:p-10 min-h-[480px]  ${imageOnLeft ? "md:order-2" : "md:order-1"} ${!imageOnLeft ? "md:direction-ltr" : ""}`}
           >
             {/* Chapter emoji */}
-            <div className="text-4xl md:text-5xl mb-4 animate-float">
+            {/* <div className="text-4xl md:text-5xl mb-4 animate-float">
               {page.emoji}
-            </div>
+            </div> */}
 
-            <p className="font-body text-foreground/80 text-sm md:text-base lg:text-lg leading-relaxed mb-5">
+            <p className="font-body text-foreground/80 text-lg md:text-xl lg:text-xl leading-relaxed mb-5">
               {page.text}
             </p>
 
@@ -283,7 +301,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
         <button
           onClick={goPrev}
           disabled={isFirstPage}
-          className={`flex items-center gap-2 px-5 py-3 rounded-xl font-display font-bold text-sm transition-all duration-300 ${
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl font-display font-bold text-xl transition-all duration-300 ${
             isFirstPage
               ? "opacity-30 cursor-not-allowed bg-muted text-muted-foreground"
               : "bg-card border-2 border-border text-foreground hover:border-primary hover:scale-105 hover:shadow-md"
@@ -292,7 +310,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
           <span className="text-lg">📖</span> Previous Page
         </button>
 
-        <span className="font-display text-sm text-muted-foreground">
+        <span className="font-display text-lg font-bold text-muted-foreground">
           Page {currentPage + 1} of {totalPages}
         </span>
 
@@ -300,7 +318,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
           onClick={goNext}
           className={`flex items-center gap-2 px-6 py-3 rounded-xl font-display font-bold text-sm transition-all duration-300 shadow-lg hover:scale-105 ${
             isLastPage
-              ? "bg-gradient-to-r from-primary to-accent text-primary-foreground animate-pulse-glow text-base"
+              ? "bg-gradient-to-r from-primary to-accent text-primary-foreground animate-pulse-glow text-xl"
               : "bg-primary text-primary-foreground hover:shadow-xl"
           }`}
           style={{ boxShadow: "var(--shadow-card)" }}
@@ -331,7 +349,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
             ].map((item) => (
               <div
                 key={item}
-                className="text-lg font-body text-foreground/70 bg-background/50 rounded-lg px-1 py-2 text-center whitespace-nowrap"
+                className="text-lg font-semibold text-foreground/70 bg-background/50 rounded-lg px-1 py-2 text-center whitespace-nowrap"
               >
                 {item}
               </div>

@@ -275,11 +275,11 @@ import { CalendarDays, Play } from "lucide-react";
 
 const iconMap = {
   primary: (
-    <div className="relative w-14 h-11 bg-white rounded-xl flex flex-col items-center justify-center shadow-lg border-2 border-yellow-300">
-      <div className="w-full bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 text-white text-[12px] font-bold rounded-t-xl text-center">
+    <div className="relative w-20 h-20 bg-white rounded-xl flex flex-col items-center justify-center shadow-lg border-2 border-yellow-300">
+      <div className="w-full bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 text-white text-[17px] font-bold rounded-t-xl text-center">
         MONTH
       </div>
-      <div className="text-sm font-extrabold text-purple-700 leading-none">
+      <div className="text-2xl font-extrabold text-secondary leading-none">
         12
       </div>
       {/* <span className="absolute -top-1 -right-1 text-xs">🌈</span> */}
@@ -299,9 +299,12 @@ const GameCard = ({
   const [activeSection, setActiveSection] = useState(null);
 
   return (
-    <Link to={path} className="group block"
-      style={{ fontFamily: "'Times New Roman', var(--font-body)" }}>
-    {/* <div
+    <Link
+      to={path}
+      className="group block"
+      style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+    >
+      {/* <div
       className="group block"
       style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
     > */}
@@ -316,17 +319,17 @@ const GameCard = ({
 
         {/* Age Badge */}
         <div className="absolute top-4 right-4 w-16 h-16 rounded-full bg-yellow-300  shadow-lg flex flex-col items-center justify-center animate-pulse">
-          <span className="text-sm font-extrabold text-purple-700 leading-none">
+          <span className="text-xl font-extrabold text-purple-700 leading-none">
             7+
           </span>
-          <span className="text-[9px] font-bold text-purple-600 leading-none">
+          <span className="text-[18px] font-bold text-purple-600 leading-none">
             years
           </span>
         </div>
 
         {/* Icon */}
         <div
-          className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-yellow-300 via-orange-300 to-pink-300
+          className="w-24 h-24 rounded-3xl bg-gradient-to-tr from-yellow-300 via-orange-300 to-pink-300
           flex items-center justify-center mb-4 shadow-lg group-hover:animate-bounce"
         >
           {iconMap[color] || (
@@ -335,12 +338,12 @@ const GameCard = ({
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-extrabold text-purple-700 mb-1 pr-16 drop-shadow-sm">
+        <h3 className="text-2xl font-extrabold  text-secondary mb-1 pr-16 drop-shadow-sm">
           {title}
         </h3>
 
         {/* Description */}
-        <p className="text-sm text-purple-800 mb-4 leading-relaxed">
+        <p className="text-xl text-secondary mb-4 leading-relaxed">
           {description}
         </p>
 
@@ -356,10 +359,10 @@ const GameCard = ({
                 e.stopPropagation();
                 setActiveSection(activeSection === "aim" ? null : "aim");
               }}
-              className={`flex-1 px-4 py-2.5 rounded-2xl font-bold transition-all duration-300 ${
+              className={`flex-1 px-4 py-2.5 rounded-2xl text-xl font-bold transition-all duration-300 ${
                 activeSection === "aim"
                   ? "bg-pink-400 text-white shadow-md"
-                  : "bg-white text-purple-700 hover:bg-pink-100 shadow"
+                  : "bg-white text-secondary hover:bg-pink-100 shadow"
               }`}
             >
               🎯 Aim
@@ -375,10 +378,10 @@ const GameCard = ({
                   activeSection === "learning" ? null : "learning",
                 );
               }}
-              className={`flex-1 px-4 py-2.5 rounded-2xl font-bold transition-all duration-300 ${
+              className={`flex-1 px-4 py-2.5 rounded-2xl text-xl font-bold transition-all duration-300 ${
                 activeSection === "learning"
                   ? "bg-blue-400 text-white shadow-md"
-                  : "bg-white text-purple-700 hover:bg-blue-100 shadow"
+                  : "bg-white text-secondary hover:bg-blue-100 shadow"
               }`}
             >
               🎓 Learning
@@ -392,13 +395,13 @@ const GameCard = ({
             }`}
           >
             {activeSection === "aim" && (
-              <div className="text-lg text-purple-800 bg-white/80 rounded-xl p-4 shadow">
+              <div className="text-lg text-black bg-white/80 rounded-xl p-4 shadow">
                 {about_game}
               </div>
             )}
 
             {activeSection === "learning" && (
-              <div className="text-lg text-purple-800 bg-white/80 rounded-xl p-4 shadow">
+              <div className="text-lg text-black bg-white/80 rounded-xl p-4 shadow">
                 <p className="font-bold mb-2">{learning_object?.heading}</p>
 
                 <ul className="list-decimal pl-4 space-y-1 max-h-40 overflow-y-auto hide-scrollbar pr-2">
@@ -414,7 +417,7 @@ const GameCard = ({
         {/* Play Button */}
         <div
           className="mt-5 flex items-center justify-center gap-2 
-          bg-green-400 text-white py-2 rounded-2xl font-bold shadow-md 
+          bg-green-400 text-white py-2 rounded-2xl font-bold shadow-md text-xl
           group-hover:scale-105 transition-all duration-300"
         >
           <Play className="w-4 h-4 fill-white" /> 🎮 Play Now

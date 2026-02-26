@@ -102,6 +102,9 @@ const Index = () => {
               className="flex flex-col items-center gap-4 bg-card rounded-2xl p-5 border border-border"
               style={{ boxShadow: "var(--shadow-card)" }}
             >
+              <div className="text-xl text-primary font-bold">
+                <h1>The brain behind these games</h1>
+              </div>
               <div className="w-full aspect-[3/4] max-w-[320px] rounded-xl bg-muted border-2 border-primary/20 overflow-hidden">
                 <img
                   src={MamImage}
@@ -112,7 +115,9 @@ const Index = () => {
               <div className="text-center space-y-0.5">
                 <h4
                   className="text-lg font-bold text-secondary"
-                  style={{ fontFamily: "'Times New Roman', var(--font-display)" }}
+                  style={{
+                    fontFamily: "'Times New Roman', var(--font-display)",
+                  }}
                 >
                   Ms. Divyanshi Dhawan
                 </h4>
