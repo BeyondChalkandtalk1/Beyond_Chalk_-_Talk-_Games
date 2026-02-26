@@ -227,7 +227,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
               : "animate-fade-in"
           }
         `}
-        style={{ minHeight: "480px" }}
+        style={{ minHeight: "480px", maxHeight: "520px" }}
       >
         {/* Book spine shadow */}
         <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border z-10 hidden md:block" />
@@ -250,7 +250,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
             <img
               src={page.image}
               alt={`Story scene ${page.id}`}
-              className="w-full h-full object-cover min-h-[250px] md:min-h-[480px]"
+              className="w-full h-full object-contain bg-[hsl(35,30%,90%)] min-h-[250px] md:min-h-[480px]"
             />
             {/* Page number on image */}
             <div className="absolute bottom-3 left-3 bg-secondary/80 text-secondary-foreground rounded-full w-8 h-8 flex items-center justify-center font-display font-bold text-sm backdrop-blur-sm">
@@ -262,7 +262,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
 
           {/* Text side */}
           <div
-            className={`flex flex-col justify-center p-6 md:p-10 min-h-[480px]  ${imageOnLeft ? "md:order-2" : "md:order-1"} ${!imageOnLeft ? "md:direction-ltr" : ""}`}
+            className={`flex flex-col justify-center p-6 md:p-10 ${imageOnLeft ? "md:order-2" : "md:order-1"} ${!imageOnLeft ? "md:direction-ltr" : ""}`}
           >
             {/* Chapter emoji */}
             {/* <div className="text-4xl md:text-5xl mb-4 animate-float">
