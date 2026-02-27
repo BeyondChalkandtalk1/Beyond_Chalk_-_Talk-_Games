@@ -313,6 +313,7 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
   const [timer, setTimer] = useState(0);
   const [done, setDone] = useState(false);
   const [timerQuizPassed, setTimerQuizPassed] = useState(false);
+const [showHowToPlay, setShowHowToPlay] = useState(true);
 
   const [mcqMonthIndex, setMcqMonthIndex] = useState<number | null>(null);
   const [pendingPlaced, setPendingPlaced] = useState<{ slotMonthIndex: number; leafId: number } | null>(null);
@@ -383,8 +384,12 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
         timerQuizPassed ? (
           <div className="text-center py-2 animate-bounce-in">
             <div className="text-6xl mb-4">🏆</div>
-            <h3 className="font-display text-3xl font-bold text-primary mb-2">Level 1 Complete! 🌟</h3>
-            <p className="font-body text-muted-foreground mb-6">Bonus challenge bhi clear! Ab next level khelo!</p>
+            <h3 className="font-display text-3xl font-bold text-primary mb-2">
+              Level 1 Complete! 🌟
+            </h3>
+            <p className="font-body text-muted-foreground mb-6">
+              Bonus challenge bhi clear! Ab next level khelo!
+            </p>
             <button
               onClick={onComplete}
               className="px-8 py-4 rounded-2xl font-display font-bold text-lg bg-primary text-primary-foreground hover:scale-110 transition-all shadow-lg"
@@ -393,7 +398,10 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
             </button>
           </div>
         ) : (
-          <TimerQuiz seconds={timer} onCorrect={() => setTimerQuizPassed(true)} />
+          <TimerQuiz
+            seconds={timer}
+            onCorrect={() => setTimerQuizPassed(true)}
+          />
         )
       ) : (
         <>
@@ -412,8 +420,14 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
                 <div
                   key={leafIdx}
                   draggable
-                  onDragStart={() => { setDraggedLeaf(leafIdx); trackInteraction(); }}
-                  onClick={() => { setDraggedLeaf(draggedLeaf === leafIdx ? null : leafIdx); trackInteraction(); }}
+                  onDragStart={() => {
+                    setDraggedLeaf(leafIdx);
+                    trackInteraction();
+                  }}
+                  onClick={() => {
+                    setDraggedLeaf(draggedLeaf === leafIdx ? null : leafIdx);
+                    trackInteraction();
+                  }}
                   className={`cursor-grab active:cursor-grabbing rounded-2xl border-2 p-1 transition-all hover:scale-105 select-none ${
                     draggedLeaf === leafIdx
                       ? "border-primary ring-2 ring-primary/40 scale-110"
@@ -421,7 +435,10 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
                   }`}
                   style={{
                     width: "320px",
-                    boxShadow: draggedLeaf === leafIdx ? "0 6px 20px rgba(0,0,0,0.2)" : "0 3px 12px rgba(0,0,0,0.1)",
+                    boxShadow:
+                      draggedLeaf === leafIdx
+                        ? "0 6px 20px rgba(0,0,0,0.2)"
+                        : "0 3px 12px rgba(0,0,0,0.1)",
                     background: MONTH_COLORS[leafIdx].bg,
                   }}
                 >
@@ -447,21 +464,36 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
                   <div
                     key={idx}
                     onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => { e.preventDefault(); handleDrop(idx); }}
-                    onClick={() => { if (!isPlaced && !isPending && draggedLeaf !== null) handleDrop(idx); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      handleDrop(idx);
+                    }}
+                    onClick={() => {
+                      if (!isPlaced && !isPending && draggedLeaf !== null)
+                        handleDrop(idx);
+                    }}
                     className={`rounded-2xl border-2 p-1 transition-all cursor-pointer min-h-[150px] lg:min-h-[170px] flex flex-col items-center justify-center ${
                       isPlaced
                         ? "border-green-400"
                         : isPending
-                        ? "border-primary animate-pulse"
-                        : isWrong
-                        ? "border-red-400 bg-red-50 animate-shake"
-                        : "border-dashed hover:border-primary hover:scale-[1.02]"
+                          ? "border-primary animate-pulse"
+                          : isWrong
+                            ? "border-red-400 bg-red-50 animate-shake"
+                            : "border-dashed hover:border-primary hover:scale-[1.02]"
                     }`}
                     style={{
                       boxShadow: "0 3px 10px rgba(0,0,0,0.08)",
-                      background: isPlaced ? undefined : isPending ? undefined : isWrong ? undefined : colors.bg,
-                      borderColor: !isPlaced && !isPending && !isWrong ? colors.border : undefined,
+                      background: isPlaced
+                        ? undefined
+                        : isPending
+                          ? undefined
+                          : isWrong
+                            ? undefined
+                            : colors.bg,
+                      borderColor:
+                        !isPlaced && !isPending && !isWrong
+                          ? colors.border
+                          : undefined,
                     }}
                   >
                     {isPlaced ? (
@@ -469,12 +501,19 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
                     ) : isPending ? (
                       <div className="text-center">
                         <div className="text-2xl mb-1">⏳</div>
-                        <div className="font-display text-sm font-bold text-primary">{month}</div>
+                        <div className="font-display text-sm font-bold text-primary">
+                          {month}
+                        </div>
                       </div>
                     ) : (
                       <div className="text-center">
                         <div className="text-3xl mb-1">{MONTH_EMOJIS[idx]}</div>
-                        <div className="font-display text-lg font-bold" style={{ color: colors.header }}>{month}</div>
+                        <div
+                          className="font-display text-lg font-bold"
+                          style={{ color: colors.header }}
+                        >
+                          {month}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -498,8 +537,52 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
       {enableMCQ && mcqMonthIndex !== null && pendingPlaced && (
         <MCQPopup
           monthIndex={mcqMonthIndex}
-          onCorrect={() => confirmPlacement(pendingPlaced.slotMonthIndex, pendingPlaced.leafId)}
+          onCorrect={() =>
+            confirmPlacement(pendingPlaced.slotMonthIndex, pendingPlaced.leafId)
+          }
         />
+      )}
+
+      {showHowToPlay && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div
+            className="w-[90%] max-w-xl p-6 rounded-2xl shadow-xl"
+            style={{ backgroundColor: "#FBF5EF" }}
+          >
+            {/* Heading */}
+            <h2
+              className="text-2xl font-bold text-center mb-4"
+              style={{ color: "#8F2424" }}
+            >
+              📖 How to Play
+            </h2>
+
+            {/* Content */}
+            <ul
+              className="text-gray-700 space-y-2 text-2xl font-semibold leading-relaxed"
+              style={{
+                fontFamily: "'Times New Roman', var(--font-body)",
+              }}
+            >
+              <li>🔎 Explore the calendar leaf on screen.</li>
+              <li>🧠 Guess which month it belongs to.</li>
+              <li>🖱️ Drag & drop into correct month box.</li>
+              <li>✨ Correct choice unlocks next leaf.</li>
+              <li>🏆 Complete all 12 months to win.</li>
+            </ul>
+
+            {/* Close Button */}
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => setShowHowToPlay(false)}
+                className="px-6 py-2 rounded-full text-white font-semibold"
+                style={{ backgroundColor: "#8F2424" }}
+              >
+                Start Playing 🚀
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

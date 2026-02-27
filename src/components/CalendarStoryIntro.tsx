@@ -3,7 +3,7 @@ import storyMaking from "@/assets/story/story-1-making.jpg";
 import storyWhoosh from "@/assets/story/story-2-whoosh.jpg";
 import storyRunning from "@/assets/story/story-3-running.jpg";
 import storySad from "@/assets/story/story-4-sad.jpg";
-import storyHelp from "@/assets/story/story-5-help.jpg";
+import storyHelp from "@/assets/story/story-5-help-2 (1).jpg";
 import whitePaw from "../assets/whitePaw.png"
 
 const STORY_PAGES = [
