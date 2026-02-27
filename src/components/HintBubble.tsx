@@ -15,18 +15,38 @@ const MONTH_NAMES = [
   "July","August","September","October","November","December"
 ];
 
+const MAX_HINTS = 3;
+
 const HintBubble = ({ unplacedMonths, lastInteraction, delay = 6000 }: HintBubbleProps) => {
   const [visible, setVisible] = useState(false);
   const [hintMonth, setHintMonth] = useState<number | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
+  // const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+const hintIndexRef = useRef(0); // Sequential hint tracker
 
   // Pick a random unplaced month for the hint
+  // const pickHint = useCallback(() => {
+  //   if (unplacedMonths.length === 0) return;
+  //   const idx = unplacedMonths[Math.floor(Math.random() * unplacedMonths.length)];
+  //   setHintMonth(idx);
+  //   setSelected(null);
+  //   setAnswered(false);
+  //   setVisible(true);
+  // }, [unplacedMonths]);
   const pickHint = useCallback(() => {
     if (unplacedMonths.length === 0) return;
-    const idx = unplacedMonths[Math.floor(Math.random() * unplacedMonths.length)];
-    setHintMonth(idx);
+
+    // MAX_HINTS tak hi hints dikhao
+    if (hintIndexRef.current >= MAX_HINTS) return;
+
+    // Sequence mein next unplaced month pick karo
+    const sequentialMonth =
+      unplacedMonths[hintIndexRef.current % unplacedMonths.length];
+    hintIndexRef.current += 1;
+
+    setHintMonth(sequentialMonth);
     setSelected(null);
     setAnswered(false);
     setVisible(true);
@@ -60,11 +80,15 @@ const HintBubble = ({ unplacedMonths, lastInteraction, delay = 6000 }: HintBubbl
   const dismiss = () => setVisible(false);
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.4)" }}>
+    <div
+      className="fixed inset-0 z-40 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.4)" }}
+    >
       <div
-        className="relative max-w-sm w-full rounded-3xl overflow-hidden shadow-2xl animate-bounce-in"
+        className="relative max-w-md w-full rounded-3xl overflow-hidden shadow-2xl animate-bounce-in"
         style={{
-          background: "linear-gradient(135deg, hsl(45 90% 96%), hsl(30 80% 95%))",
+          background:
+            "linear-gradient(135deg, hsl(45 90% 96%), hsl(30 80% 95%))",
           border: "3px solid hsl(45 80% 70%)",
         }}
       >
@@ -83,28 +107,38 @@ const HintBubble = ({ unplacedMonths, lastInteraction, delay = 6000 }: HintBubbl
           </div>
           <div className="flex items-center justify-center gap-1 mb-1">
             <span className="text-lg">💡</span>
-            <h3 className="font-display text-lg font-bold text-secondary">Hint Time!</h3>
+            <h3 className="font-display text-lg font-bold text-secondary">
+              Hint Time!
+            </h3>
             <span className="text-lg">💡</span>
           </div>
-          <p className="text-xs text-muted-foreground font-body px-4">
-            Lagta hai thodi madad chahiye — koi baat nahi! 🤗
+          <p className="text-lg text-muted-foreground font-body px-4">
+            Looks like you need a little help – no problem! 🤗
           </p>
         </div>
 
         {/* Clue card */}
-        <div className="mx-4 mb-3 rounded-2xl p-3 text-center" style={{ background: "hsl(45 70% 90%)", border: "2px dashed hsl(45 60% 70%)" }}>
-          <p className="font-display font-bold text-sm text-foreground">{hint.clue}</p>
+        <div
+          className="mx-4 mb-3 rounded-2xl p-3 text-center"
+          style={{
+            background: "hsl(45 70% 90%)",
+            border: "2px dashed hsl(45 60% 70%)",
+          }}
+        >
+          <p className="font-display font-bold text-xl text-foreground">
+            {hint.clue}
+          </p>
         </div>
 
         {/* Question */}
         <div className="px-4 mb-2">
-          <p className="text-center text-xs font-display font-bold text-muted-foreground">
-            Yeh kaun sa mahina hai? 🤔
+          <p className="text-center text-lg font-display font-bold text-muted-foreground">
+            What month is this? 🤔
           </p>
         </div>
 
         {/* Options */}
-        <div className="grid grid-cols-2 gap-2 px-4 mb-3">
+        {/* <div className="grid grid-cols-2 gap-2 px-4 mb-3">
           {hint.options.map((opt, idx) => {
             const isCorrect = idx === hint.correct;
             const isSelected = selected === idx;
@@ -124,10 +158,10 @@ const HintBubble = ({ unplacedMonths, lastInteraction, delay = 6000 }: HintBubbl
               </button>
             );
           })}
-        </div>
+        </div> */}
 
         {/* Result */}
-        {answered && (
+        {/* {answered && (
           <div className={`mx-4 mb-4 rounded-xl p-3 text-center text-xs font-body animate-fade-in ${
             selected === hint.correct
               ? "bg-green-50 text-green-700 border border-green-300"
@@ -140,13 +174,19 @@ const HintBubble = ({ unplacedMonths, lastInteraction, delay = 6000 }: HintBubbl
             )}
             <div className="text-[10px] mt-1 text-muted-foreground">{hint.funFact}</div>
           </div>
-        )}
+        )} */}
 
         {/* Footer sparkles */}
         <div className="flex justify-center gap-1 pb-4 text-lg">
-          <span className="animate-bounce" style={{ animationDelay: "0ms" }}>⭐</span>
-          <span className="animate-bounce" style={{ animationDelay: "150ms" }}>✨</span>
-          <span className="animate-bounce" style={{ animationDelay: "300ms" }}>⭐</span>
+          <span className="animate-bounce" style={{ animationDelay: "0ms" }}>
+            ⭐
+          </span>
+          <span className="animate-bounce" style={{ animationDelay: "150ms" }}>
+            ✨
+          </span>
+          <span className="animate-bounce" style={{ animationDelay: "300ms" }}>
+            ⭐
+          </span>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@
 export const MONTH_HINTS = [
   // 0 - January
   {
-    clue: "Yeh saal ka sabse pehla mahina hai! ❄️",
+    clue: "Start with the month that has the least number of days — it is the easiest to identify. ❄️",
     funFact: "Is mahine mein bahut thand hoti hai aur naya saal shuru hota hai! 🎉",
     emoji: "🧊",
     options: ["March", "January", "June", "October"],
@@ -12,7 +12,7 @@ export const MONTH_HINTS = [
   },
   // 1 - February
   {
-    clue: "Yeh saal ka sabse chhota mahina hai! 💕",
+    clue: "Look at the last day of the month. The next month will always begin with the following day of the week.💕",
     funFact: "February mein sirf 28 ya 29 din hote hain — leap year mein ek extra din! 📅",
     emoji: "💝",
     options: ["February", "April", "September", "December"],
@@ -20,7 +20,7 @@ export const MONTH_HINTS = [
   },
   // 2 - March
   {
-    clue: "Is mahine mein rangon ka tyohaar manaya jaata hai! 🌈",
+    clue: "Remember which months have 30 days and which have 31 days. This will help you narrow down the possibilities.🌈",
     funFact: "March mein Holi aati hai — sab ek dusre ko rang lagate hain! 🎨",
     emoji: "🎨",
     options: ["July", "November", "March", "May"],

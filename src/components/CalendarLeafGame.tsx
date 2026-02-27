@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { MONTH_MCQ, enableMCQ } from "../data/calendarMCQ";
 import HintBubble from "./HintBubble";
 
@@ -135,19 +135,25 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.55)" }}>
-      <div className="bg-card rounded-3xl p-6 max-w-sm w-full shadow-2xl border-4 border-primary animate-bounce-in">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.55)" }}
+    >
+      <div className="bg-card rounded-3xl p-6 max-w-md w-full shadow-2xl border-4 border-primary animate-bounce-in">
         <div className="text-center mb-4">
           <div className="text-5xl mb-2 animate-bounce">🎉</div>
           <h3 className="font-display text-xl font-bold text-secondary">
-            Shandaar! {MONTH_EMOJIS[monthIndex]} {MONTHS[monthIndex]}!
+            Great Job! {MONTH_EMOJIS[monthIndex]} {MONTHS[monthIndex]}!
           </h3>
           <p className="text-sm text-muted-foreground font-body mt-1">
-            Ek sawaal aur! Sahi jawab do aur aage badho 🚀
+            Answer the question to unlock the next calendar leaf to correct
+            month 🚀
           </p>
         </div>
         <div className="bg-muted rounded-2xl p-3 mb-4">
-          <p className="font-display font-bold text-sm text-foreground text-center">{mcq.question}</p>
+          <p className="font-display font-bold text-sm text-foreground text-center">
+            {mcq.question}
+          </p>
         </div>
         <div className="grid grid-cols-2 gap-2 mb-3">
           {mcq.options.map((opt: string, idx: number) => {
@@ -170,14 +176,20 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
           })}
         </div>
         {answered && (
-          <div className={`rounded-xl p-3 text-center text-xs font-body animate-fade-in ${selected === mcq.correct ? "bg-green-50 text-green-700 border border-green-300" : "bg-orange-50 text-orange-700 border border-orange-300"}`}>
-            {selected === mcq.correct ? "✅ " : "❌ "}{mcq.fact}
+          <div
+            className={`rounded-xl p-3 text-center text-xs font-body animate-fade-in ${selected === mcq.correct ? "bg-green-50 text-green-700 border border-green-300" : "bg-orange-50 text-orange-700 border border-orange-300"}`}
+          >
+            {selected === mcq.correct ? "✅ " : "❌ "}
+            {mcq.fact}
             {selected !== mcq.correct && (
               <button
-                onClick={() => { setSelected(null); setAnswered(false); }}
+                onClick={() => {
+                  setSelected(null);
+                  setAnswered(false);
+                }}
                 className="block mx-auto mt-2 px-4 py-1 rounded-lg bg-primary text-primary-foreground font-display font-bold text-xs"
               >
-                Dobara try karo 🔄
+                Try again 🔄
               </button>
             )}
           </div>
@@ -314,6 +326,8 @@ const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; tit
   const [done, setDone] = useState(false);
   const [timerQuizPassed, setTimerQuizPassed] = useState(false);
 const [showHowToPlay, setShowHowToPlay] = useState(true);
+const [gameStarted, setGameStarted] = useState(false);
+const [showHelpVideo, setShowHelpVideo] = useState(false);
 
   const [mcqMonthIndex, setMcqMonthIndex] = useState<number | null>(null);
   const [pendingPlaced, setPendingPlaced] = useState<{ slotMonthIndex: number; leafId: number } | null>(null);
@@ -322,12 +336,19 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
   // Track user interactions for hint system
   const trackInteraction = useCallback(() => setLastInteraction(Date.now()), []);
 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (!done) setTimer(t => t + 1);
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, [done]);
   useEffect(() => {
+    if (!gameStarted) return;
     const interval = setInterval(() => {
-      if (!done) setTimer(t => t + 1);
+      if (!done) setTimer((t) => t + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [done]);
+  }, [done, gameStarted]);
 
   const placedLeafIds = new Set(Object.values(placed));
   const availableLeaves = shuffledMonths.filter(id => !placedLeafIds.has(id) && id !== pendingPlaced?.leafId);
@@ -343,6 +364,7 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
   }, [placed]);
 
   const handleDrop = useCallback((slotMonthIndex: number) => {
+    if (!gameStarted) return;
     if (draggedLeaf === null) return;
     if (placed[slotMonthIndex] !== undefined) return;
     trackInteraction();
@@ -362,9 +384,27 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
     }
   }, [draggedLeaf, placed, confirmPlacement, trackInteraction]);
 
-  const unplacedMonths = [...Array(12).keys()].filter(i => placed[i] === undefined && pendingPlaced?.slotMonthIndex !== i);
-
+  // const unplacedMonths = [...Array(12).keys()].filter(i => placed[i] === undefined && pendingPlaced?.slotMonthIndex !== i);
+const unplacedMonths = useMemo(
+  () =>
+    [...Array(12).keys()].filter(
+      (i) => placed[i] === undefined && pendingPlaced?.slotMonthIndex !== i,
+    ),
+  [placed, pendingPlaced],
+);
   const correctCount = Object.keys(placed).length + (pendingPlaced ? 1 : 0);
+
+  useEffect(() => {
+    if (!gameStarted || done) return;
+
+    const timeout = setTimeout(() => {
+      console.log(
+        "🕐 60 seconds se koi touch/drag/drop nahi hua! — HINT DIKHAO",
+      );
+    }, 60000);
+
+    return () => clearTimeout(timeout);
+  }, [lastInteraction, gameStarted, done]);
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-pink-50 px-3 py-4 min-h-screen">
@@ -408,11 +448,11 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
           {/* Available Leaves */}
           <div className="mb-6">
             <h3 className="font-display text-base font-bold text-center text-foreground mb-3">
-              📦 Calendar Leaves — Drag or select!
+              📦 Patch the calendar by dragging/clicking the calendar leaves
             </h3>
             {draggedLeaf !== null && (
               <p className="text-center text-sm text-primary font-bold mb-2 animate-pulse">
-                ✨ Selected! Ab neeche sahi month pe drop karo!
+                ✨Selected! Now drop down to the correct month!
               </p>
             )}
             <div className="flex flex-wrap gap-3 justify-center max-w-11xl mx-auto">
@@ -421,10 +461,12 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
                   key={leafIdx}
                   draggable
                   onDragStart={() => {
+                    if (!gameStarted) return;
                     setDraggedLeaf(leafIdx);
                     trackInteraction();
                   }}
                   onClick={() => {
+                    if (!gameStarted) return;
                     setDraggedLeaf(draggedLeaf === leafIdx ? null : leafIdx);
                     trackInteraction();
                   }}
@@ -451,7 +493,7 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
           {/* Drop Zones Grid */}
           <div className="max-w-9xl mx-auto">
             <h3 className="font-display text-base font-bold text-center text-foreground mb-3">
-              🗓️ Sahi month pe calendar drop karo!
+              🗓️Drop the correct month calendar leaves here
             </h3>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
               {MONTHS.map((month, idx) => {
@@ -468,8 +510,18 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
                       e.preventDefault();
                       handleDrop(idx);
                     }}
+                    // onClick={() => {
+                    //   if (!isPlaced && !isPending && draggedLeaf !== null)
+                    //     handleDrop(idx);
+                    // }}
+                    // On drop zone onClick:
                     onClick={() => {
-                      if (!isPlaced && !isPending && draggedLeaf !== null)
+                      if (
+                        !isPlaced &&
+                        !isPending &&
+                        draggedLeaf !== null &&
+                        gameStarted
+                      )
                         handleDrop(idx);
                     }}
                     className={`rounded-2xl border-2 p-1 transition-all cursor-pointer min-h-[150px] lg:min-h-[170px] flex flex-col items-center justify-center ${
@@ -520,6 +572,15 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
                 );
               })}
             </div>
+          </div>
+          <div className="flex justify-center mt-6 mb-4">
+            <button
+              onClick={() => setShowHelpVideo(true)}
+              className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-display font-bold text-sm shadow-xl hover:scale-105 transition-transform"
+              style={{ backgroundColor: "#8F2424" }}
+            >
+              🎥 Do you need help?
+            </button>
           </div>
         </>
       )}
@@ -580,6 +641,82 @@ const [showHowToPlay, setShowHowToPlay] = useState(true);
               >
                 Start Playing 🚀
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Start Game Popup — shown after closing How To Play */}
+      {!showHowToPlay && !gameStarted && !done && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-card rounded-3xl shadow-2xl border-2 border-primary/30 p-8 max-w-sm w-full mx-4 flex flex-col items-center gap-4 text-center animate-bounce-in">
+            <div className="text-5xl">🚀</div>
+            <h2 className="font-display font-bold text-2xl text-foreground">
+              Ready to Play?
+            </h2>
+            <p className="text-muted-foreground font-display text-xl">
+              The timer will start when you
+              <span className="text-primary font-bold"> press</span> start!
+            </p>
+            <button
+              onClick={() => {
+                setGameStarted(true);
+                trackInteraction();
+              }}
+              className="mt-2 px-8 py-3 rounded-full text-white font-display font-bold text-lg shadow-lg hover:scale-105 transition-transform"
+              style={{ backgroundColor: "#8F2424" }}
+            >
+              ▶ Start Game!
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* {!done && gameStarted && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30">
+          <button
+            onClick={() => setShowHelpVideo(true)}
+            className="flex items-center gap-2 px-5 py-3 rounded-full text-white font-display font-bold text-sm shadow-xl hover:scale-105 transition-transform"
+            style={{ backgroundColor: "#8F2424" }}
+          >
+            🎥 Do you need help?
+          </button>
+        </div>
+      )} */}
+
+      {showHelpVideo && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backdropFilter: "blur(6px)", background: "rgba(0,0,0,0.6)" }}
+          onClick={() => setShowHelpVideo(false)} // backdrop click se bhi band ho
+        >
+          <div
+            className="relative w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl bg-black"
+            onClick={(e) => e.stopPropagation()} // modal ke andar click se band na ho
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowHelpVideo(false)}
+              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center text-white font-bold text-lg transition-all"
+            >
+              ✕
+            </button>
+
+            {/* Video Title */}
+            <div className="px-5 pt-5 pb-3 bg-gray-900">
+              <h3 className="font-display font-bold text-white text-lg">
+                🎬 How to Play — Video Guide
+              </h3>
+            </div>
+
+            {/* Video Player */}
+            <div className="aspect-video w-full bg-black">
+              <video
+                src="/videos/video1.mp4" // 👈 apna video URL yahan daalo
+                controls
+                autoPlay
+                className="w-full h-full object-contain"
+              />
             </div>
           </div>
         </div>
