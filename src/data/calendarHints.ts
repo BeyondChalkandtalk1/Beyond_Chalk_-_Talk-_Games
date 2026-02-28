@@ -12,7 +12,7 @@ export const MONTH_HINTS = [
   },
   // 1 - February
   {
-    clue: "Look at the last day of the month. The next month will always begin with the following day of the week.💕",
+    clue: "Look at the last day of the month. The next month will always begin with the following day of the week.🌿",
     funFact: "February mein sirf 28 ya 29 din hote hain — leap year mein ek extra din! 📅",
     emoji: "💝",
     options: ["February", "April", "September", "December"],

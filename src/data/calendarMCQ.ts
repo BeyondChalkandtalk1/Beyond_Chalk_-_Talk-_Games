@@ -23,7 +23,7 @@ export const MONTH_MCQ = [
     question: "When do we celebrate International Day of Mathematics? 🌸",
     options: ["March 12", "March 22", "March 14", "March 8"],
     correct: 2,
-    fact: "Mathematics is all around us — in the games we play, the buildings we see, and even in nature! Every year on March 14 (3/14), people all over the world celebrate the International Day of Mathematics. UNESCO declared this day to show how important math is in science, technology, and daily life.This day is also called Pi Day, as the date 3/14 matches the first numbers of the Greek symbol π (pi) — 3.14, the special number that helps us in calculating measurements of circles, spheres, and cylinders. 🌈",
+    fact: "Mathematics is all around us — in the games we play, the buildings we see, and even in nature! Every year on March 14 (3/14), people all over the world celebrate the International Day of Mathematics. UNESCO declared this day to show how important math is in science, technology, and daily life.This day is also called Pi Day, as the date 3/14 matches the first numbers of the Greek symbol π (pi) — 3.14, the special number that helps us in calculating measurements of circles, spheres, and cylinders.",
   },
   // 3 - April
   {

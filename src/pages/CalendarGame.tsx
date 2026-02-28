@@ -12,7 +12,7 @@ import HintBubble from "../components/HintBubble";
 
 const MONTHS = [
   { name: "January", short: "Jan", emoji: "❄️", color: "hsl(200 70% 60%)" },
-  { name: "February", short: "Feb", emoji: "💕", color: "hsl(340 70% 60%)" },
+  { name: "February", short: "Feb", emoji: "🌿", color: "hsl(340 70% 60%)" },
   { name: "March", short: "Mar", emoji: "🌸", color: "hsl(320 60% 65%)" },
   { name: "April", short: "Apr", emoji: "🌧️", color: "hsl(210 60% 55%)" },
   { name: "May", short: "May", emoji: "🌻", color: "hsl(45 80% 55%)" },
@@ -85,7 +85,7 @@ const CARD_STYLES = {
     emoji: "🎉",
     data: [
       { line1: "Lohri 🔥", line2: "Makkar Sankranti" },
-      { line1: "Valentine 💕", line2: "Basant Panchami" },
+      { line1: "Valentine 🌿", line2: "Basant Panchami" },
       { line1: "Holi 🎨", line2: "Rang Barse" },
       { line1: "Baisakhi 🌾", line2: "Naya Saal" },
       { line1: "Buddha Purnima 🪷", line2: "Enlightenment" },
@@ -124,6 +124,17 @@ const shuffleArray = (array) => {
 // ──────────────────────────────────────────────
 // Level 2: Dice / Zodiac month-matching game
 // ──────────────────────────────────────────────
+const LEVEL2_HINTS = [
+  {
+    emoji: "📅",
+    clue: "Each month usually has about 4 weeks. Use Repeated Addition to find the month!",
+  },
+  {
+    emoji: "🔢",
+    clue: "Use Multiplication — Week Number ÷ 4 ≈ Month Number!",
+  },
+];
+
 const Level2Game = ({ story, onFinish }) => {
   const navigate = useNavigate();
   const [layout, setLayout] = useState("dice");
@@ -140,6 +151,8 @@ const Level2Game = ({ story, onFinish }) => {
   const [gameResult, setGameResult] = useState("win");
   const [shakeSlot, setShakeSlot] = useState(null);
   const [lastInteraction, setLastInteraction] = useState(Date.now());
+  const [showHowToPlay, setShowHowToPlay] = useState(true);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const trackInteraction = useCallback(() => setLastInteraction(Date.now()), []);
 
@@ -259,23 +272,21 @@ const Level2Game = ({ story, onFinish }) => {
           🎮 Level 2 — Month Matching
         </span>
       </div>
-
       <div className="text-center mb-4">
-        <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary mb-2">
-          📅 The Lost Calendar Leaves
+        <h2 className="font-display text-3xl md:text-5xl font-bold text-secondary mb-2">
+          📅 The Paw Patch Puzzles
         </h2>
-        <p className="text-muted-foreground font-body">
-          Calendar ko sahi month pe drag karke drop karo! 🎯
+        <p className="text-muted-foreground font-bold text-3xl">
+          Drag and drop the calendar to the correct month! 🎯
         </p>
       </div>
-
       {/* Layout switcher */}
       <div className="flex justify-center gap-2 mb-4 flex-wrap">
         {LAYOUT_OPTIONS.map((opt) => (
           <button
             key={opt.type}
             onClick={() => setLayout(opt.type)}
-            className={`px-4 py-2 rounded-xl font-display font-bold text-sm transition-all ${
+            className={`px-4 py-2 rounded-xl font-display font-bold text-xl transition-all ${
               layout === opt.type
                 ? "bg-primary text-primary-foreground scale-105"
                 : "bg-card border-2 border-border text-foreground hover:border-primary"
@@ -285,12 +296,10 @@ const Level2Game = ({ story, onFinish }) => {
           </button>
         ))}
       </div>
-
       <LayoutComponent slots={slotElements} centerContent={undefined} />
-
-      <div className="max-w-2xl mx-auto">
-        <h3 className="font-display text-lg font-bold text-foreground text-center mb-3">
-          📦 Calendars — Drag karo! (ya click karo)
+      <div className="max-w-4xl mx-auto">
+        <h3 className="font-display text-3xl font-bold text-foreground text-center mb-3">
+          📦 Calendars — Drag! (or Click)
         </h3>
 
         {/* Card style switcher */}
@@ -299,7 +308,7 @@ const Level2Game = ({ story, onFinish }) => {
             <button
               key={opt.type}
               onClick={() => setCardStyle(opt.type)}
-              className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs transition-all ${
+              className={`px-3 py-1.5 rounded-xl font-display font-bold text-2xl transition-all ${
                 cardStyle === opt.type
                   ? "bg-secondary text-secondary-foreground scale-105"
                   : "bg-card border-2 border-border text-foreground hover:border-secondary"
@@ -316,17 +325,26 @@ const Level2Game = ({ story, onFinish }) => {
           </p>
         )}
 
-        <div className="flex flex-wrap gap-3 justify-center">
+        <div className="grid grid-cols-4 gap-3 justify-center">
           {availableCalendars.map((cal) => {
             const info = CARD_STYLES[cardStyle].data[cal.id];
             return (
               <div
                 key={cal.id}
                 draggable
-                onDragStart={() => { setDraggedId(cal.id); trackInteraction(); }}
-                onTouchStart={() => { setDraggedId(cal.id); trackInteraction(); }}
-                onClick={() => { setDraggedId(draggedId === cal.id ? null : cal.id); trackInteraction(); }}
-                className={`px-4 py-3 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-105 select-none border-2 min-w-[90px] ${
+                onDragStart={() => {
+                  setDraggedId(cal.id);
+                  trackInteraction();
+                }}
+                onTouchStart={() => {
+                  setDraggedId(cal.id);
+                  trackInteraction();
+                }}
+                onClick={() => {
+                  setDraggedId(draggedId === cal.id ? null : cal.id);
+                  trackInteraction();
+                }}
+                className={`px-4 py-3 rounded-xl cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-105 select-none border-2 min-w-[150px] ${
                   draggedId === cal.id
                     ? "border-primary scale-110 ring-2 ring-primary/50"
                     : "border-border hover:border-primary/50"
@@ -337,10 +355,10 @@ const Level2Game = ({ story, onFinish }) => {
                 }}
               >
                 <div className="text-2xl text-center">{cal.emoji}</div>
-                <div className="text-[10px] font-display font-bold text-center mt-1 text-foreground">
+                <div className="text-[24px] font-display font-bold text-center mt-1 text-foreground">
                   {info.line1}
                 </div>
-                <div className="text-[9px] font-body text-center text-muted-foreground">
+                <div className="text-[20px] font-body text-center text-muted-foreground">
                   {info.line2}
                 </div>
               </div>
@@ -354,18 +372,78 @@ const Level2Game = ({ story, onFinish }) => {
           </p>
         )}
       </div>
-
       {/* Hint after 60s inactivity */}
-      {!showResult && (
+      {/* {!showResult && (
         <HintBubble
           unplacedMonths={[...Array(12).keys()].filter(i => placed[i] === undefined)}
           lastInteraction={lastInteraction}
           delay={60000}
         />
+      )} */}
+      {!showResult && !showHowToPlay && (
+        <HintBubble
+          unplacedMonths={[...Array(12).keys()].filter(
+            (i) => placed[i] === undefined,
+          )}
+          lastInteraction={lastInteraction}
+          delay={60000}
+          maxHints={2}
+          customHints={LEVEL2_HINTS}
+        />
       )}
+      {showHowToPlay && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div
+            className="w-[90%] max-w-xl p-6 rounded-2xl shadow-xl"
+            style={{ backgroundColor: "#FBF5EF" }}
+          >
+            <h2
+              className="text-2xl font-bold text-center mb-4"
+              style={{ color: "#8F2424" }}
+            >
+              📖 How to Play — Level 2
+            </h2>
 
+            <ul
+              className="text-gray-700 space-y-2 text-2xl font-semibold leading-relaxed"
+              style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+            >
+              <li>
+                🔢 Look carefully at the <strong>week number</strong> on the
+                card. (e.g. Week 8, Week 39)
+              </li>
+              <li>
+                🧠 Think about which <strong>month of the year</strong> that
+                week falls in.
+              </li>
+              <li>
+                🗓️ Find the correct <strong>month tile</strong> on the board.
+              </li>
+              <li>
+                🖱️ <strong>Drag and drop</strong> the card onto that month.
+              </li>
+              <li>
+                ✅ If correct, the calendar patch gets <strong>fixed!</strong>
+              </li>
+            </ul>
+
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => {
+                  setShowHowToPlay(false);
+                  setGameStarted(true);
+                  trackInteraction(); // ← yahan se 60s hint timer shuru hoga
+                }}
+                className="px-6 py-2 rounded-full text-white font-semibold text-xl"
+                style={{ backgroundColor: "#8F2424" }}
+              >
+                Start Playing 🚀
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {showConfetti && <ConfettiAnimation />}
-
       <ResultModal
         isOpen={showResult}
         result={gameResult}

@@ -7,7 +7,7 @@ const MONTHS = [
   "July","August","September","October","November","December"
 ];
 
-const MONTH_EMOJIS = ["❄️","💕","🌸","🌧️","🌻","☀️","🌈","🌾","📚","🎃","🍂","🎄"];
+const MONTH_EMOJIS = ["❄️","🌿","🌸","🌧️","🌻","☀️","🌈","🌾","📚","🎃","🍂","🎄"];
 
 const MONTH_COLORS = [
   { bg: "hsl(210, 70%, 94%)", border: "hsl(210, 60%, 75%)", header: "hsl(210, 60%, 40%)" },
@@ -95,6 +95,7 @@ const CalendarCard = ({ monthIndex, small = false }: { monthIndex: number; small
                     textAlign: "center",
                     fontWeight: 600,
                     color: ci === 0 ? "#e53935" : ci === 6 ? "#1e88e5" : "#333",
+                    
                   }}
                 >
                   {day || ""}
@@ -139,19 +140,19 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "rgba(0,0,0,0.55)" }}
     >
-      <div className="bg-card rounded-3xl p-6 max-w-md w-full shadow-2xl border-4 border-primary animate-bounce-in">
+      <div className="bg-card rounded-3xl p-6 max-w-[700px] max-h-[90vh] overflow-y-auto hide-scrollbar w-full shadow-2xl border-4 border-primary animate-bounce-in">
         <div className="text-center mb-4">
           <div className="text-5xl mb-2 animate-bounce">🎉</div>
-          <h3 className="font-display text-xl font-bold text-secondary">
+          <h3 className="font-display text-3xl font-bold text-secondary">
             Great Job! {MONTH_EMOJIS[monthIndex]} {MONTHS[monthIndex]}!
           </h3>
-          <p className="text-sm text-muted-foreground font-body mt-1">
+          <p className="text-2xl text-muted-foreground font-body mt-1">
             Answer the question to unlock the next calendar leaf to correct
             month 🚀
           </p>
         </div>
         <div className="bg-muted rounded-2xl p-3 mb-4">
-          <p className="font-display font-bold text-sm text-foreground text-center">
+          <p className="font-display font-bold text-2xl text-foreground text-center">
             {mcq.question}
           </p>
         </div>
@@ -168,7 +169,7 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
               <button
                 key={idx}
                 onClick={() => handleSelect(idx)}
-                className={`rounded-xl border-2 p-2 font-display font-bold text-sm text-foreground transition-all ${bg} ${!answered ? "hover:scale-105 cursor-pointer" : "cursor-default"}`}
+                className={`rounded-xl border-2 p-2 font-display font-bold text-2xl text-foreground transition-all ${bg} ${!answered ? "hover:scale-105 cursor-pointer" : "cursor-default"}`}
               >
                 {opt}
               </button>
@@ -177,9 +178,10 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
         </div>
         {answered && (
           <div
-            className={`rounded-xl p-3 text-center text-xs font-body animate-fade-in ${selected === mcq.correct ? "bg-green-50 text-green-700 border border-green-300" : "bg-orange-50 text-orange-700 border border-orange-300"}`}
+            className={`rounded-xl p-3 text-center text-2xl font-semibold font-body animate-fade-in ${selected === mcq.correct ? "bg-green-50 text-green-700 border border-green-300" : "bg-orange-50 text-orange-700 border border-orange-300"}`}
           >
             {selected === mcq.correct ? "✅ " : "❌ "}
+            <p className="text-black">Do you know?</p>
             {mcq.fact}
             {selected !== mcq.correct && (
               <button
@@ -187,7 +189,7 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
                   setSelected(null);
                   setAnswered(false);
                 }}
-                className="block mx-auto mt-2 px-4 py-1 rounded-lg bg-primary text-primary-foreground font-display font-bold text-xs"
+                className="block mx-auto mt-2 px-4 py-1 rounded-lg bg-primary text-primary-foreground font-display font-bold text-xl"
               >
                 Try again 🔄
               </button>
@@ -317,24 +319,38 @@ const TimerQuiz = ({ seconds, onCorrect }: { seconds: number; onCorrect: () => v
 // ─────────────────────────────────────────
 // Main CalendarLeafGame
 // ─────────────────────────────────────────
-const CalendarLeafGame = ({ story, onComplete }: { story?: { emoji?: string; title?: string }; onComplete: () => void }) => {
-  const [shuffledMonths, setShuffledMonths] = useState(() => shuffle([...Array(12).keys()]));
+const CalendarLeafGame = ({
+  story,
+  onComplete,
+}: {
+  story?: { emoji?: string; title?: string };
+  onComplete: () => void;
+}) => {
+  const [shuffledMonths, setShuffledMonths] = useState(() =>
+    shuffle([...Array(12).keys()]),
+  );
   const [placed, setPlaced] = useState<Record<number, number>>({});
   const [draggedLeaf, setDraggedLeaf] = useState<number | null>(null);
   const [wrongSlot, setWrongSlot] = useState<number | null>(null);
   const [timer, setTimer] = useState(0);
   const [done, setDone] = useState(false);
   const [timerQuizPassed, setTimerQuizPassed] = useState(false);
-const [showHowToPlay, setShowHowToPlay] = useState(true);
-const [gameStarted, setGameStarted] = useState(false);
-const [showHelpVideo, setShowHelpVideo] = useState(false);
+  const [showHowToPlay, setShowHowToPlay] = useState(true);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [showHelpVideo, setShowHelpVideo] = useState(false);
 
   const [mcqMonthIndex, setMcqMonthIndex] = useState<number | null>(null);
-  const [pendingPlaced, setPendingPlaced] = useState<{ slotMonthIndex: number; leafId: number } | null>(null);
+  const [pendingPlaced, setPendingPlaced] = useState<{
+    slotMonthIndex: number;
+    leafId: number;
+  } | null>(null);
   const [lastInteraction, setLastInteraction] = useState(Date.now());
 
   // Track user interactions for hint system
-  const trackInteraction = useCallback(() => setLastInteraction(Date.now()), []);
+  const trackInteraction = useCallback(
+    () => setLastInteraction(Date.now()),
+    [],
+  );
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -351,48 +367,67 @@ const [showHelpVideo, setShowHelpVideo] = useState(false);
   }, [done, gameStarted]);
 
   const placedLeafIds = new Set(Object.values(placed));
-  const availableLeaves = shuffledMonths.filter(id => !placedLeafIds.has(id) && id !== pendingPlaced?.leafId);
+  const availableLeaves = shuffledMonths.filter(
+    (id) => !placedLeafIds.has(id) && id !== pendingPlaced?.leafId,
+  );
 
-  const confirmPlacement = useCallback((slotMonthIndex: number, leafId: number) => {
-    const newPlaced = { ...placed, [slotMonthIndex]: leafId };
-    setPlaced(newPlaced);
-    setPendingPlaced(null);
-    setMcqMonthIndex(null);
-    if (Object.keys(newPlaced).length === 12) {
-      setTimeout(() => setDone(true), 300);
-    }
-  }, [placed]);
-
-  const handleDrop = useCallback((slotMonthIndex: number) => {
-    if (!gameStarted) return;
-    if (draggedLeaf === null) return;
-    if (placed[slotMonthIndex] !== undefined) return;
-    trackInteraction();
-
-    if (draggedLeaf === slotMonthIndex) {
-      setDraggedLeaf(null);
-      if (enableMCQ) {
-        setPendingPlaced({ slotMonthIndex, leafId: draggedLeaf });
-        setMcqMonthIndex(slotMonthIndex);
-      } else {
-        confirmPlacement(slotMonthIndex, draggedLeaf);
+  const confirmPlacement = useCallback(
+    (slotMonthIndex: number, leafId: number) => {
+      const newPlaced = { ...placed, [slotMonthIndex]: leafId };
+      setPlaced(newPlaced);
+      setPendingPlaced(null);
+      setMcqMonthIndex(null);
+      if (Object.keys(newPlaced).length === 12) {
+        setTimeout(() => setDone(true), 300);
       }
-    } else {
-      setWrongSlot(slotMonthIndex);
-      setTimeout(() => setWrongSlot(null), 600);
-      setDraggedLeaf(null);
-    }
-  }, [draggedLeaf, placed, confirmPlacement, trackInteraction]);
+    },
+    [placed],
+  );
+
+  const handleDrop = useCallback(
+    (slotMonthIndex: number) => {
+      if (!gameStarted) return;
+      if (draggedLeaf === null) return;
+      if (placed[slotMonthIndex] !== undefined) return;
+      trackInteraction();
+
+      if (draggedLeaf === slotMonthIndex) {
+        setDraggedLeaf(null);
+        if (enableMCQ) {
+          setPendingPlaced({ slotMonthIndex, leafId: draggedLeaf });
+          setMcqMonthIndex(slotMonthIndex);
+        } else {
+          confirmPlacement(slotMonthIndex, draggedLeaf);
+        }
+      } else {
+        setWrongSlot(slotMonthIndex);
+        setTimeout(() => setWrongSlot(null), 600);
+        setDraggedLeaf(null);
+      }
+    },
+    [draggedLeaf, placed, confirmPlacement, trackInteraction],
+  );
 
   // const unplacedMonths = [...Array(12).keys()].filter(i => placed[i] === undefined && pendingPlaced?.slotMonthIndex !== i);
-const unplacedMonths = useMemo(
-  () =>
-    [...Array(12).keys()].filter(
-      (i) => placed[i] === undefined && pendingPlaced?.slotMonthIndex !== i,
-    ),
-  [placed, pendingPlaced],
-);
+  const unplacedMonths = useMemo(
+    () =>
+      [...Array(12).keys()].filter(
+        (i) => placed[i] === undefined && pendingPlaced?.slotMonthIndex !== i,
+      ),
+    [placed, pendingPlaced],
+  );
   const correctCount = Object.keys(placed).length + (pendingPlaced ? 1 : 0);
+
+  const formatTime = (totalSeconds) => {
+    if (totalSeconds < 60) {
+      return `${totalSeconds}s`;
+    }
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
+  };
 
   useEffect(() => {
     if (!gameStarted || done) return;
@@ -406,30 +441,63 @@ const unplacedMonths = useMemo(
     return () => clearTimeout(timeout);
   }, [lastInteraction, gameStarted, done]);
 
+  // CalendarLeafGame mein yeh add karo (dev only)
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      // Ctrl + Shift + S dabao = skip
+      if ( e.shiftKey && e.key === "L") {
+        setDone(true);
+        setTimerQuizPassed(true);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-pink-50 px-3 py-4 min-h-screen">
       {/* Header */}
-      <div className="text-center mb-4">
-        <h2 className="font-display text-2xl font-bold text-secondary">
+      {/* <div className=" flex justify-between  text-center mb-4">
+        <span>⏱️ {timer}s</span>
+        <h2 className="font-display text-5xl font-bold text-secondary">
           {story?.emoji || "📅"} {story?.title || "Calendar Leaf Game"}
         </h2>
         <div className="flex justify-center gap-4 mt-1 text-sm font-body text-muted-foreground">
-          <span>⏱️ {timer}s</span>
           <span>✅ {correctCount}/12</span>
+        </div>
+      </div> */}
+      {/* Header */}
+      <div className="grid grid-cols-3 items-center mb-6 max-w-11xl mx-20">
+        {/* Timer - Left */}
+        <div className="flex justify-start">
+          <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
+            ⏱️ {formatTime(timer)}
+          </span>
+        </div>
+
+        {/* Title - Center */}
+        <div className=" justify-center">
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary whitespace-nowrap -ml-24">
+            {story?.emoji || "📅"} {story?.title || "Calendar Leaf Game"}
+          </h2>
+        </div>
+
+        {/* Correct Count - Right */}
+        <div className="flex justify-end">
+          <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
+            ✅ {correctCount}/12
+          </span>
         </div>
       </div>
 
       {/* Done — show timer quiz first, then next level */}
-      {done ? (
-        timerQuizPassed ? (
+      {done ? 
+         (
           <div className="text-center py-2 animate-bounce-in">
             <div className="text-6xl mb-4">🏆</div>
             <h3 className="font-display text-3xl font-bold text-primary mb-2">
               Level 1 Complete! 🌟
             </h3>
-            <p className="font-body text-muted-foreground mb-6">
-              Bonus challenge bhi clear! Ab next level khelo!
-            </p>
             <button
               onClick={onComplete}
               className="px-8 py-4 rounded-2xl font-display font-bold text-lg bg-primary text-primary-foreground hover:scale-110 transition-all shadow-lg"
@@ -437,21 +505,22 @@ const unplacedMonths = useMemo(
               Next Level → 🎲
             </button>
           </div>
-        ) : (
-          <TimerQuiz
-            seconds={timer}
-            onCorrect={() => setTimerQuizPassed(true)}
-          />
-        )
-      ) : (
+        ) 
+        // : (
+        //   <TimerQuiz
+        //     seconds={timer}
+        //     onCorrect={() => setTimerQuizPassed(true)}
+        //   />
+        // )
+       : (
         <>
           {/* Available Leaves */}
           <div className="mb-6">
-            <h3 className="font-display text-base font-bold text-center text-foreground mb-3">
+            <h3 className="font-display text-2xl font-bold text-center text-foreground mb-3">
               📦 Patch the calendar by dragging/clicking the calendar leaves
             </h3>
             {draggedLeaf !== null && (
-              <p className="text-center text-sm text-primary font-bold mb-2 animate-pulse">
+              <p className="text-center text-xl text-primary font-bold mb-2 animate-pulse">
                 ✨Selected! Now drop down to the correct month!
               </p>
             )}
@@ -492,7 +561,7 @@ const unplacedMonths = useMemo(
 
           {/* Drop Zones Grid */}
           <div className="max-w-9xl mx-auto">
-            <h3 className="font-display text-base font-bold text-center text-foreground mb-3">
+            <h3 className="font-display text-4xl font-bold text-center text-foreground mb-3">
               🗓️Drop the correct month calendar leaves here
             </h3>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
@@ -561,7 +630,7 @@ const unplacedMonths = useMemo(
                       <div className="text-center">
                         <div className="text-3xl mb-1">{MONTH_EMOJIS[idx]}</div>
                         <div
-                          className="font-display text-lg font-bold"
+                          className="font-display text-xl font-bold"
                           style={{ color: colors.header }}
                         >
                           {month}
@@ -576,10 +645,10 @@ const unplacedMonths = useMemo(
           <div className="flex justify-center mt-6 mb-4">
             <button
               onClick={() => setShowHelpVideo(true)}
-              className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-display font-bold text-sm shadow-xl hover:scale-105 transition-transform"
+              className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-display font-bold text-xl shadow-xl hover:scale-105 transition-transform"
               style={{ backgroundColor: "#8F2424" }}
             >
-              🎥 Do you need help?
+              🎥 Do you need solution?
             </button>
           </div>
         </>
@@ -723,6 +792,6 @@ const unplacedMonths = useMemo(
       )}
     </div>
   );
-};
+};;
 
 export default CalendarLeafGame;
