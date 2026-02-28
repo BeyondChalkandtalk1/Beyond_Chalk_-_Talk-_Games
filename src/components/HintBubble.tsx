@@ -336,12 +336,12 @@ const HintBubble = ({
           </div>
           <div className="flex items-center justify-center gap-1 mb-1">
             <span className="text-lg">💡</span>
-            <h3 className="font-display text-lg font-bold text-secondary">
+            <h3 className="font-display text-3xl font-bold text-secondary">
               Hint Time!
             </h3>
             <span className="text-lg">💡</span>
           </div>
-          <p className="text-lg text-muted-foreground font-body px-4">
+          <p className="text-xl text-muted-foreground font-body px-4">
             Looks like you need a little help – no problem! 🤗
           </p>
         </div>

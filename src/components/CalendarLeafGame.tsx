@@ -524,7 +524,7 @@ const CalendarLeafGame = ({
                 ✨Selected! Now drop down to the correct month!
               </p>
             )}
-            <div className="flex flex-wrap gap-3 justify-center max-w-11xl mx-auto">
+            <div className="flex flex-wrap gap-6 justify-center max-w-11xl mx-auto">
               {availableLeaves.map((leafIdx) => (
                 <div
                   key={leafIdx}

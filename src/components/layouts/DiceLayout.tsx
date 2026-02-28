@@ -4,7 +4,7 @@ const DiceLayout = ({ slots, centerContent }) => {
       <div className="flex justify-center mb-4">
         <div className="px-6 py-2 rounded-full bg-primary flex items-center justify-center">
           {centerContent || (
-            <span className="text-primary-foreground font-display text-base font-bold">
+            <span className="text-primary-foreground font-display text-xl font-bold">
               🎲 Dice Layout — 12 Months
             </span>
           )}
