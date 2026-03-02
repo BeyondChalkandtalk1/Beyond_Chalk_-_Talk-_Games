@@ -213,72 +213,89 @@ const Level2Game = ({ story, onFinish }) => {
     setGameScore(0);
   };
 
-  const buildSlot = (index) => {
-    const month = MONTHS[index];
+  // const buildSlot = (index) => {
+  //   const month = MONTHS[index];
+  //   const isPlaced = placed[index] !== undefined;
+  //   const result = results[index];
+  //   const isShaking = shakeSlot === index;
+
+  //   return (
+  //     <div
+  //       className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl border-2 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${
+  //         isPlaced
+  //           ? result === "correct"
+  //             ? "bg-green-100 border-green-500"
+  //             : "bg-red-100 border-red-500"
+  //           : "bg-card border-border hover:border-primary"
+  //       } ${isShaking ? "animate-shake" : ""} ${
+  //         isPlaced && result === "correct" ? "animate-bounce-in" : ""
+  //       }`}
+  //       style={{ boxShadow: isPlaced ? undefined : "var(--shadow-card)" }}
+  //       onDragOver={(e) => e.preventDefault()}
+  //       onDrop={(e) => {
+  //         e.preventDefault();
+  //         if (!isPlaced) handleDrop(index);
+  //       }}
+  //       onClick={() => {
+  //         if (!isPlaced && draggedId !== null) handleDrop(index);
+  //       }}
+  //     >
+  //       {isPlaced ? (
+  //         <>
+  //           <span className="text-lg">{MONTHS[placed[index]].emoji}</span>
+  //           <span className="text-[10px] md:text-xs font-display font-bold leading-tight">
+  //             {MONTHS[placed[index]].short}
+  //           </span>
+  //         </>
+  //       ) : (
+  //         <>
+  //           <span className="text-xs font-display font-bold text-muted-foreground">
+  //             {index + 1}
+  //           </span>
+  //           <span className="text-[9px] md:text-[10px] text-muted-foreground font-body leading-tight">
+  //             {month.short}
+  //           </span>
+  //         </>
+  //       )}
+  //     </div>
+  //   );
+  // };
+
+  const buildSlotConfig = (index) => {
     const isPlaced = placed[index] !== undefined;
     const result = results[index];
-    const isShaking = shakeSlot === index;
-
-    return (
-      <div
-        className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl border-2 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${
-          isPlaced
-            ? result === "correct"
-              ? "bg-green-100 border-green-500"
-              : "bg-red-100 border-red-500"
-            : "bg-card border-border hover:border-primary"
-        } ${isShaking ? "animate-shake" : ""} ${
-          isPlaced && result === "correct" ? "animate-bounce-in" : ""
-        }`}
-        style={{ boxShadow: isPlaced ? undefined : "var(--shadow-card)" }}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          if (!isPlaced) handleDrop(index);
-        }}
-        onClick={() => {
-          if (!isPlaced && draggedId !== null) handleDrop(index);
-        }}
-      >
-        {isPlaced ? (
-          <>
-            <span className="text-lg">{MONTHS[placed[index]].emoji}</span>
-            <span className="text-[10px] md:text-xs font-display font-bold leading-tight">
-              {MONTHS[placed[index]].short}
-            </span>
-          </>
-        ) : (
-          <>
-            <span className="text-xs font-display font-bold text-muted-foreground">
-              {index + 1}
-            </span>
-            <span className="text-[9px] md:text-[10px] text-muted-foreground font-body leading-tight">
-              {month.short}
-            </span>
-          </>
-        )}
-      </div>
-    );
+    return {
+      isPlaced,
+      result,
+      isShaking: shakeSlot === index,
+      placedMonth: isPlaced ? MONTHS[placed[index]] : null,
+      onDragOver: (e) => e.preventDefault(),
+      onDrop: (e) => {
+        e.preventDefault();
+        if (!isPlaced) handleDrop(index);
+      },
+      onClick: () => {
+        if (!isPlaced && draggedId !== null) handleDrop(index);
+      },
+    };
   };
-
-  const slotElements = MONTHS.map((_, i) => buildSlot(i));
+  // const slotElements = MONTHS.map((_, i) => buildSlot(i));
+  const slotConfigs = MONTHS.map((_, i) => buildSlotConfig(i));
   const LayoutComponent = layout === "zodiac" ? ZodiacLayout : DiceLayout;
 
   return (
     <div className="container mx-auto px-4 py-6">
       {/* Level badge */}
       <div className="flex justify-center mb-3">
-        <span className="px-4 py-1 rounded-full bg-secondary text-secondary-foreground font-display font-bold text-sm">
-          🎮 Level 2 — Month Matching
+        <span className="px-4 py-1 rounded-full bg-secondary text-secondary-foreground font-display font-bold text-lg">
+          🎮 Level 2 
         </span>
       </div>
       <div className="text-center mb-4">
         <h2 className="font-display text-3xl md:text-5xl font-bold text-secondary mb-2">
           📅 The Paw Patch Puzzles
         </h2>
-        <p className="text-muted-foreground font-bold text-3xl">
-          Drag and drop the calendar to the correct month! 🎯
-        </p>
+     
       </div>
       {/* Layout switcher */}
       <div className="flex justify-center gap-2 mb-4 flex-wrap">
@@ -296,11 +313,13 @@ const Level2Game = ({ story, onFinish }) => {
           </button>
         ))}
       </div>
-      <LayoutComponent slots={slotElements} centerContent={undefined} />
+      {/* <LayoutComponent slots={slotElements} centerContent={undefined} /> */}
+      {/* <LayoutComponent slots={slotConfigs} centerContent={undefined} /> */}
+      <LayoutComponent slotConfigs={slotConfigs} centerContent={undefined} />
       <div className="max-w-4xl mx-auto">
-        <h3 className="font-display text-3xl font-bold text-foreground text-center mb-3">
+        {/* <h3 className="font-display text-3xl font-bold text-foreground text-center mb-3">
           📦 Calendars — Drag! (or Click)
-        </h3>
+        </h3> */}
 
         {/* Card style switcher */}
         <div className="flex justify-center gap-2 mb-4 flex-wrap">
@@ -320,8 +339,8 @@ const Level2Game = ({ story, onFinish }) => {
         </div>
 
         {draggedId !== null && (
-          <p className="text-center text-sm text-primary font-display font-bold mb-2 animate-pulse">
-            ✨ Selected — ab upar month pe click karo!
+          <p className="text-center text-2lg text-primary font-display font-bold mb-2 animate-pulse">
+            ✨ Selected – Now click on the month above!
           </p>
         )}
 
