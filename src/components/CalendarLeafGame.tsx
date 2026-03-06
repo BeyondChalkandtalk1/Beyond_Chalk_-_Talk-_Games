@@ -61,7 +61,7 @@ const CalendarCard = ({ monthIndex, small = false }: { monthIndex: number; small
         className="text-center font-display font-bold mb-1"
         style={{ fontSize: small ? "13px" : "15px", color: colors.header }}
       >
-        {MONTH_EMOJIS[monthIndex]} {name}
+        {/* {MONTH_EMOJIS[monthIndex]} {name} */}
       </div>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: small ? "16px" : "18px" }}>
         <thead>
@@ -131,7 +131,7 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
     setSelected(idx);
     setAnswered(true);
     if (idx === mcq.correct) {
-      setTimeout(() => onCorrect(), 4000);
+      setTimeout(() => onCorrect(), 35000);
     }
   };
 
@@ -140,12 +140,32 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "rgba(0,0,0,0.55)" }}
     >
-      <div className="bg-card rounded-3xl p-6 max-w-[700px] max-h-[90vh] overflow-y-auto hide-scrollbar w-full shadow-2xl border-4 border-primary animate-bounce-in">
+      <div className="relative  bg-card rounded-3xl p-6 max-w-[700px] max-h-[90vh] overflow-y-auto hide-scrollbar w-full shadow-2xl border-4 border-primary animate-bounce-in">
+        {/* CROSS BUTTON */}
+        {answered && (
+          <button
+            onClick={()=>{
+              if(selected !== mcq.correct){
+                  setSelected(null);
+                  setAnswered(false);
+                }else{
+                   onCorrect();
+                }
+              }
+            }
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:bg-destructive hover:text-destructive-foreground transition-all text-lg font-bold z-20"
+          >
+            ✕
+          </button>
+        )}
+
         <div className="text-center mb-4">
           <div className="text-5xl mb-2 animate-bounce">🎉</div>
+
           <h3 className="font-display text-3xl font-bold text-secondary">
             Great Job! {MONTH_EMOJIS[monthIndex]} {MONTHS[monthIndex]}!
           </h3>
+
           <p className="text-2xl text-muted-foreground font-body mt-1">
             Answer the question to unlock the next calendar leaf to correct
             month 🚀
@@ -181,7 +201,7 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
             className={`rounded-xl p-3 text-center text-2xl font-semibold font-body animate-fade-in ${selected === mcq.correct ? "bg-green-50 text-green-700 border border-green-300" : "bg-orange-50 text-orange-700 border border-orange-300"}`}
           >
             {selected === mcq.correct ? "✅ " : "❌ "}
-            <p className="text-black">Do you know?</p>
+            <p className="text-black">Did you know?</p>
             {mcq.fact}
             {selected !== mcq.correct && (
               <button
@@ -353,18 +373,20 @@ const CalendarLeafGame = ({
   );
 
   // useEffect(() => {
+  //   if (!gameStarted) return;
   //   const interval = setInterval(() => {
-  //     if (!done) setTimer(t => t + 1);
+  //     if (!done) setTimer((t) => t + 1);
   //   }, 1000);
   //   return () => clearInterval(interval);
-  // }, [done]);
+  // }, [done, gameStarted]);
+
   useEffect(() => {
-    if (!gameStarted) return;
+    if (!gameStarted || done || showHowToPlay) return; // ← add showHowToPlay check
     const interval = setInterval(() => {
       if (!done) setTimer((t) => t + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [done, gameStarted]);
+  }, [done, gameStarted, showHowToPlay]); // ← add showHowToPlay to deps
 
   const placedLeafIds = new Set(Object.values(placed));
   const availableLeaves = shuffledMonths.filter(
@@ -445,7 +467,7 @@ const CalendarLeafGame = ({
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       // Ctrl + Shift + S dabao = skip
-      if ( e.shiftKey && e.key === "L") {
+      if (e.shiftKey && e.key === "L") {
         setDone(true);
         setTimerQuizPassed(true);
       }
@@ -470,9 +492,17 @@ const CalendarLeafGame = ({
       <div className="grid grid-cols-3 items-center mb-6 max-w-11xl mx-20">
         {/* Timer - Left */}
         <div className="flex justify-start">
-          <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
-            ⏱️ {formatTime(timer)}
-          </span>
+          <div className="flex flex-col gap-4">
+            <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
+              ⏱️ {formatTime(timer)}
+            </span>
+            <button
+              className="px-2 py-1 text-white text-xl bg-slate-500 font-bold rounded-[19px]"
+              onClick={() => setShowHowToPlay(true)}
+            >
+              How to play
+            </button>
+          </div>
         </div>
 
         {/* Title - Center */}
@@ -491,28 +521,26 @@ const CalendarLeafGame = ({
       </div>
 
       {/* Done — show timer quiz first, then next level */}
-      {done ? 
-         (
-          <div className="text-center py-2 animate-bounce-in">
-            <div className="text-6xl mb-4">🏆</div>
-            <h3 className="font-display text-3xl font-bold text-primary mb-2">
-              Level 1 Complete! 🌟
-            </h3>
-            <button
-              onClick={onComplete}
-              className="px-8 py-4 rounded-2xl font-display font-bold text-lg bg-primary text-primary-foreground hover:scale-110 transition-all shadow-lg"
-            >
-              Next Level → 🎲
-            </button>
-          </div>
-        ) 
+      {done ? (
+        <div className="text-center py-2 animate-bounce-in">
+          <div className="text-6xl mb-4">🏆</div>
+          <h3 className="font-display text-3xl font-bold text-primary mb-2">
+            Level 1 Complete! 🌟
+          </h3>
+          <button
+            onClick={onComplete}
+            className="px-8 py-4 rounded-2xl font-display font-bold text-lg bg-primary text-primary-foreground hover:scale-110 transition-all shadow-lg"
+          >
+            Next Level → 🎲
+          </button>
+        </div>
+      ) : (
         // : (
         //   <TimerQuiz
         //     seconds={timer}
         //     onCorrect={() => setTimerQuizPassed(true)}
         //   />
         // )
-       : (
         <>
           {/* Available Leaves */}
           <div className="mb-6">
@@ -648,7 +676,7 @@ const CalendarLeafGame = ({
               className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-display font-bold text-xl shadow-xl hover:scale-105 transition-transform"
               style={{ backgroundColor: "#8F2424" }}
             >
-              🎥 Do you need solution?
+              🎥 Do you need a solution?
             </button>
           </div>
         </>
@@ -774,7 +802,7 @@ const CalendarLeafGame = ({
             {/* Video Title */}
             <div className="px-5 pt-5 pb-3 bg-gray-900">
               <h3 className="font-display font-bold text-white text-lg">
-                🎬 How to Play — Video Guide
+                🎬 Video Guide
               </h3>
             </div>
 

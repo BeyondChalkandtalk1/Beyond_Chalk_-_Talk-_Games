@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     if (!username.trim() || !password.trim()) {
-      setError("Username aur password dono daalo! 😅");
+      setError("Enter your username and password!");
       return;
     }
     const success = login(username.trim(), password);
@@ -37,16 +37,20 @@ const Login = () => {
         style={{ boxShadow: "var(--shadow-hover)" }}
       >
         <div className="text-center items-center mb-6">
-          <div className="text-6xl mb-3 animate-float"><img src={logo} alt="" className="w-20 h-20 mx-auto"/></div>
-          <h1 className="font-display text-3xl font-bold text-secondary">Welcome Back!</h1>
-          <p className="text-muted-foreground font-body text-sm mt-1">
-            Login karke games khelo! 🌟
+          <div className="text-6xl mb-3 animate-float">
+            <img src={logo} alt="" className="w-20 h-20 mx-auto" />
+          </div>
+          <h1 className="font-display text-3xl font-bold text-secondary">
+            Welcome Back!
+          </h1>
+          <p className="text-muted-foreground font-body text-xl mt-1">
+            Login to play the games! 🌟
           </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="font-display text-sm font-bold text-foreground block mb-1">
+            <label className="font-display text-lg font-bold text-foreground block mb-1">
               👤 Username
             </label>
             <input
@@ -54,12 +58,12 @@ const Login = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border-2 border-border bg-background font-body text-foreground focus:border-primary focus:outline-none transition-colors"
-              placeholder="Apna naam likho..."
+              placeholder="Write your name"
             />
           </div>
 
           <div>
-            <label className="font-display text-sm font-bold text-foreground block mb-1">
+            <label className="font-display text-lg font-bold text-foreground block mb-1">
               🔒 Password
             </label>
             <input
@@ -67,12 +71,12 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border-2 border-border bg-background font-body text-foreground focus:border-primary focus:outline-none transition-colors"
-              placeholder="Password daalo..."
+              placeholder="Create your password "
             />
           </div>
 
           {error && (
-            <p className="text-destructive font-display text-sm text-center animate-shake">
+            <p className="text-destructive font-display text-lg text-center animate-shake">
               {error}
             </p>
           )}
@@ -82,13 +86,13 @@ const Login = () => {
             className="w-full py-3 rounded-xl font-display font-bold text-primary-foreground transition-all hover:scale-105"
             style={{ background: "var(--gradient-golden)" }}
           >
-            🚀 Login Karo!
+            🚀 Login!
           </button>
         </form>
 
         <div className="my-5 flex items-center gap-3">
           <div className="flex-1 h-px bg-border" />
-          <span className="text-muted-foreground font-body text-xs">YA</span>
+          <span className="text-muted-foreground font-body text-xs">OR</span>
           <div className="flex-1 h-px bg-border" />
         </div>
 
@@ -99,10 +103,13 @@ const Login = () => {
           🎭 Guest Login
         </button>
 
-        <p className="text-center mt-5 font-body text-sm text-muted-foreground">
-          Naya account?{" "}
-          <Link to="/register" className="text-primary font-display font-bold hover:underline">
-            Register Karo! ✨
+        <p className="text-center mt-5 font-body text-lg text-muted-foreground">
+          Create new account{" "}
+          <Link
+            to="/register"
+            className="text-primary font-display font-bold hover:underline"
+          >
+            Register now! ✨
           </Link>
         </p>
       </div>

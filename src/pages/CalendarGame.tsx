@@ -30,18 +30,18 @@ const CARD_STYLES = {
     label: "Week & Day",
     emoji: "📆",
     data: [
-      { line1: "Monday", line2: "Week 1 • 1st" },
-      { line1: "Tuesday", line2: "Week 5 • 14th" },
-      { line1: "Wednesday", line2: "Week 9 • 8th" },
-      { line1: "Thursday", line2: "Week 14 • 3rd" },
-      { line1: "Friday", line2: "Week 18 • 22nd" },
-      { line1: "Saturday", line2: "Week 23 • 10th" },
-      { line1: "Sunday", line2: "Week 27 • 4th" },
-      { line1: "Monday", line2: "Week 31 • 15th" },
-      { line1: "Tuesday", line2: "Week 36 • 5th" },
-      { line1: "Wednesday", line2: "Week 40 • 12th" },
-      { line1: "Thursday", line2: "Week 44 • 7th" },
-      { line1: "Friday", line2: "Week 49 • 25th" },
+      { line1: "Monday", line2: "Week 1" },
+      { line1: "Tuesday", line2: "Week 5" },
+      { line1: "Wednesday", line2: "Week 9" },
+      { line1: "Thursday", line2: "Week 14" },
+      { line1: "Friday", line2: "Week 18" },
+      { line1: "Saturday", line2: "Week 23" },
+      { line1: "Sunday", line2: "Week 27" },
+      { line1: "Monday", line2: "Week 31" },
+      { line1: "Tuesday", line2: "Week 36" },
+      { line1: "Wednesday", line2: "Week 40" },
+      { line1: "Thursday", line2: "Week 44" },
+      { line1: "Friday", line2: "Week 49" },
     ],
   },
   date: {
@@ -131,7 +131,7 @@ const LEVEL2_HINTS = [
   },
   {
     emoji: "🔢",
-    clue: "Use Multiplication — Week Number ÷ 4 ≈ Month Number!",
+    clue: "Use Multiplication :-  Week number divided by 4 = ",
   },
 ];
 
@@ -287,18 +287,17 @@ const Level2Game = ({ story, onFinish }) => {
     <div className="container mx-auto px-4 py-6">
       {/* Level badge */}
       <div className="flex justify-center mb-3">
-        <span className="px-4 py-1 rounded-full bg-secondary text-secondary-foreground font-display font-bold text-lg">
-          🎮 Level 2 
+        <span className="px-4 py-1 rounded-full bg-secondary text-secondary-foreground font-display font-bold text-4xl">
+          🎮 Level 2
         </span>
       </div>
       <div className="text-center mb-4">
         <h2 className="font-display text-3xl md:text-5xl font-bold text-secondary mb-2">
           📅 The Paw Patch Puzzles
         </h2>
-     
       </div>
       {/* Layout switcher */}
-      <div className="flex justify-center gap-2 mb-4 flex-wrap">
+      {/* <div className="flex justify-center gap-2 mb-4 flex-wrap">
         {LAYOUT_OPTIONS.map((opt) => (
           <button
             key={opt.type}
@@ -312,7 +311,7 @@ const Level2Game = ({ story, onFinish }) => {
             {opt.emoji} {opt.label}
           </button>
         ))}
-      </div>
+      </div> */}
       {/* <LayoutComponent slots={slotElements} centerContent={undefined} /> */}
       {/* <LayoutComponent slots={slotConfigs} centerContent={undefined} /> */}
       <LayoutComponent slotConfigs={slotConfigs} centerContent={undefined} />
@@ -322,7 +321,7 @@ const Level2Game = ({ story, onFinish }) => {
         </h3> */}
 
         {/* Card style switcher */}
-        <div className="flex justify-center gap-2 mb-4 flex-wrap">
+        {/* <div className="flex justify-center gap-2 mb-4 flex-wrap">
           {CARD_STYLE_OPTIONS.map((opt) => (
             <button
               key={opt.type}
@@ -336,15 +335,16 @@ const Level2Game = ({ story, onFinish }) => {
               {opt.emoji} {opt.label}
             </button>
           ))}
-        </div>
+        </div> */}
 
         {draggedId !== null && (
-          <p className="text-center text-2lg text-primary font-display font-bold mb-2 animate-pulse">
-            ✨ Selected – Now click on the month above!
+          <p className="text-center text-2xl text-primary font-display font-bold mb-2 animate-pulse">
+            ✨ Selected- Now click on the month in which the selected week
+            will fall
           </p>
         )}
 
-        <div className="grid grid-cols-4 gap-3 justify-center">
+        <div className="grid grid-cols-6 gap-3 justify-center">
           {availableCalendars.map((cal) => {
             const info = CARD_STYLES[cardStyle].data[cal.id];
             return (
@@ -373,13 +373,14 @@ const Level2Game = ({ story, onFinish }) => {
                   boxShadow: "var(--shadow-card)",
                 }}
               >
-                <div className="text-2xl text-center">{cal.emoji}</div>
+                {/* <div className="text-2xl text-center">{cal.emoji}</div> */}
                 <div className="text-[24px] font-display font-bold text-center mt-1 text-foreground">
-                  {info.line1}
-                </div>
-                <div className="text-[20px] font-body text-center text-muted-foreground">
+                  {/* {info.line1} */}
                   {info.line2}
                 </div>
+                {/* <div className="text-[20px] font-body text-center text-muted-foreground">
+                  {info.line2}
+                </div> */}
               </div>
             );
           })}

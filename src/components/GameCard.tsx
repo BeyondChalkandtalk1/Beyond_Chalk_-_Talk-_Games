@@ -277,10 +277,10 @@ const iconMap = {
   primary: (
     <div className="relative w-20 h-20 bg-white rounded-xl flex flex-col items-center justify-center shadow-lg border-2 border-yellow-300">
       <div className="w-full bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 text-white text-[17px] font-bold rounded-t-xl text-center">
-        MONTH
+        Number of levels
       </div>
       <div className="text-2xl font-extrabold text-secondary leading-none">
-        12
+        2
       </div>
       {/* <span className="absolute -top-1 -right-1 text-xs">🌈</span> */}
     </div>

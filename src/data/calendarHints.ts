@@ -4,6 +4,7 @@
 export const MONTH_HINTS = [
   // 0 - January
   {
+    id:1,
     clue: "Start with the month that has the least number of days — it is the easiest to identify. ❄️",
     funFact: "Is mahine mein bahut thand hoti hai aur naya saal shuru hota hai! 🎉",
     emoji: "🧊",
@@ -12,14 +13,16 @@ export const MONTH_HINTS = [
   },
   // 1 - February
   {
+    id:2,
     clue: "Look at the last day of the month. The next month will always begin with the following day of the week.🌿",
     funFact: "February mein sirf 28 ya 29 din hote hain — leap year mein ek extra din! 📅",
-    emoji: "💝",
+    emoji: "👩‍🏫",
     options: ["February", "April", "September", "December"],
     correct: 0,
   },
   // 2 - March
   {
+    id:3,
     clue: "Remember which months have 30 days and which have 31 days. This will help you narrow down the possibilities.🌈",
     funFact: "March mein Holi aati hai — sab ek dusre ko rang lagate hain! 🎨",
     emoji: "🎨",

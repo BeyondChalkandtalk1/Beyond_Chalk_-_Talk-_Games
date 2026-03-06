@@ -327,7 +327,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
             <>🎮 Let's Play!</>
           ) : (
             <>
-              Turn Page <span className="text-lg">📄</span>
+              <span className="text-xl">Turn Page</span> <span className="text-lg">📄</span>
             </>
           )}
         </button>

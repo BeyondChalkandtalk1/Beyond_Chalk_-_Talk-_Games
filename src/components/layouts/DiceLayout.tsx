@@ -460,18 +460,18 @@
 // export default DiceLayout;
 
 const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
+  "January",
+  "February",
+  "March",
+  "April",
   "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const DieFace = ({ number, size = 44 }) => {
@@ -575,12 +575,12 @@ const MonthCard = ({ positionFace, monthIndex, slotConfig = {} }) => {
       {/* <DieFace number={positionFace} size={40} /> */}
 
       {/* Content: placed month OR month dots + name */}
-      <div className="flex flex-col items-center gap-1">
+      <div className="flex flex-col items-center justify-center gap-1">
         {isPlaced && placedMonth ? (
           <>
             <span className="text-2xl">{placedMonth.emoji}</span>
-            <span className="text-xs font-display font-bold text-foreground">
-              {placedMonth.short}
+            <span className="text-2xl font-display font-bold text-foreground">
+              {placedMonth.name}
             </span>
           </>
         ) : (
@@ -600,49 +600,69 @@ const MonthCard = ({ positionFace, monthIndex, slotConfig = {} }) => {
 };
 
 // Props: slotConfigs (array of 12 config objects), centerContent
+// const DiceLayout = ({ slotConfigs = [], centerContent }) => {
+//   return (
+//     <div className="max-w-2xl mx-auto mb-8">
+//       <div className="flex justify-center mb-4">
+//         {/* <div className="px-6 py-2 rounded-full bg-primary flex items-center justify-center">
+//           {centerContent || (
+//             <span className="text-primary-foreground font-display text-xl font-bold">
+//               🎲 Dice Layout — 12 Months
+//             </span>
+//           )}
+//         </div> */}
+//       </div>
+
+//       <div className="flex gap-4 justify-center flex-wrap">
+//         {/* Die 1 — months 1–6 */}
+//         <div
+//           className="bg-card border-4 border-border rounded-3xl p-4 inline-grid grid-cols-2 grid-rows-3 gap-3"
+//           style={{ boxShadow: "var(--shadow-card)" }}
+//         >
+//           {Array.from({ length: 6 }).map((_, i) => (
+//             <MonthCard
+//               key={i}
+//               positionFace={i + 1}
+//               monthIndex={i}
+//               slotConfig={slotConfigs[i]}
+//             />
+//           ))}
+//         </div>
+
+//         {/* Die 2 — months 7–12 */}
+//         <div
+//           className="bg-card border-4 border-border rounded-3xl p-4 inline-grid grid-cols-2 grid-rows-3 gap-3"
+//           style={{ boxShadow: "var(--shadow-card)" }}
+//         >
+//           {Array.from({ length: 6 }).map((_, i) => (
+//             <MonthCard
+//               key={i + 6}
+//               positionFace={i + 1}
+//               monthIndex={i + 6}
+//               slotConfig={slotConfigs[i + 6]}
+//             />
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
 const DiceLayout = ({ slotConfigs = [], centerContent }) => {
   return (
-    <div className="max-w-2xl mx-auto mb-8">
-      <div className="flex justify-center mb-4">
-        {/* <div className="px-6 py-2 rounded-full bg-primary flex items-center justify-center">
-          {centerContent || (
-            <span className="text-primary-foreground font-display text-xl font-bold">
-              🎲 Dice Layout — 12 Months
-            </span>
-          )}
-        </div> */}
-      </div>
-
-      <div className="flex gap-4 justify-center flex-wrap">
-        {/* Die 1 — months 1–6 */}
-        <div
-          className="bg-card border-4 border-border rounded-3xl p-4 inline-grid grid-cols-2 grid-rows-3 gap-3"
-          style={{ boxShadow: "var(--shadow-card)" }}
-        >
-          {Array.from({ length: 6 }).map((_, i) => (
-            <MonthCard
-              key={i}
-              positionFace={i + 1}
-              monthIndex={i}
-              slotConfig={slotConfigs[i]}
-            />
-          ))}
-        </div>
-
-        {/* Die 2 — months 7–12 */}
-        <div
-          className="bg-card border-4 border-border rounded-3xl p-4 inline-grid grid-cols-2 grid-rows-3 gap-3"
-          style={{ boxShadow: "var(--shadow-card)" }}
-        >
-          {Array.from({ length: 6 }).map((_, i) => (
-            <MonthCard
-              key={i + 6}
-              positionFace={i + 1}
-              monthIndex={i + 6}
-              slotConfig={slotConfigs[i + 6]}
-            />
-          ))}
-        </div>
+    <div className="w-full mb-8">
+      <div
+        className="bg-card border-4 border-border rounded-3xl p-4 grid grid-cols-6 gap-3"
+        style={{ boxShadow: "var(--shadow-card)" }}
+      >
+        {Array.from({ length: 12 }).map((_, i) => (
+          <MonthCard
+            key={i}
+            positionFace={i + 1}
+            monthIndex={i}
+            slotConfig={slotConfigs[i]}
+          />
+        ))}
       </div>
     </div>
   );
