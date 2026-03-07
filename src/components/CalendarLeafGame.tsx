@@ -1,6 +1,15 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { MONTH_MCQ, enableMCQ } from "../data/calendarMCQ";
 import HintBubble from "./HintBubble";
+import howtoplaySound from "../assets/howToPlaySound.mpeg";
+import hintSound from "../assets/HintSound.mpeg";
+import tryAgainSound from "../assets/TryAgainSound.mpeg";
+import TimerSound from "../assets/TimerSound.mpeg";
+import correctDragSound from "../assets/correctDargSound.mpeg";
+import inCorrectDragSound from "../assets/inCorrectDragSound.mpeg";
+import Level1CompleteVideo from "../assets/Level1CompleteVideo.mp4";
+import Level2CompleteVideo from "../assets/Level2CompleteVideo.mp4";
+import { useSound } from "@/contexts/SoundContext";
 
 const MONTHS = [
   "January","February","March","April","May","June",
@@ -125,6 +134,7 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
   const mcq = MONTH_MCQ[monthIndex];
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
+    const { playSound } = useSound();
 
   const handleSelect = (idx: number) => {
     if (answered) return;
@@ -132,6 +142,8 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
     setAnswered(true);
     if (idx === mcq.correct) {
       setTimeout(() => onCorrect(), 35000);
+    } else {
+      playSound(tryAgainSound); 
     }
   };
 
@@ -358,6 +370,7 @@ const CalendarLeafGame = ({
   const [showHowToPlay, setShowHowToPlay] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
   const [showHelpVideo, setShowHelpVideo] = useState(false);
+  const { playSound, isSoundEnabled } = useSound();
 
   const [mcqMonthIndex, setMcqMonthIndex] = useState<number | null>(null);
   const [pendingPlaced, setPendingPlaced] = useState<{
@@ -371,14 +384,6 @@ const CalendarLeafGame = ({
     () => setLastInteraction(Date.now()),
     [],
   );
-
-  // useEffect(() => {
-  //   if (!gameStarted) return;
-  //   const interval = setInterval(() => {
-  //     if (!done) setTimer((t) => t + 1);
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, [done, gameStarted]);
 
   useEffect(() => {
     if (!gameStarted || done || showHowToPlay) return; // ← add showHowToPlay check
@@ -414,6 +419,7 @@ const CalendarLeafGame = ({
       trackInteraction();
 
       if (draggedLeaf === slotMonthIndex) {
+        playSound(correctDragSound);
         setDraggedLeaf(null);
         if (enableMCQ) {
           setPendingPlaced({ slotMonthIndex, leafId: draggedLeaf });
@@ -422,6 +428,7 @@ const CalendarLeafGame = ({
           confirmPlacement(slotMonthIndex, draggedLeaf);
         }
       } else {
+        playSound(inCorrectDragSound);
         setWrongSlot(slotMonthIndex);
         setTimeout(() => setWrongSlot(null), 600);
         setDraggedLeaf(null);
@@ -463,6 +470,26 @@ const CalendarLeafGame = ({
     return () => clearTimeout(timeout);
   }, [lastInteraction, gameStarted, done]);
 
+  useEffect(() => {
+    if (showHowToPlay) {
+      playSound(howtoplaySound);
+    }
+  }, [showHowToPlay]);
+
+  useEffect(() => {
+    if (!gameStarted || done || showHowToPlay || !isSoundEnabled) return;
+
+    const audio = new Audio(TimerSound);
+    audio.loop = true;
+    audio.volume = 0.3;
+    audio.play().catch(() => {});
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [gameStarted, done, showHowToPlay, isSoundEnabled]); // isSoundEnabled dependency mein add
+
   // CalendarLeafGame mein yeh add karo (dev only)
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -478,16 +505,6 @@ const CalendarLeafGame = ({
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-pink-50 px-3 py-4 min-h-screen">
-      {/* Header */}
-      {/* <div className=" flex justify-between  text-center mb-4">
-        <span>⏱️ {timer}s</span>
-        <h2 className="font-display text-5xl font-bold text-secondary">
-          {story?.emoji || "📅"} {story?.title || "Calendar Leaf Game"}
-        </h2>
-        <div className="flex justify-center gap-4 mt-1 text-sm font-body text-muted-foreground">
-          <span>✅ {correctCount}/12</span>
-        </div>
-      </div> */}
       {/* Header */}
       <div className="grid grid-cols-3 items-center mb-6 max-w-11xl mx-20">
         {/* Timer - Left */}
@@ -533,14 +550,17 @@ const CalendarLeafGame = ({
           >
             Next Level → 🎲
           </button>
+          <div className="mt-6 flex justify-center">
+            <video
+              src={Level1CompleteVideo}
+              autoPlay
+              loop
+              muted
+              className="w-full max-w-xl rounded-xl shadow-lg"
+            />
+          </div>
         </div>
       ) : (
-        // : (
-        //   <TimerQuiz
-        //     seconds={timer}
-        //     onCorrect={() => setTimerQuizPassed(true)}
-        //   />
-        // )
         <>
           {/* Available Leaves */}
           <div className="mb-6">

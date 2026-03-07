@@ -1,8 +1,18 @@
 import { motion } from "framer-motion";
+import howtoplaySound from "../assets/howToPlaySound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
+import { useEffect } from "react";
 
 const HowToPlayModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+ 
+    const { playSound } = useSound();
 
+    useEffect(() => {
+      if (isOpen) {
+        playSound(howtoplaySound);
+      }
+    }, [isOpen]);
+ if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <motion.div

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfettiAnimation from "../components/ConfettiAnimation";
 import ResultModal from "../components/ResultModal";
@@ -8,6 +8,11 @@ import CalendarLeafGame from "../components/CalendarLeafGame";
 import DiceLayout from "../components/layouts/DiceLayout";
 import ZodiacLayout from "../components/layouts/ZodiacLayout";
 import HintBubble from "../components/HintBubble";
+import howtoplaySound from "../assets/howToPlaySound.mpeg";
+import TimerSound from "../assets/TimerSound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
+import correctDragSound from "../assets/correctDargSound.mpeg";
+import inCorrectDragSound from "../assets/inCorrectDragSound.mpeg";
 
 
 const MONTHS = [
@@ -153,6 +158,15 @@ const Level2Game = ({ story, onFinish }) => {
   const [lastInteraction, setLastInteraction] = useState(Date.now());
   const [showHowToPlay, setShowHowToPlay] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
+    const { playSound, isSoundEnabled } = useSound();
+  const [timer, setTimer] = useState(0);
+
+  const formatTime = (totalSeconds) => {
+    if (totalSeconds < 60) return `${totalSeconds}s`;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
+  };
 
   const trackInteraction = useCallback(() => setLastInteraction(Date.now()), []);
 
@@ -166,6 +180,7 @@ const Level2Game = ({ story, onFinish }) => {
       trackInteraction();
       const isCorrect = draggedId === slotIndex;
 
+      playSound(isCorrect ? correctDragSound : inCorrectDragSound);
       setPlaced((prev) => ({ ...prev, [slotIndex]: draggedId }));
       setResults((prev) => ({
         ...prev,
@@ -195,12 +210,16 @@ const Level2Game = ({ story, onFinish }) => {
 
           if (isWin) setShowConfetti(true);
 
-          saveGameResult("Calendar Game 📅", isWin ? "win" : "loss", correctCount);
+          saveGameResult(
+            "Calendar Game 📅",
+            isWin ? "win" : "loss",
+            correctCount,
+          );
           setShowResult(true);
         }, 600);
       }
     },
-    [draggedId, placed, results, trackInteraction]
+    [draggedId, placed, results, trackInteraction, playSound],
   );
 
   const resetGame = () => {
@@ -212,54 +231,6 @@ const Level2Game = ({ story, onFinish }) => {
     setDraggedId(null);
     setGameScore(0);
   };
-
-  // const buildSlot = (index) => {
-  //   const month = MONTHS[index];
-  //   const isPlaced = placed[index] !== undefined;
-  //   const result = results[index];
-  //   const isShaking = shakeSlot === index;
-
-  //   return (
-  //     <div
-  //       className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl border-2 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${
-  //         isPlaced
-  //           ? result === "correct"
-  //             ? "bg-green-100 border-green-500"
-  //             : "bg-red-100 border-red-500"
-  //           : "bg-card border-border hover:border-primary"
-  //       } ${isShaking ? "animate-shake" : ""} ${
-  //         isPlaced && result === "correct" ? "animate-bounce-in" : ""
-  //       }`}
-  //       style={{ boxShadow: isPlaced ? undefined : "var(--shadow-card)" }}
-  //       onDragOver={(e) => e.preventDefault()}
-  //       onDrop={(e) => {
-  //         e.preventDefault();
-  //         if (!isPlaced) handleDrop(index);
-  //       }}
-  //       onClick={() => {
-  //         if (!isPlaced && draggedId !== null) handleDrop(index);
-  //       }}
-  //     >
-  //       {isPlaced ? (
-  //         <>
-  //           <span className="text-lg">{MONTHS[placed[index]].emoji}</span>
-  //           <span className="text-[10px] md:text-xs font-display font-bold leading-tight">
-  //             {MONTHS[placed[index]].short}
-  //           </span>
-  //         </>
-  //       ) : (
-  //         <>
-  //           <span className="text-xs font-display font-bold text-muted-foreground">
-  //             {index + 1}
-  //           </span>
-  //           <span className="text-[9px] md:text-[10px] text-muted-foreground font-body leading-tight">
-  //             {month.short}
-  //           </span>
-  //         </>
-  //       )}
-  //     </div>
-  //   );
-  // };
 
   const buildSlotConfig = (index) => {
     const isPlaced = placed[index] !== undefined;
@@ -283,6 +254,34 @@ const Level2Game = ({ story, onFinish }) => {
   const slotConfigs = MONTHS.map((_, i) => buildSlotConfig(i));
   const LayoutComponent = layout === "zodiac" ? ZodiacLayout : DiceLayout;
 
+  useEffect(() => {
+    if (!gameStarted || showResult || showHowToPlay) return;
+    const interval = setInterval(() => setTimer((t) => t + 1), 1000);
+    return () => clearInterval(interval);
+  }, [gameStarted, showResult, showHowToPlay]);
+
+
+
+  useEffect(() => {
+    if (showHowToPlay) {
+      playSound(howtoplaySound);
+    }
+  }, [showHowToPlay]);
+
+  useEffect(() => {
+    if (!gameStarted || showResult || showHowToPlay || !isSoundEnabled) return;
+
+    const audio = new Audio(TimerSound);
+    audio.loop = true;
+    audio.volume = 0.3;
+    audio.play().catch(() => {});
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [gameStarted, showResult, showHowToPlay, isSoundEnabled]);
+
   return (
     <div className="container mx-auto px-4 py-6">
       {/* Level badge */}
@@ -291,56 +290,48 @@ const Level2Game = ({ story, onFinish }) => {
           🎮 Level 2
         </span>
       </div>
-      <div className="text-center mb-4">
+      {/* <div className="text-center mb-4">
         <h2 className="font-display text-3xl md:text-5xl font-bold text-secondary mb-2">
           📅 The Paw Patch Puzzles
         </h2>
-      </div>
-      {/* Layout switcher */}
-      {/* <div className="flex justify-center gap-2 mb-4 flex-wrap">
-        {LAYOUT_OPTIONS.map((opt) => (
-          <button
-            key={opt.type}
-            onClick={() => setLayout(opt.type)}
-            className={`px-4 py-2 rounded-xl font-display font-bold text-xl transition-all ${
-              layout === opt.type
-                ? "bg-primary text-primary-foreground scale-105"
-                : "bg-card border-2 border-border text-foreground hover:border-primary"
-            }`}
-          >
-            {opt.emoji} {opt.label}
-          </button>
-        ))}
       </div> */}
-      {/* <LayoutComponent slots={slotElements} centerContent={undefined} /> */}
-      {/* <LayoutComponent slots={slotConfigs} centerContent={undefined} /> */}
+      {/* Timer + Count Header — Level 1 jaisa */}
+      <div className="grid grid-cols-3 items-center mb-4 max-w-11xl mx-20">
+        {/* Timer - Left */}
+        <div className="flex justify-start">
+          <div className="flex flex-col gap-4">
+            <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
+              ⏱️ {formatTime(timer)}
+            </span>
+            <button
+              className="px-2 py-1 text-white text-xl bg-slate-500 font-bold rounded-[19px]"
+              onClick={() => setShowHowToPlay(true)}
+            >
+              How to play
+            </button>
+          </div>
+        </div>
+
+        {/* Title - Center */}
+        <div className="flex justify-center">
+          <h2 className="font-display text-3xl md:text-5xl font-bold text-secondary whitespace-nowrap">
+            📅 The Paw Patch Puzzles
+          </h2>
+        </div>
+
+        {/* Correct Count - Right */}
+        <div className="flex justify-end">
+          <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
+            ✅ {Object.values(results).filter((v) => v === "correct").length}/12
+          </span>
+        </div>
+      </div>
       <LayoutComponent slotConfigs={slotConfigs} centerContent={undefined} />
       <div className="max-w-4xl mx-auto">
-        {/* <h3 className="font-display text-3xl font-bold text-foreground text-center mb-3">
-          📦 Calendars — Drag! (or Click)
-        </h3> */}
-
-        {/* Card style switcher */}
-        {/* <div className="flex justify-center gap-2 mb-4 flex-wrap">
-          {CARD_STYLE_OPTIONS.map((opt) => (
-            <button
-              key={opt.type}
-              onClick={() => setCardStyle(opt.type)}
-              className={`px-3 py-1.5 rounded-xl font-display font-bold text-2xl transition-all ${
-                cardStyle === opt.type
-                  ? "bg-secondary text-secondary-foreground scale-105"
-                  : "bg-card border-2 border-border text-foreground hover:border-secondary"
-              }`}
-            >
-              {opt.emoji} {opt.label}
-            </button>
-          ))}
-        </div> */}
-
         {draggedId !== null && (
           <p className="text-center text-2xl text-primary font-display font-bold mb-2 animate-pulse">
-            ✨ Selected- Now click on the month in which the selected week
-            will fall
+            ✨ Selected- Now click on the month in which the selected week will
+            fall
           </p>
         )}
 

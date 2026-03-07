@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { MONTH_HINTS } from "../data/calendarHints";
+import hitSound from "../assets/HintSound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
 
 interface HintBubbleProps {
   /** Which month indices still need to be placed (unplaced months) */
@@ -51,6 +53,16 @@ const HintBubble = ({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const hintIndexRef = useRef(0);
+
+  const { playSound } = useSound();
+
+  // Jab bhi visible true ho, hint sound bajao
+  useEffect(() => {
+    if (visible) {
+      playSound(hitSound);
+    }
+  }, [visible]);
+
 
   const pickHint = useCallback(() => {
     if (unplacedMonths.length === 0) return;

@@ -14,13 +14,13 @@ const ResultModal = ({ isOpen, result, score, total, onClose, onPlayAgain }) => 
         </div>
 
         <h2 className="font-display text-3xl font-bold mb-2 text-foreground">
-          {result === "win" ? "Bahut Badhiya! 🌟" : "Koi Baat Nahi! 😊"}
+          {result === "win" ? "Bahut Badhiya! 🌟" : "Well tried!!😊"}
         </h2>
 
-        <p className="text-muted-foreground font-body mb-4">
+        <p className="text-muted-foreground font-bold mb-4 text-xl ">
           {result === "win"
             ? "Tumne sahi jawab diya! Champion ho tum! 🏆"
-            : "Phir se try karo, tum zaroor kar paoge! 💪"}
+            : " You can try again !  💪"}
         </p>
 
         <div
@@ -36,13 +36,13 @@ const ResultModal = ({ isOpen, result, score, total, onClose, onPlayAgain }) => 
         <div className="flex gap-3 justify-center">
           <button
             onClick={onPlayAgain}
-            className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-display font-bold text-sm hover:opacity-90 transition-opacity"
+            className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-display font-bold text-xl hover:opacity-90 transition-opacity"
           >
-            🔄 Phir Se Khelo
+            🔄 Try again
           </button>
           <button
             onClick={onClose}
-            className="px-6 py-3 rounded-xl bg-muted text-muted-foreground font-display font-bold text-sm hover:opacity-80 transition-opacity"
+            className="px-6 py-3 rounded-xl bg-muted text-muted-foreground font-display font-bold text-xl hover:opacity-80 transition-opacity"
           >
             🏠 Home
           </button>
