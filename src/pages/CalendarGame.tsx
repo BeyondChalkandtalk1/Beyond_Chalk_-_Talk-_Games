@@ -13,7 +13,8 @@ import TimerSound from "../assets/TimerSound.mpeg";
 import { useSound } from "@/contexts/SoundContext";
 import correctDragSound from "../assets/correctDargSound.mpeg";
 import inCorrectDragSound from "../assets/inCorrectDragSound.mpeg";
-
+import Level2CompleteVideo from "../assets/Level2CompleteVideo.mp4";
+import generalSound from "../assets/general-sound.mpeg";
 
 const MONTHS = [
   { name: "January", short: "Jan", emoji: "❄️", color: "hsl(200 70% 60%)" },
@@ -28,6 +29,21 @@ const MONTHS = [
   { name: "October", short: "Oct", emoji: "🎃", color: "hsl(30 90% 50%)" },
   { name: "November", short: "Nov", emoji: "🍂", color: "hsl(20 60% 45%)" },
   { name: "December", short: "Dec", emoji: "🎄", color: "hsl(140 60% 40%)" },
+];
+
+const WEEK_OPTIONS = [
+  ["Week 1", "Week 2", "Week 3"], // January
+  ["Week 5", "Week 6", "Week 7"], // February
+  ["Week 9", "Week 10", "Week 11"], // March
+  ["Week 14", "Week 15", "Week 16"], // April
+  ["Week 18", "Week 19", "Week 20"], // May
+  ["Week 23", "Week 24", "Week 25"], // June
+  ["Week 27", "Week 28", "Week 29"], // July
+  ["Week 31", "Week 32", "Week 33"], // August
+  ["Week 36", "Week 37", "Week 38"], // September
+  ["Week 40", "Week 41", "Week 42"], // October
+  ["Week 44", "Week 45", "Week 46"], // November
+  ["Week 49", "Week 50", "Week 51"], // December
 ];
 
 const CARD_STYLES = {
@@ -144,8 +160,13 @@ const Level2Game = ({ story, onFinish }) => {
   const navigate = useNavigate();
   const [layout, setLayout] = useState("dice");
   const [cardStyle, setCardStyle] = useState("week");
+  const [selectedWeeks] = useState(() =>
+    WEEK_OPTIONS.map(
+      (options) => options[Math.floor(Math.random() * options.length)],
+    ),
+  );
   const [calendars, setCalendars] = useState(() =>
-    shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i })))
+    shuffleArray(MONTHS.map((m, i) => ({ ...m, id: i }))),
   );
   const [placed, setPlaced] = useState({});
   const [draggedId, setDraggedId] = useState(null);
@@ -158,7 +179,7 @@ const Level2Game = ({ story, onFinish }) => {
   const [lastInteraction, setLastInteraction] = useState(Date.now());
   const [showHowToPlay, setShowHowToPlay] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
-    const { playSound, isSoundEnabled } = useSound();
+  const { playSound, isSoundEnabled } = useSound();
   const [timer, setTimer] = useState(0);
 
   const formatTime = (totalSeconds) => {
@@ -168,10 +189,13 @@ const Level2Game = ({ story, onFinish }) => {
     return `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
   };
 
-  const trackInteraction = useCallback(() => setLastInteraction(Date.now()), []);
+  const trackInteraction = useCallback(
+    () => setLastInteraction(Date.now()),
+    [],
+  );
 
   const availableCalendars = calendars.filter(
-    (c) => !Object.values(placed).includes(c.id)
+    (c) => !Object.values(placed).includes(c.id),
   );
 
   const handleDrop = useCallback(
@@ -232,6 +256,11 @@ const Level2Game = ({ story, onFinish }) => {
     setGameScore(0);
   };
 
+  const weekCardData = selectedWeeks.map((week) => ({
+    line1: "",
+    line2: week,
+  }));
+
   const buildSlotConfig = (index) => {
     const isPlaced = placed[index] !== undefined;
     const result = results[index];
@@ -260,8 +289,6 @@ const Level2Game = ({ story, onFinish }) => {
     return () => clearInterval(interval);
   }, [gameStarted, showResult, showHowToPlay]);
 
-
-
   useEffect(() => {
     if (showHowToPlay) {
       playSound(howtoplaySound);
@@ -281,6 +308,74 @@ const Level2Game = ({ story, onFinish }) => {
       audio.currentTime = 0;
     };
   }, [gameStarted, showResult, showHowToPlay, isSoundEnabled]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      // Ctrl + Shift + S dabao = skip
+      if (e.shiftKey && e.key === "L") {
+        setShowConfetti(true);
+        setShowResult(true);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
+  // showResult true hone pe poora component yeh return kare
+  if (showResult) {
+    return (
+      <div className="bg-gradient-to-br from-blue-50 to-pink-50 px-3 py-4 min-h-screen flex flex-col items-center justify-center">
+        <div className="text-center animate-bounce-in">
+          <div className="text-6xl mb-2">🏆</div>
+          <h3 className="font-display text-3xl font-bold text-primary mb-1">
+            {gameResult === "win" ? "Level 2 Complete! 🌟" : "Well tried!! 😊"}
+          </h3>
+          <p className="text-muted-foreground font-bold mb-3 text-xl">
+            {gameResult === "win"
+              ? "You got it right! You're a champion! 🏆"
+              : "You can try again! 🎉"}
+          </p>
+          <div
+            className={`inline-block px-6 py-3 rounded-2xl font-display text-2xl font-bold mb-4 ${
+              gameResult === "win"
+                ? "bg-success text-success-foreground"
+                : "bg-destructive text-destructive-foreground"
+            }`}
+          >
+            Score: {gameScore}/{12}
+          </div>
+
+          <div className="flex gap-4 justify-center mb-6">
+            <button
+              onClick={resetGame}
+              className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-display font-bold text-xl hover:scale-105 transition-all shadow-lg"
+            >
+              🔄 Try again
+            </button>
+            <button
+              onClick={() => navigate("/")}
+              className="px-6 py-3 rounded-xl bg-muted text-muted-foreground font-display font-bold text-xl hover:scale-105 transition-all shadow-lg"
+            >
+              🏠 Home
+            </button>
+          </div>
+
+          {gameResult === "win" && (
+            <div className="flex justify-center">
+              <video
+                src={Level2CompleteVideo}
+                autoPlay
+                loop
+                muted
+                className="w-full max-w-xl rounded-xl shadow-lg"
+              />
+            </div>
+          )}
+        </div>
+        {showConfetti && <ConfettiAnimation />}
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -337,7 +432,10 @@ const Level2Game = ({ story, onFinish }) => {
 
         <div className="grid grid-cols-6 gap-3 justify-center">
           {availableCalendars.map((cal) => {
-            const info = CARD_STYLES[cardStyle].data[cal.id];
+            const info =
+              cardStyle === "week"
+                ? weekCardData[cal.id]
+                : CARD_STYLES[cardStyle].data[cal.id];
             return (
               <div
                 key={cal.id}
@@ -455,17 +553,17 @@ const Level2Game = ({ story, onFinish }) => {
         </div>
       )}
       {showConfetti && <ConfettiAnimation />}
-      <ResultModal
+      {/* <ResultModal
         isOpen={showResult}
         result={gameResult}
         score={gameScore}
         total={12}
         onClose={() => navigate("/")}
         onPlayAgain={resetGame}
-      />
+      /> */}
     </div>
   );
-};
+};;
 
 
 // ──────────────────────────────────────────────

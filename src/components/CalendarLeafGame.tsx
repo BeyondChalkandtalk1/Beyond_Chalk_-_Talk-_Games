@@ -10,6 +10,7 @@ import inCorrectDragSound from "../assets/inCorrectDragSound.mpeg";
 import Level1CompleteVideo from "../assets/Level1CompleteVideo.mp4";
 import Level2CompleteVideo from "../assets/Level2CompleteVideo.mp4";
 import { useSound } from "@/contexts/SoundContext";
+import generalSound from "../assets/general-sound.mpeg";
 
 const MONTHS = [
   "January","February","March","April","May","June",
@@ -371,6 +372,11 @@ const CalendarLeafGame = ({
   const [gameStarted, setGameStarted] = useState(false);
   const [showHelpVideo, setShowHelpVideo] = useState(false);
   const { playSound, isSoundEnabled } = useSound();
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [shuffledColors, setShuffledColors] = useState(() =>
+    shuffle([...Array(12).keys()]).map((i) => MONTH_COLORS[i]),
+  );
 
   const [mcqMonthIndex, setMcqMonthIndex] = useState<number | null>(null);
   const [pendingPlaced, setPendingPlaced] = useState<{
@@ -490,6 +496,29 @@ const CalendarLeafGame = ({
     };
   }, [gameStarted, done, showHowToPlay, isSoundEnabled]); // isSoundEnabled dependency mein add
 
+  useEffect(() => {
+    if (!done) return;
+    const saved = localStorage.getItem("calendarLeaderboard_v1");
+    const existing = saved ? JSON.parse(saved) : [];
+    const entry = { time: timer, count: Object.keys(placed).length }; // ← placed directly use karo
+    const updated = [entry, ...existing].slice(0, 1);
+    localStorage.setItem("calendarLeaderboard_v1", JSON.stringify(updated));
+    setLeaderboard(updated);
+  }, [done]);
+
+  useEffect(() => {
+    if (!done) return;
+    if (!isSoundEnabled) return; // ✅ sound off ho toh mat bajao
+
+    const audio = new Audio(generalSound);
+    audio.play().catch(() => {});
+
+    return () => {
+      audio.pause(); // ✅ component unmount pe band
+      audio.currentTime = 0;
+    };
+  }, [done, isSoundEnabled]); // ✅ isSoundEnabled change pe dobara check hoga
+
   // CalendarLeafGame mein yeh add karo (dev only)
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -509,17 +538,21 @@ const CalendarLeafGame = ({
       <div className="grid grid-cols-3 items-center mb-6 max-w-11xl mx-20">
         {/* Timer - Left */}
         <div className="flex justify-start">
-          <div className="flex flex-col gap-4">
-            <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
-              ⏱️ {formatTime(timer)}
-            </span>
-            <button
-              className="px-2 py-1 text-white text-xl bg-slate-500 font-bold rounded-[19px]"
-              onClick={() => setShowHowToPlay(true)}
-            >
-              How to play
-            </button>
-          </div>
+          {!done ? (
+            <div className="flex flex-col gap-4">
+              <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
+                ⏱️ {formatTime(timer)}
+              </span>
+              <button
+                className="px-2 py-1 text-white text-xl bg-slate-500 font-bold rounded-[19px]"
+                onClick={() => setShowHowToPlay(true)}
+              >
+                How to play
+              </button>
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
 
         {/* Title - Center */}
@@ -530,27 +563,88 @@ const CalendarLeafGame = ({
         </div>
 
         {/* Correct Count - Right */}
-        <div className="flex justify-end">
-          <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
-            ✅ {correctCount}/12
-          </span>
-        </div>
+        {!done ? (
+          <div className="flex justify-end">
+            <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
+              ✅ {correctCount}/12
+            </span>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
 
       {/* Done — show timer quiz first, then next level */}
       {done ? (
         <div className="text-center py-2 animate-bounce-in">
-          <div className="text-6xl mb-4">🏆</div>
-          <h3 className="font-display text-3xl font-bold text-primary mb-2">
-            Level 1 Complete! 🌟
+          <div className="text-6xl mb-2">🏆</div>
+          <h3 className="font-display text-3xl font-bold text-primary mb-1">
+            Let’s Move to Level 2! 🌟
           </h3>
+
           <button
             onClick={onComplete}
-            className="px-8 py-4 rounded-2xl font-display font-bold text-lg bg-primary text-primary-foreground hover:scale-110 transition-all shadow-lg"
+            className="px-8 py-2 rounded-2xl font-display font-bold text-2xl bg-primary text-primary-foreground hover:scale-110 transition-all shadow-lg mb-6"
           >
             Next Level → 🎲
           </button>
-          <div className="mt-6 flex justify-center">
+
+          {/* Leaderboard Toggle */}
+          <div className="mb-4">
+            <button
+              onClick={() => setShowLeaderboard((v) => !v)}
+              className="px-6 py-2 rounded-full bg-yellow-400 text-yellow-900 font-display font-bold text-lg hover:scale-105 transition-all shadow"
+            >
+              {showLeaderboard ? "🔼 Hide Leaderboard" : "🏅 Show Leaderboard"}
+            </button>
+          </div>
+
+          {/* Inline Leaderboard */}
+          {showLeaderboard && (
+            <div className="mx-auto max-w-sm bg-white rounded-3xl border-4 border-yellow-400 shadow-xl p-5 mb-6 animate-fade-in">
+              <h4 className="font-display text-2xl font-bold text-yellow-700 mb-3">
+                🏆 Leaderboard
+              </h4>
+              {leaderboard.length === 0 ? (
+                <p className="text-gray-400 text-sm py-4">No record found</p>
+              ) : (
+                <div className="space-y-2 max-h-72 overflow-y-auto">
+                  {leaderboard.map((entry, i) => (
+                    <div
+                      key={i}
+                      className={`flex items-center justify-between rounded-xl px-4 py-3 border-2 ${
+                        i === 0
+                          ? "bg-yellow-50 border-yellow-400"
+                          : i === 1
+                            ? "bg-gray-50 border-gray-300"
+                            : i === 2
+                              ? "bg-orange-50 border-orange-300"
+                              : "bg-white border-gray-100"
+                      }`}
+                    >
+                      <span className="text-2xl">
+                        {i === 0
+                          ? "🥇"
+                          : i === 1
+                            ? "🥈"
+                            : i === 2
+                              ? "🥉"
+                              : `#${i + 1}`}
+                      </span>
+                      <span className="font-bold text-primary text-2xl">
+                        ⏱️ {formatTime(entry.time)}
+                      </span>
+                      <span className="font-bold text-green-600 text-2xl">
+                        ✅ {entry.count}/12
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="flex justify-center">
             <video
               src={Level1CompleteVideo}
               autoPlay
@@ -617,7 +711,8 @@ const CalendarLeafGame = ({
                 const isPlaced = placed[idx] !== undefined;
                 const isPending = pendingPlaced?.slotMonthIndex === idx;
                 const isWrong = wrongSlot === idx;
-                const colors = MONTH_COLORS[idx];
+                // const colors = MONTH_COLORS[idx];
+                const colors = shuffledColors[idx];
 
                 return (
                   <div
