@@ -2,6 +2,9 @@ import GameCard from "../components/GameCard";
 import GameHistory from "../components/GameHistory";
 import HeroVideoSlider from "../components/HeroVideoSlider";
 import MamImage from "../assets/divyanshi_mam.jpeg";
+import { useSound } from "@/contexts/SoundContext";
+import { useEffect } from "react";
+import homePageSound from "../assets/cartoon-music-sound.mpeg";
 
 const GAMES = [
   {
@@ -49,6 +52,15 @@ const GAMES = [
 ];
 
 const Index = () => {
+const { playLoopingSound, clearLoopingSound } = useSound();
+
+useEffect(() => {
+  playLoopingSound(homePageSound);
+
+  return () => {
+    clearLoopingSound(); // ✅ page leave pe ref null hoga
+  };
+}, []);
   return (
     <>
       {/* Hero Video Slider */}

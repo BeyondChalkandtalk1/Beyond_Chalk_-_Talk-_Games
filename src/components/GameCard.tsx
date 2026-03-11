@@ -380,7 +380,7 @@ const GameCard = ({
                   activeSection === "learning" ? null : "learning",
                 );
               }}
-              className={`flex-1 px-4 py-2.5 rounded-2xl text-xl font-bold transition-all duration-300 ${
+              className={`flex-1 px-4 py-2.5 rounded-2xl text-xl font-bold transition-all whitespace-nowrap duration-300 ${
                 activeSection === "learning"
                   ? "bg-blue-400 text-white shadow-md"
                   : "bg-white text-secondary hover:bg-blue-100 shadow"
