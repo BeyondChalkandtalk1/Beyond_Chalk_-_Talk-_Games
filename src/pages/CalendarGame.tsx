@@ -321,6 +321,19 @@ const Level2Game = ({ story, onFinish }) => {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
+    useEffect(() => {
+      if (!showResult) return;
+      if (!isSoundEnabled) return; // ✅ sound off ho toh mat bajao
+
+      const audio = new Audio(generalSound);
+      audio.play().catch(() => {});
+
+      return () => {
+        audio.pause(); // ✅ component unmount pe band
+        audio.currentTime = 0;
+      };
+    }, [showResult, isSoundEnabled]);
+
   // showResult true hone pe poora component yeh return kare
   if (showResult) {
     return (
