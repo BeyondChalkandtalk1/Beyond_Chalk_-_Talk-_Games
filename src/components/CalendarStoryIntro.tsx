@@ -1239,15 +1239,6 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
         {/* ✅ Book — z-10 taaki video ke upar rahe */}
         <div
           onClick={openBook}
-          style={{ zIndex: 10, position: "relative" }}
-          className={`
-            cursor-pointer select-none
-            w-[340px] md:w-[480px] aspect-[3/4]
-            rounded-r-2xl rounded-l-md
-            shadow-2xl
-            transition-transform duration-700 origin-left
-            ${bookState === "opening" ? "scale-x-0 opacity-0" : "hover:rotate-y-6 hover:shadow-[0_20px_60px_-10px_hsl(var(--secondary)/0.4)]"}
-          `}
           style={{
             background:
               "linear-gradient(135deg, hsl(0 60% 30%), hsl(0 55% 40%))",
@@ -1256,6 +1247,14 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
             zIndex: 10,
             position: "relative",
           }}
+          className={`
+            cursor-pointer select-none
+            w-[340px] md:w-[480px] aspect-[3/4]
+            rounded-r-2xl rounded-l-md
+            shadow-2xl
+            transition-transform duration-700 origin-left
+            ${bookState === "opening" ? "scale-x-0 opacity-0" : "hover:rotate-y-6 hover:shadow-[0_20px_60px_-10px_hsl(var(--secondary)/0.4)]"}
+          `}
         >
           <div
             className="w-full h-full rounded-r-2xl rounded-l-md"
