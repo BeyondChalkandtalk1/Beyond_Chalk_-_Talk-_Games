@@ -1248,7 +1248,7 @@ const CalendarStoryIntro = ({ onStart }: { onStart: (story: any) => void }) => {
             transition-transform duration-700 origin-left
             ${bookState === "opening" ? "scale-x-0 opacity-0" : "hover:rotate-y-6 hover:shadow-[0_20px_60px_-10px_hsl(var(--secondary)/0.4)]"}
           `}
-          style2={{
+          style={{
             background:
               "linear-gradient(135deg, hsl(0 60% 30%), hsl(0 55% 40%))",
             transformStyle: "preserve-3d",

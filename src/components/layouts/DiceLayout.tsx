@@ -543,7 +543,7 @@ const MonthDots = ({ month }) => {
 };
 
 // slotConfig = { isPlaced, result, isShaking, placedMonth, onDragOver, onDrop, onClick }
-const MonthCard = ({ positionFace, monthIndex, slotConfig = {} }) => {
+const MonthCard = ({ positionFace, monthIndex, slotConfig = {} }: { positionFace: any; monthIndex: any; slotConfig?: any }) => {
   const {
     isPlaced,
     result,
