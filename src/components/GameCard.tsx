@@ -295,7 +295,7 @@ const GameCard = ({
   color,
   about_game,
   learning_object,
-  level,
+  levels,
   age
 }) => {
   const [activeSection, setActiveSection] = useState(null);
