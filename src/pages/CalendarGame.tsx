@@ -434,7 +434,7 @@ const Level2Game = ({ story, onFinish }) => {
           </span>
         </div>
       </div>
-      <LayoutComponent slotConfigs={slotConfigs} centerContent={undefined} />
+      <LayoutComponent slotConfigs={slotConfigs} centerContent={undefined} slots={slotConfigs} />
       <div className="max-w-4xl mx-auto">
         {draggedId !== null && (
           <p className="text-center text-2xl text-primary font-display font-bold mb-2 animate-pulse">

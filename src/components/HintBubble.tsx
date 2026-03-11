@@ -193,7 +193,7 @@ const HintBubble = ({
         <div className="px-4 mb-2">
           <p className="text-center text-lg font-display font-bold text-muted-foreground">
             {/* {hint?.id==1 ?"What month is this? 🤔":""} */}
-            {hint?.id != 2 ? "What month is this? 🤔" : ""}
+            {"What month is this? 🤔"}
           </p>
         </div>
 
