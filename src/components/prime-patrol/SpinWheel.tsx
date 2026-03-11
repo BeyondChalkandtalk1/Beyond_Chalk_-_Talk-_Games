@@ -234,50 +234,53 @@ export default function SpinWheel({ onLetsPlay }: SpinWheelProps) {
         </div>
       </div>
 
-      {/* Lucky Number Result */}
+      {/* Lucky Number Result Modal */}
       <AnimatePresence>
         {showResult && selectedNumber !== null && (
           <motion.div
-            className="mt-8 text-center"
-            initial={{ y: 30, opacity: 0, scale: 0.8 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -20, opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div className="rounded-2xl px-8 py-6 border-2"
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+            
+            {/* Modal Content */}
+            <motion.div
+              className="relative rounded-2xl px-10 py-8 border-2 text-center max-w-md w-full"
               style={{
-                background: 'rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(10px)',
+                background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
                 borderColor: '#FFD700',
-              }}>
+                boxShadow: '0 0 40px rgba(255,215,0,0.3)',
+              }}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            >
               <p className="text-xl text-white mb-2" style={{ fontFamily: "var(--font-body)" }}>
                 Your lucky number is
               </p>
               <motion.span 
-                className="text-6xl font-extrabold inline-block my-2"
+                className="text-7xl font-extrabold inline-block my-3"
                 style={{ 
                   fontFamily: "var(--font-display)",
                   color: '#FFD700',
                   textShadow: '0 0 20px rgba(255,215,0,0.5)',
                 }}
-                animate={{ 
-                  scale: [1, 1.15, 1],
-                  opacity: [1, 0.7, 1],
-                }}
+                animate={{ scale: [1, 1.15, 1], opacity: [1, 0.7, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
               >
                 {selectedNumber}
               </motion.span>
-              <p className="text-lg mt-3"
-                style={{ 
-                  fontFamily: "var(--font-body)",
-                  color: '#e0e0e0',
-                }}>
+              <p className="text-lg mt-3" style={{ fontFamily: "var(--font-body)", color: '#e0e0e0' }}>
                 Let's identify whether it is a <span className="font-bold text-green-400">prime number</span> or a <span className="font-bold text-orange-400">composite number</span>.
               </p>
 
               <motion.button
                 onClick={() => onLetsPlay(selectedNumber)}
-                className="mt-5 px-10 py-3 rounded-full font-bold text-xl shadow-xl"
+                className="mt-6 px-10 py-3 rounded-full font-bold text-xl shadow-xl"
                 style={{
                   fontFamily: "var(--font-display)",
                   background: 'linear-gradient(135deg, #4CAF50, #8BC34A)',
@@ -292,7 +295,7 @@ export default function SpinWheel({ onLetsPlay }: SpinWheelProps) {
               >
                 🚀 Let's Play!
               </motion.button>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
