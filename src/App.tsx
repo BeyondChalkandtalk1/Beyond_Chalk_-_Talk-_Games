@@ -10,6 +10,7 @@ import CalendarGame from "./pages/CalendarGame";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import PrimePatrol from "./pages/PrimePatrol";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
             <Route element={<MainLayout />}>
               <Route path="/" element={<Index />} />
               <Route path="/games/calendar" element={<CalendarGame />} />
+              <Route path="/games/prime" element={<PrimePatrol />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

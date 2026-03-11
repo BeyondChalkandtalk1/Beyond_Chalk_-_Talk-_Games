@@ -20,7 +20,30 @@ const GAMES = [
         "Develop logical thinking and sequencing skills through a problem-solving task.",
       ],
     },
+    levels:2,
+    age: "7+",
     path: "/games/calendar",
+    color: "primary" as const,
+  },
+  {
+    title: "Prime Patrol and Combo Detectives",
+    description: "Paw made the mess, smart minds patch the calendar.  🏆",
+    emoji: "🐾",
+    about_game:
+      "To help children understand the structure and order of a calendar by arranging mixed calendar pages and solving simple logic-based questions related to days, weeks, and months.",
+    learning_object: {
+      heading: "After playing the game, learners will be able to:",
+      points: [
+        "Sequence the months of the year correctly.",
+        "Interpret basic calendar information (days, dates, weeks, months).",
+        "Use reasoning to answer calendar-based questions (before–after days, order of months, simple event timing).",
+        "Apply calendar knowledge to everyday contexts such as holidays, routines, and festivals.",
+        "Develop logical thinking and sequencing skills through a problem-solving task.",
+      ],
+    },
+    levels:2,
+    age: "9+",
+    path: "/games/prime",
     color: "primary" as const,
   },
 ];

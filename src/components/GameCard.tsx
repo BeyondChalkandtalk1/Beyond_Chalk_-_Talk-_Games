@@ -295,6 +295,8 @@ const GameCard = ({
   color,
   about_game,
   learning_object,
+  level,
+  age
 }) => {
   const [activeSection, setActiveSection] = useState(null);
 
@@ -320,7 +322,7 @@ const GameCard = ({
         {/* Age Badge */}
         <div className="absolute top-4 right-4 w-16 h-16 rounded-full bg-yellow-300  shadow-lg flex flex-col items-center justify-center animate-pulse">
           <span className="text-xl font-extrabold text-purple-700 leading-none">
-            7+
+            {age}
           </span>
           <span className="text-[18px] font-bold text-purple-600 leading-none">
             years
@@ -384,7 +386,7 @@ const GameCard = ({
                   : "bg-white text-secondary hover:bg-blue-100 shadow"
               }`}
             >
-              🎓 Learning
+              🎓 Learning Outcomes
             </button>
           </div>
 
