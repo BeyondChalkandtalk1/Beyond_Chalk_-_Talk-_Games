@@ -490,6 +490,39 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
         )}
       </AnimatePresence>
 
+      {/* Prime Congrats Modal */}
+      <AnimatePresence>
+        {phase === 'primeCongrats' && (
+          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <motion.div className="relative rounded-2xl p-8 border-2 text-center max-w-md w-full"
+              style={{ background: 'linear-gradient(135deg, #1a1a2e, #16213e)', borderColor: '#FFD700', boxShadow: '0 0 40px rgba(255,215,0,0.3)' }}
+              initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}
+              transition={{ type: 'spring', damping: 20 }}>
+              <div className="text-5xl mb-3">🌟🎉🌟</div>
+              <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                Congratulations!
+              </h3>
+              <p className="text-lg text-gray-200 mb-2">
+                You correctly identified that
+              </p>
+              <p className="text-3xl font-bold text-yellow-400 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                {luckyNumber} is a Prime Number!
+              </p>
+              <p className="text-gray-300 mb-6">
+                It can only be divided by 1 and {luckyNumber}. No rectangular arrangement other than 1 × {luckyNumber} is possible! 🧠
+              </p>
+              <button onClick={() => setPhase('complete')}
+                className="px-8 py-3 rounded-full font-bold text-lg text-white shadow-lg hover:scale-105 transition-transform"
+                style={{ background: 'linear-gradient(135deg, #4CAF50, #8BC34A)' }}>
+                Continue →
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Input Pair Modal */}
       <AnimatePresence>
         {phase === 'inputPair' && (
