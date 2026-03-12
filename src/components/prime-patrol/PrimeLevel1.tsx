@@ -177,7 +177,7 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
   const handlePrimeGuess = () => {
     if (primeNum || allPairs.length === 0) {
       playSound(correctSound);
-      setPhase('complete');
+      setPhase('primeCongrats');
     } else {
       playSound(incorrectSound);
       setNoRectMsg(`Not prime! ${luckyNumber} is composite. Try to form a rectangle! 💪`);
