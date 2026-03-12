@@ -123,15 +123,27 @@ const toggleSound = useCallback(() => {
   });
 }, []);
 
-  const playSound = useCallback(
-    (src: string) => {
-      if (!isSoundEnabled) return;
-      const audio = new Audio(src);
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
-    },
-    [isSoundEnabled],
-  );
+  // const playSound = useCallback(
+  //   (src: string) => {
+  //     if (!isSoundEnabled) return;
+  //     const audio = new Audio(src);
+  //     audio.currentTime = 0;
+  //     audio.play().catch(() => {});
+  //   },
+  //   [isSoundEnabled],
+  // );
+
+  const isSoundEnabledRef = useRef(isSoundEnabled);
+  useEffect(() => {
+    isSoundEnabledRef.current = isSoundEnabled;
+  }, [isSoundEnabled]);
+
+  const playSound = useCallback((src: string) => {
+    if (!isSoundEnabledRef.current) return;
+    const audio = new Audio(src);
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }, []);
 
 const playLoopingSound = useCallback(
   (src: string) => {

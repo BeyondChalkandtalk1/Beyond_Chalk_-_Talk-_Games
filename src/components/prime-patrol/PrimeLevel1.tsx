@@ -9,11 +9,18 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 p-6">
       <div className="text-center space-y-6 animate-bounce-in">
-        <h1 className="text-3xl font-bold text-secondary" style={{ fontFamily: "var(--font-display)" }}>
-          🔍 Level 1 — Prime Patrol
+        <h1
+          className="text-3xl font-bold text-secondary"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          🔍 Level 1 — Prime Patrol and Combo Detectives
         </h1>
-        <p className="text-xl text-foreground" style={{ fontFamily: "var(--font-body)" }}>
-          Your lucky number: <span className="font-bold text-primary text-3xl">{luckyNumber}</span>
+        <p
+          className="text-xl text-foreground"
+          style={{ fontFamily: "var(--font-body)" }}
+        >
+          Your lucky number:{" "}
+          <span className="font-bold text-primary text-3xl">{luckyNumber}</span>
         </p>
         <p className="text-muted-foreground">Level 1 game coming soon...</p>
         <button
