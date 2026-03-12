@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSound } from '@/contexts/SoundContext';
 import TimerSound from '@/assets/TimerSound.mpeg';
-import howtoplaySound from '@/assets/howToPlaySound.mpeg';
+import howtoplaySound from "@/assets/howToPlaySound.mpeg";
 import correctSound from '@/assets/correctDargSound.mpeg';
 import incorrectSound from '@/assets/inCorrectDragSound.mpeg';
 import generalSound from '@/assets/general-sound.mpeg';
@@ -12,8 +12,8 @@ interface PrimeLevel1Props {
   onComplete: () => void;
 }
 
-const EMOJIS = ['⭐', '🌟', '💎', '🔥', '🎯', '🍎', '🐱', '🌈'];
-const MAX_DIM = 14;
+const EMOJIS = ['⭐', '💎', '🎯',  '🌈'];
+const MAX_DIM = 99;
 
 function getFactorPairs(n: number): [number, number][] {
   const pairs: [number, number][] = [];
@@ -126,6 +126,7 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
   // How to play sound
   useEffect(() => {
     if (phase === 'howtoplay' || showHowToPlay) {
+      console.log("play sount how")
       playSound(howtoplaySound);
     }
   }, [phase, showHowToPlay]);
@@ -268,23 +269,30 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
   }
 
   return (
-    <div className="min-h-screen flex flex-col p-3"
-      style={{ background: 'linear-gradient(135deg, #f0f4ff, #fdf2f8, #f0fdf4)' }}>
-
+    <div
+      className="min-h-screen flex flex-col p-3"
+      style={{
+        background: "linear-gradient(135deg, #f0f4ff, #fdf2f8, #f0fdf4)",
+      }}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-3 px-2">
         <div className="flex flex-col gap-2">
-          <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
+          <span className="text-2xl font-bold bg-white px-4 py-2 rounded-full shadow-md text-center">
             ⏱️ {formatTime(timer)}
           </span>
-          <button onClick={() => setShowHowToPlay(true)}
-            className="px-3 py-1.5 text-white text-sm bg-slate-500 font-bold rounded-full hover:scale-105 transition-transform">
+          <button
+            onClick={() => setShowHowToPlay(true)}
+            className="px-3 py-1.5 text-white text-2xl bg-slate-500 font-bold rounded-full hover:scale-105 transition-transform"
+          >
             📖 How to Play
           </button>
         </div>
-        <h2 className="text-xl md:text-3xl font-bold text-secondary text-center"
-          style={{ fontFamily: 'var(--font-display)' }}>
-          🔍 Level 1 — Prime Patrol
+        <h2
+          className="text-2xl md:text-4xl font-bold text-secondary text-center"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          🔍 Level 1 — Prime Patrol and Combo Detectives
         </h2>
         <span className="text-lg font-bold bg-white px-4 py-2 rounded-full shadow-md">
           ✅ {completed.length}/{allPairs.length}
@@ -293,19 +301,34 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
 
       {/* Lucky number + remaining clicks */}
       <div className="text-center mb-2 flex flex-wrap items-center justify-center gap-3">
-        <span className="bg-white/80 px-4 py-1.5 rounded-full shadow text-lg">
-          Your number: <span className="text-2xl font-bold text-primary" style={{ fontFamily: 'var(--font-display)' }}>{luckyNumber}</span>
+        <span className="bg-white/80 px-4 py-1.5 rounded-full shadow text-2xl font-bold">
+          Your number:{" "}
+          <span
+            className="text-2xl font-bold text-primary"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            {luckyNumber}
+          </span>
         </span>
-        <span className="bg-white/80 px-4 py-1.5 rounded-full shadow text-lg">
-          Remaining clicks: <span className="text-xl font-bold text-secondary">{luckyNumber - cells.size}</span>
+        <span className="bg-white/80 px-4 py-1.5 rounded-full shadow text-2xl font-bold">
+          Remaining clicks:{" "}
+          <span className="text-2xl font-bold text-secondary">
+            {luckyNumber - cells.size}
+          </span>
         </span>
       </div>
 
+<div className='flex justify-center text-center text-2xl font-bold py-4 text-golden'>
+  <h1>Select an icon</h1>
+</div>
       {/* Emoji selector */}
       <div className="flex justify-center gap-2 mb-3">
-        {EMOJIS.map(e => (
-          <button key={e} onClick={() => setEmoji(e)}
-            className={`text-2xl p-1.5 rounded-lg transition-all ${emoji === e ? 'bg-primary/20 scale-110 ring-2 ring-primary' : 'hover:bg-muted'}`}>
+        {EMOJIS.map((e) => (
+          <button
+            key={e}
+            onClick={() => setEmoji(e)}
+            className={`text-2xl p-1.5 rounded-lg transition-all ${emoji === e ? "bg-primary/20 scale-110 ring-2 ring-primary" : "hover:bg-muted"}`}
+          >
             {e}
           </button>
         ))}
@@ -313,11 +336,13 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
 
       {/* Grid */}
       <div className="flex justify-center mb-3">
-        <div className="inline-grid gap-1 p-3 bg-white/70 rounded-2xl shadow-lg"
+        <div
+          className="inline-grid gap-1 p-3 bg-white/70 rounded-2xl shadow-lg"
           style={{
             gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
             width: `min(85vw, ${gridSize * 50}px)`,
-          }}>
+          }}
+        >
           {Array.from({ length: gridSize * gridSize }, (_, idx) => {
             const r = Math.floor(idx / gridSize);
             const c = idx % gridSize;
@@ -326,17 +351,20 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
             const isHighlighted = highlightRect && isSelected;
 
             return (
-              <motion.button key={key}
+              <motion.button
+                key={key}
                 onClick={() => handleCellClick(r, c)}
                 className={`aspect-square rounded-md border-2 transition-all flex items-center justify-center text-sm md:text-lg
-                  ${isSelected
-                    ? isHighlighted
-                      ? 'border-yellow-400 bg-yellow-100 shadow-[0_0_12px_rgba(250,204,21,0.7)]'
-                      : 'border-primary bg-primary/10'
-                    : 'border-gray-200 bg-white hover:border-primary/40 hover:bg-primary/5'}`}
+                  ${
+                    isSelected
+                      ? isHighlighted
+                        ? "border-yellow-400 bg-yellow-100 shadow-[0_0_12px_rgba(250,204,21,0.7)]"
+                        : "border-primary bg-primary/10"
+                      : "border-gray-200 bg-white hover:border-primary/40 hover:bg-primary/5"
+                  }`}
                 whileTap={{ scale: 0.9 }}
               >
-                {isSelected ? emoji : ''}
+                {isSelected ? emoji : ""}
               </motion.button>
             );
           })}
@@ -345,15 +373,19 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
 
       {/* Controls */}
       <div className="flex justify-center gap-4 mb-2">
-        <button onClick={handleClear}
-          className="px-6 py-2 rounded-full bg-destructive text-destructive-foreground font-bold shadow-md hover:scale-105 transition-transform">
+        <button
+          onClick={handleClear}
+          className="px-6 py-2 rounded-full bg-destructive text-destructive-foreground font-bold shadow-md hover:scale-105 transition-transform"
+        >
           🗑️ Clear All
         </button>
         {cells.size === luckyNumber && noRectMsg && (
-          <motion.button onClick={handlePrimeGuess}
+          <motion.button
+            onClick={handlePrimeGuess}
             className="px-6 py-2 rounded-full bg-amber-500 text-white font-bold shadow-md hover:scale-105 transition-transform"
             animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}>
+            transition={{ duration: 1, repeat: Infinity }}
+          >
             🤔 It's Prime!
           </motion.button>
         )}
@@ -362,8 +394,12 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
       {/* Messages */}
       <AnimatePresence>
         {noRectMsg && (
-          <motion.p className="text-center text-sm font-semibold text-amber-600 mb-2 px-4"
-            initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+          <motion.p
+            className="text-center text-sm font-semibold text-amber-600 mb-2 px-4"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+          >
             {noRectMsg}
           </motion.p>
         )}
@@ -373,33 +409,63 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
 
       {/* How to Play Modal */}
       <AnimatePresence>
-        {(phase === 'howtoplay' || showHowToPlay) && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        {(phase === "howtoplay" || showHowToPlay) && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <div className="absolute inset-0 bg-black/50" />
-            <motion.div className="relative bg-[#FBF5EF] rounded-3xl shadow-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
-              initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
-              transition={{ type: 'spring', stiffness: 200 }}>
-              <button onClick={() => {
-                if (phase === 'howtoplay') setPhase('timerStart');
-                setShowHowToPlay(false);
-              }} className="absolute top-3 right-4 text-xl font-bold text-[#8F2424]">✖</button>
-              <h2 className="text-2xl font-bold text-center mb-4 text-[#8F2424]">📖 How to Play — Level 1</h2>
-              <ul className="space-y-3 text-gray-700 text-sm leading-relaxed">
-                <li className="flex gap-2"><span>🎰</span> Your lucky number <b>{luckyNumber}</b> is from the spin wheel.</li>
-                <li className="flex gap-2"><span>🎨</span> Pick an emoji and click grid cells to place them.</li>
-                <li className="flex gap-2"><span>📐</span> Arrange exactly <b>{luckyNumber}</b> emojis to form a perfect rectangle!</li>
-                <li className="flex gap-2"><span>🔄</span> Find ALL possible rectangular arrangements (e.g., 2×4, 1×8).</li>
-                <li className="flex gap-2"><span>🤔</span> If no rectangle is possible, it might be a Prime Number!</li>
-                <li className="flex gap-2"><span>🏆</span> Complete all arrangements to finish Level 1!</li>
-              </ul>
-              <div className="mt-5 text-center">
-                <button onClick={() => {
-                  if (phase === 'howtoplay') setPhase('timerStart');
+            <motion.div
+              className="relative bg-[#FBF5EF] rounded-3xl shadow-2xl p-6 max-w-[600px] w-full max-h-[90vh] overflow-y-auto hide-scrollbar"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              transition={{ type: "spring", stiffness: 200 }}
+            >
+              {/* <button
+                onClick={() => {
+                  if (phase === "howtoplay") setPhase("timerStart");
                   setShowHowToPlay(false);
                 }}
-                  className="bg-[#8F2424] text-white px-6 py-2 rounded-full shadow-md hover:scale-105 transition">
-                  Let's Go! 🎉
+                className="absolute top-3 right-4 text-xl font-bold text-[#8F2424]"
+              >
+                ✖
+              </button> */}
+              <h2 className="text-3xl font-bold text-center mb-4 text-[#8F2424]">
+                📖 How to Play — Level 1
+              </h2>
+              <ul className="space-y-3 text-gray-700 text-2xl leading-relaxed">
+                <li className="flex gap-2">
+                  <span>🎰</span> Arrange the same number of icons on the grid.
+                </li>
+                <li className="flex gap-2">
+                  <span>🎨</span> Try to organise the icons into rectangular
+                  arrays with equal rows and columns.
+                </li>
+                <li className="flex gap-2">
+                  <span>📐</span> Explore different possible arrangements on the
+                  grid.
+                </li>
+                <li className="flex gap-2">
+                  <span>🔄</span> If the icons can be arranged in one or
+                  multiple rectangular array, the number is composite.
+                </li>
+                <li className="flex gap-2">
+                  <span>🤔</span> If no other rectangular arrangement can be
+                  formed (other than the basic one), the number is prime.
+                </li>
+              </ul>
+              <div className="mt-5 text-center">
+                <button
+                  onClick={() => {
+                    if (phase === "howtoplay") setPhase("timerStart");
+                    setShowHowToPlay(false);
+                  }}
+                  className="bg-[#8F2424] text-white text-xl font-bold px-6 py-2 rounded-full shadow-md hover:scale-105 transition"
+                >
+                  Let's Play! 🎉
                 </button>
               </div>
             </motion.div>
@@ -409,23 +475,39 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
 
       {/* Timer Start Modal */}
       <AnimatePresence>
-        {phase === 'timerStart' && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        {phase === "timerStart" && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <div className="absolute inset-0 bg-black/50" />
-            <motion.div className="relative bg-[#FBF5EF] rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center"
-              initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
-              transition={{ type: 'spring', stiffness: 200 }}>
+            <motion.div
+              className="relative bg-[#FBF5EF] rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              transition={{ type: "spring", stiffness: 200 }}
+            >
               <div className="text-6xl mb-4">⏱️</div>
-              <h3 className="text-2xl font-bold text-[#8F2424] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              <h3
+                className="text-2xl font-bold text-[#8F2424] mb-3"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 Ready to Start?
               </h3>
-              <p className="text-gray-600 mb-6 text-lg">
+              <p className="text-gray-600 mb-6 text-xl">
                 Timer will begin as soon as you click the button below!
               </p>
-              <button onClick={handleStartTimer}
+              <button
+                onClick={handleStartTimer}
                 className="px-8 py-3 rounded-full text-white font-bold text-xl shadow-lg hover:scale-105 transition-transform"
-                style={{ background: 'linear-gradient(135deg, #4CAF50, #8BC34A)', fontFamily: 'var(--font-display)' }}>
+                style={{
+                  background: "linear-gradient(135deg, #4CAF50, #8BC34A)",
+                  fontFamily: "var(--font-display)",
+                }}
+              >
                 ▶️ Start Timer
               </button>
             </motion.div>
@@ -434,54 +516,102 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
       </AnimatePresence>
 
       {/* Countdown Modal */}
-      <AnimatePresence>
-        {phase === 'countdown' && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      {/* <AnimatePresence>
+        {phase === "countdown" && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <div className="absolute inset-0 bg-black/60" />
             <AnimatePresence mode="wait">
-              <motion.div key={countdown}
+              <motion.div
+                key={countdown}
                 className="relative text-9xl font-bold text-white"
-                style={{ fontFamily: 'var(--font-display)', textShadow: '0 0 40px rgba(255,215,0,0.8)' }}
+                style={{
+                  fontFamily: "var(--font-display)",
+                  textShadow: "0 0 40px rgba(255,215,0,0.8)",
+                }}
                 initial={{ scale: 2, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.3, opacity: 0 }}
-                transition={{ duration: 0.4 }}>
-                {countdown > 0 ? countdown : 'GO!'}
+                transition={{ duration: 0.4 }}
+              >
+                {countdown > 0 ? countdown : "GO!"}
               </motion.div>
             </AnimatePresence>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       {/* Congrats Modal */}
       <AnimatePresence>
-        {phase === 'congrats' && currentRect && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        {phase === "congrats" && currentRect && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <motion.div className="relative rounded-2xl p-8 border-2 text-center max-w-md w-full"
-              style={{ background: 'linear-gradient(135deg, #1a1a2e, #16213e)', borderColor: '#FFD700', boxShadow: '0 0 40px rgba(255,215,0,0.3)' }}
-              initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}
-              transition={{ type: 'spring', damping: 20 }}>
+            <motion.div
+              className="relative rounded-2xl p-8 border-2 text-center max-w-md w-full"
+              style={{
+                background: "linear-gradient(135deg, #1a1a2e, #16213e)",
+                borderColor: "#FFD700",
+                boxShadow: "0 0 40px rgba(255,215,0,0.3)",
+              }}
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.5 }}
+              transition={{ type: "spring", damping: 20 }}
+            >
+              <button
+                onClick={() => setPhase("congrats")}
+                className="absolute top-3 right-4 text-xl font-bold text-white hover:text-red-400 transition"
+              >
+                ✖
+              </button>
               <div className="text-5xl mb-3">🎉</div>
-              <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+              <h3
+                className="text-2xl font-bold text-white mb-2"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 Congratulations!
               </h3>
               <p className="text-lg text-gray-200 mb-4">
-                You made a <span className="text-yellow-400 font-bold text-2xl">{currentRect[0]} × {currentRect[1]}</span> rectangle!
+                You made a{" "}
+                <span className="text-yellow-400 font-bold text-2xl">
+                  {currentRect[0]} × {currentRect[1]}
+                </span>{" "}
+                rectangle!
               </p>
-              <p className="text-white text-lg mb-4">Are more arrangements possible?</p>
-              {congratsError && <p className="text-amber-400 text-sm mb-3 animate-pulse">{congratsError}</p>}
+              <p className="text-white text-lg mb-4">
+                Are more arrangements possible?
+              </p>
+              {congratsError && (
+                <p className="text-amber-400 text-sm mb-3 animate-pulse">
+                  {congratsError}
+                </p>
+              )}
               <div className="flex gap-4 justify-center">
-                <button onClick={handleMoreYes}
+                <button
+                  onClick={handleMoreYes}
                   className="px-8 py-3 rounded-full font-bold text-lg text-white shadow-lg hover:scale-105 transition-transform"
-                  style={{ background: 'linear-gradient(135deg, #4CAF50, #8BC34A)' }}>
+                  style={{
+                    background: "linear-gradient(135deg, #4CAF50, #8BC34A)",
+                  }}
+                >
                   ✅ Yes!
                 </button>
-                <button onClick={handleMoreNo}
+                <button
+                  onClick={handleMoreNo}
                   className="px-8 py-3 rounded-full font-bold text-lg text-white shadow-lg hover:scale-105 transition-transform"
-                  style={{ background: 'linear-gradient(135deg, #ef4444, #f97316)' }}>
+                  style={{
+                    background: "linear-gradient(135deg, #ef4444, #f97316)",
+                  }}
+                >
                   ❌ No
                 </button>
               </div>
@@ -492,30 +622,53 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
 
       {/* Prime Congrats Modal */}
       <AnimatePresence>
-        {phase === 'primeCongrats' && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        {phase === "primeCongrats" && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <motion.div className="relative rounded-2xl p-8 border-2 text-center max-w-md w-full"
-              style={{ background: 'linear-gradient(135deg, #1a1a2e, #16213e)', borderColor: '#FFD700', boxShadow: '0 0 40px rgba(255,215,0,0.3)' }}
-              initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}
-              transition={{ type: 'spring', damping: 20 }}>
+            <motion.div
+              className="relative rounded-2xl p-8 border-2 text-center max-w-md w-full"
+              style={{
+                background: "linear-gradient(135deg, #1a1a2e, #16213e)",
+                borderColor: "#FFD700",
+                boxShadow: "0 0 40px rgba(255,215,0,0.3)",
+              }}
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.5 }}
+              transition={{ type: "spring", damping: 20 }}
+            >
               <div className="text-5xl mb-3">🌟🎉🌟</div>
-              <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+              <h3
+                className="text-2xl font-bold text-white mb-2"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 Congratulations!
               </h3>
               <p className="text-lg text-gray-200 mb-2">
                 You correctly identified that
               </p>
-              <p className="text-3xl font-bold text-yellow-400 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+              <p
+                className="text-3xl font-bold text-yellow-400 mb-2"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 {luckyNumber} is a Prime Number!
               </p>
               <p className="text-gray-300 mb-6">
-                It can only be divided by 1 and {luckyNumber}. No rectangular arrangement other than 1 × {luckyNumber} is possible! 🧠
+                It can only be divided by 1 and {luckyNumber}. No rectangular
+                arrangement other than 1 × {luckyNumber} is possible! 🧠
               </p>
-              <button onClick={() => setPhase('complete')}
+              <button
+                onClick={() => setPhase("complete")}
                 className="px-8 py-3 rounded-full font-bold text-lg text-white shadow-lg hover:scale-105 transition-transform"
-                style={{ background: 'linear-gradient(135deg, #4CAF50, #8BC34A)' }}>
+                style={{
+                  background: "linear-gradient(135deg, #4CAF50, #8BC34A)",
+                }}
+              >
                 Continue →
               </button>
             </motion.div>
@@ -525,29 +678,69 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
 
       {/* Input Pair Modal */}
       <AnimatePresence>
-        {phase === 'inputPair' && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        {phase === "inputPair" && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <motion.div className="relative rounded-2xl p-8 border-2 text-center max-w-md w-full"
-              style={{ background: 'linear-gradient(135deg, #1a1a2e, #16213e)', borderColor: '#FFD700' }}
-              initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}
-              transition={{ type: 'spring', damping: 20 }}>
-              <h3 className="text-xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+            <motion.div
+              className="relative rounded-2xl p-8 border-2 text-center max-w-md w-full"
+              style={{
+                background: "linear-gradient(135deg, #1a1a2e, #16213e)",
+                borderColor: "#FFD700",
+              }}
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.5 }}
+              transition={{ type: "spring", damping: 20 }}
+            >
+              <button
+                onClick={() => setPhase("congrats")}
+                className="absolute top-3 right-4 text-xl font-bold text-white hover:text-red-400 transition"
+              >
+                ✖
+              </button>
+              <h3
+                className="text-xl font-bold text-white mb-4"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 What's the next arrangement?
               </h3>
-              <p className="text-gray-300 mb-4">Enter the dimensions: ___ × ___ = {luckyNumber}</p>
+              <p className="text-gray-300 mb-4">
+                Enter the dimensions: ___ × ___ = {luckyNumber}
+              </p>
               <div className="flex items-center justify-center gap-3 mb-4">
-                <input type="number" value={inputR} onChange={e => setInputR(e.target.value)} placeholder="rows"
-                  className="w-20 px-3 py-2 rounded-lg text-center text-lg font-bold bg-white/10 text-white border border-white/30 focus:border-yellow-400 focus:outline-none" />
+                <input
+                  type="number"
+                  value={inputR}
+                  onChange={(e) => setInputR(e.target.value)}
+                  placeholder="rows"
+                  className="w-20 px-3 py-2 rounded-lg text-center text-lg font-bold bg-white/10 text-white border border-white/30 focus:border-yellow-400 focus:outline-none"
+                />
                 <span className="text-2xl text-yellow-400 font-bold">×</span>
-                <input type="number" value={inputC} onChange={e => setInputC(e.target.value)} placeholder="cols"
-                  className="w-20 px-3 py-2 rounded-lg text-center text-lg font-bold bg-white/10 text-white border border-white/30 focus:border-yellow-400 focus:outline-none" />
+                <input
+                  type="number"
+                  value={inputC}
+                  onChange={(e) => setInputC(e.target.value)}
+                  placeholder="cols"
+                  className="w-20 px-3 py-2 rounded-lg text-center text-lg font-bold bg-white/10 text-white border border-white/30 focus:border-yellow-400 focus:outline-none"
+                />
               </div>
-              {inputError && <p className="text-amber-400 text-sm mb-3 animate-pulse">{inputError}</p>}
-              <button onClick={handleSubmitPair}
+              {inputError && (
+                <p className="text-amber-400 text-sm mb-3 animate-pulse">
+                  {inputError}
+                </p>
+              )}
+              <button
+                onClick={handleSubmitPair}
                 className="px-8 py-3 rounded-full font-bold text-lg text-white shadow-lg hover:scale-105 transition-transform"
-                style={{ background: 'linear-gradient(135deg, #4CAF50, #8BC34A)' }}>
+                style={{
+                  background: "linear-gradient(135deg, #4CAF50, #8BC34A)",
+                }}
+              >
                 ✅ Submit
               </button>
             </motion.div>

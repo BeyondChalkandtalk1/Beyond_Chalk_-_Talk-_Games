@@ -6,6 +6,7 @@ import { useSound } from "@/contexts/SoundContext";
 import { useEffect } from "react";
 import homePageSound from "../assets/cartoon-music-sound.mpeg";
 
+
 const GAMES = [
   {
     title: "Paw Patch Calendar Quest 📅",
@@ -23,28 +24,27 @@ const GAMES = [
         "Develop logical thinking and sequencing skills through a problem-solving task.",
       ],
     },
-    levels:2,
+    levels: 2,
     age: "7+",
     path: "/games/calendar",
     color: "primary" as const,
   },
   {
     title: "Prime Patrol and Combo Detectives",
-    description: "Paw made the mess, smart minds patch the calendar.  🏆",
+    description: "Investigate numbers, discover their secrets! 🏆",
     emoji: "🐾",
     about_game:
-      "To help children understand the structure and order of a calendar by arranging mixed calendar pages and solving simple logic-based questions related to days, weeks, and months.",
+      "The aim of this game is to help children understand the difference between prime numbers and composite numbers through visual and hands-on exploration using arrays on a grid. Children arrange a given number of icons on the grid to form rows and columns. If the icons can be organised into different rectangular arrays, the number is identified as a composite number. If no such rectangular arrangement can be formed (other than the trivial arrangement), the number is identified as a prime number. In the advanced level, children further explore factors of composite numbers through different array formations and identify perfect square numbers by recognising square arrays, without relying on rote memorisation of divisibility rules.",
     learning_object: {
       heading: "After playing the game, learners will be able to:",
       points: [
-        "Sequence the months of the year correctly.",
-        "Interpret basic calendar information (days, dates, weeks, months).",
-        "Use reasoning to answer calendar-based questions (before–after days, order of months, simple event timing).",
-        "Apply calendar knowledge to everyday contexts such as holidays, routines, and festivals.",
-        "Develop logical thinking and sequencing skills through a problem-solving task.",
+        "Distinguish between prime and composite numbers through array formation on a grid.",
+        "Identify factors and factor pairs of numbers through different rectangular arrangements.",
+        "Recognise perfect square numbers by observing square arrays (equal rows and columns).",
+        "Develop reasoning and conceptual understanding of number relationships without relying on rote memorisation of divisibility rules.",
       ],
     },
-    levels:2,
+    levels: 2,
     age: "9+",
     path: "/games/prime",
     color: "primary" as const,
