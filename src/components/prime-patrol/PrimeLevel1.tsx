@@ -110,6 +110,10 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
     return () => clearTimeout(t);
   }, [phase, countdown]);
 
+  const handleStartTimer = () => {
+    setPhase('countdown');
+  };
+
   // Timer sound
   useEffect(() => {
     if (phase !== 'playing' || !isSoundEnabled) return;
