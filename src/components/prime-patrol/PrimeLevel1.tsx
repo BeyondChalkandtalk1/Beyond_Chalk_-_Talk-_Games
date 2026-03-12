@@ -407,6 +407,32 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
         )}
       </AnimatePresence>
 
+      {/* Timer Start Modal */}
+      <AnimatePresence>
+        {phase === 'timerStart' && (
+          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="absolute inset-0 bg-black/50" />
+            <motion.div className="relative bg-[#FBF5EF] rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center"
+              initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
+              transition={{ type: 'spring', stiffness: 200 }}>
+              <div className="text-6xl mb-4">⏱️</div>
+              <h3 className="text-2xl font-bold text-[#8F2424] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+                Ready to Start?
+              </h3>
+              <p className="text-gray-600 mb-6 text-lg">
+                Timer will begin as soon as you click the button below!
+              </p>
+              <button onClick={handleStartTimer}
+                className="px-8 py-3 rounded-full text-white font-bold text-xl shadow-lg hover:scale-105 transition-transform"
+                style={{ background: 'linear-gradient(135deg, #4CAF50, #8BC34A)', fontFamily: 'var(--font-display)' }}>
+                ▶️ Start Timer
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Countdown Modal */}
       <AnimatePresence>
         {phase === 'countdown' && (
