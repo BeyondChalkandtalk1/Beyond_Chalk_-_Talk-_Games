@@ -381,7 +381,7 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
               initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
               transition={{ type: 'spring', stiffness: 200 }}>
               <button onClick={() => {
-                if (phase === 'howtoplay') setPhase('countdown');
+                if (phase === 'howtoplay') setPhase('timerStart');
                 setShowHowToPlay(false);
               }} className="absolute top-3 right-4 text-xl font-bold text-[#8F2424]">✖</button>
               <h2 className="text-2xl font-bold text-center mb-4 text-[#8F2424]">📖 How to Play — Level 1</h2>
