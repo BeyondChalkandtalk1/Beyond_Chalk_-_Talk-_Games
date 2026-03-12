@@ -56,7 +56,7 @@ function detectRectangle(cells: Set<string>): [number, number] | null {
   return [h, w];
 }
 
-type Phase = 'howtoplay' | 'countdown' | 'playing' | 'rectFound' | 'congrats' | 'inputPair' | 'complete';
+type Phase = 'howtoplay' | 'timerStart' | 'countdown' | 'playing' | 'rectFound' | 'congrats' | 'inputPair' | 'primeCongrats' | 'complete';
 
 export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Props) {
   const { playSound, isSoundEnabled } = useSound();
