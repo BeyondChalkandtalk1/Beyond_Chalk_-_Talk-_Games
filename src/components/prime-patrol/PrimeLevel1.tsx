@@ -395,7 +395,7 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
               </ul>
               <div className="mt-5 text-center">
                 <button onClick={() => {
-                  if (phase === 'howtoplay') setPhase('countdown');
+                  if (phase === 'howtoplay') setPhase('timerStart');
                   setShowHowToPlay(false);
                 }}
                   className="bg-[#8F2424] text-white px-6 py-2 rounded-full shadow-md hover:scale-105 transition">
