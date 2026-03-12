@@ -56,7 +56,7 @@ function detectRectangle(cells: Set<string>): [number, number] | null {
   return [h, w];
 }
 
-type Phase = 'howtoplay' | 'countdown' | 'playing' | 'rectFound' | 'congrats' | 'inputPair' | 'complete';
+type Phase = 'howtoplay' | 'timerStart' | 'countdown' | 'playing' | 'rectFound' | 'congrats' | 'inputPair' | 'primeCongrats' | 'complete';
 
 export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Props) {
   const { playSound, isSoundEnabled } = useSound();
@@ -109,6 +109,10 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
     const t = setTimeout(() => setCountdown(c => c - 1), 1000);
     return () => clearTimeout(t);
   }, [phase, countdown]);
+
+  const handleStartTimer = () => {
+    setPhase('countdown');
+  };
 
   // Timer sound
   useEffect(() => {
@@ -173,7 +177,7 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
   const handlePrimeGuess = () => {
     if (primeNum || allPairs.length === 0) {
       playSound(correctSound);
-      setPhase('complete');
+      setPhase('primeCongrats');
     } else {
       playSound(incorrectSound);
       setNoRectMsg(`Not prime! ${luckyNumber} is composite. Try to form a rectangle! 💪`);
@@ -377,7 +381,7 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
               initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
               transition={{ type: 'spring', stiffness: 200 }}>
               <button onClick={() => {
-                if (phase === 'howtoplay') setPhase('countdown');
+                if (phase === 'howtoplay') setPhase('timerStart');
                 setShowHowToPlay(false);
               }} className="absolute top-3 right-4 text-xl font-bold text-[#8F2424]">✖</button>
               <h2 className="text-2xl font-bold text-center mb-4 text-[#8F2424]">📖 How to Play — Level 1</h2>
@@ -391,13 +395,39 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
               </ul>
               <div className="mt-5 text-center">
                 <button onClick={() => {
-                  if (phase === 'howtoplay') setPhase('countdown');
+                  if (phase === 'howtoplay') setPhase('timerStart');
                   setShowHowToPlay(false);
                 }}
                   className="bg-[#8F2424] text-white px-6 py-2 rounded-full shadow-md hover:scale-105 transition">
                   Let's Go! 🎉
                 </button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Timer Start Modal */}
+      <AnimatePresence>
+        {phase === 'timerStart' && (
+          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="absolute inset-0 bg-black/50" />
+            <motion.div className="relative bg-[#FBF5EF] rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center"
+              initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}
+              transition={{ type: 'spring', stiffness: 200 }}>
+              <div className="text-6xl mb-4">⏱️</div>
+              <h3 className="text-2xl font-bold text-[#8F2424] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+                Ready to Start?
+              </h3>
+              <p className="text-gray-600 mb-6 text-lg">
+                Timer will begin as soon as you click the button below!
+              </p>
+              <button onClick={handleStartTimer}
+                className="px-8 py-3 rounded-full text-white font-bold text-xl shadow-lg hover:scale-105 transition-transform"
+                style={{ background: 'linear-gradient(135deg, #4CAF50, #8BC34A)', fontFamily: 'var(--font-display)' }}>
+                ▶️ Start Timer
+              </button>
             </motion.div>
           </motion.div>
         )}
@@ -455,6 +485,39 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
                   ❌ No
                 </button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Prime Congrats Modal */}
+      <AnimatePresence>
+        {phase === 'primeCongrats' && (
+          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <motion.div className="relative rounded-2xl p-8 border-2 text-center max-w-md w-full"
+              style={{ background: 'linear-gradient(135deg, #1a1a2e, #16213e)', borderColor: '#FFD700', boxShadow: '0 0 40px rgba(255,215,0,0.3)' }}
+              initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}
+              transition={{ type: 'spring', damping: 20 }}>
+              <div className="text-5xl mb-3">🌟🎉🌟</div>
+              <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                Congratulations!
+              </h3>
+              <p className="text-lg text-gray-200 mb-2">
+                You correctly identified that
+              </p>
+              <p className="text-3xl font-bold text-yellow-400 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                {luckyNumber} is a Prime Number!
+              </p>
+              <p className="text-gray-300 mb-6">
+                It can only be divided by 1 and {luckyNumber}. No rectangular arrangement other than 1 × {luckyNumber} is possible! 🧠
+              </p>
+              <button onClick={() => setPhase('complete')}
+                className="px-8 py-3 rounded-full font-bold text-lg text-white shadow-lg hover:scale-105 transition-transform"
+                style={{ background: 'linear-gradient(135deg, #4CAF50, #8BC34A)' }}>
+                Continue →
+              </button>
             </motion.div>
           </motion.div>
         )}
