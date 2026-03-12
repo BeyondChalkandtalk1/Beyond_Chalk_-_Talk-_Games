@@ -13,7 +13,7 @@ export default function PrimeLevel1({ luckyNumber, onComplete }: PrimeLevel1Prop
           className="text-3xl font-bold text-secondary"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          🔍 Level 1 — Prime Patrol and Combo Detectives
+          🔍 Level 1 — Prime Patrol and Combo Detectives  
         </h1>
         <p
           className="text-xl text-foreground"
