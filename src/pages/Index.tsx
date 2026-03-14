@@ -44,7 +44,7 @@ const GAMES = [
         "Develop reasoning and conceptual understanding of number relationships without relying on rote memorisation of divisibility rules.",
       ],
     },
-    levels: 2,
+    levels: 1,
     age: "9+",
     path: "/games/prime",
     color: "primary" as const,
