@@ -87,6 +87,7 @@ export default function PrimeLevel1({
   const [phase, setPhase] = useState<Phase>("howtoplay");
   const [emoji, setEmoji] = useState("⭐");
   const [cells, setCells] = useState<Set<string>>(new Set());
+  const [perfectSquarePopup, setPerfectSquarePopup] = useState(false);
   const [completed, setCompleted] = useState<
     {
       rows: number;
@@ -140,7 +141,7 @@ const [quiz2HintVisible, setQuiz2HintVisible] = useState(false);
     const maxB = Math.max(...allPairs.map(([, b]) => b));
     return {
       gridRows: Math.min(maxA + 2, 20),
-      gridCols: Math.min(maxB + 2, 72),
+      gridCols: Math.min(maxB + 2, MAX_DIM),
     };
   }, [allPairs, luckyNumber]);
 
@@ -243,21 +244,42 @@ const [quiz2HintVisible, setQuiz2HintVisible] = useState(false);
       setNoRectMsg("");
       playSound(correctSound);
       const cellsSnapshot = new Set(cells);
+      // setTimeout(() => {
+      //   setCompleted((prev) => [
+      //     ...prev,
+      //     {
+      //       rows: norm[0],
+      //       cols: norm[1],
+      //       snapshot: cellsSnapshot,
+      //       gRows: gridRows,
+      //       gCols: gridCols,
+      //     },
+      //   ]);
+      //   setHighlightRect(false);
+      //   setPhase("congrats");
+      //   setCongratsError("");
+      // }, 2000);
+
       setTimeout(() => {
-        setCompleted((prev) => [
-          ...prev,
-          {
-            rows: norm[0],
-            cols: norm[1],
-            snapshot: cellsSnapshot,
-            gRows: gridRows,
-            gCols: gridCols,
-          },
-        ]);
-        setHighlightRect(false);
-        setPhase("congrats");
-        setCongratsError("");
-      }, 2000);
+  setCompleted((prev) => [
+    ...prev,
+    {
+      rows: norm[0],
+      cols: norm[1],
+      snapshot: cellsSnapshot,
+      gRows: gridRows,
+      gCols: gridCols,
+    },
+  ]);
+  setHighlightRect(false);
+  // ── Perfect Square check ──────────────────────────────────────
+  if (norm[0] === norm[1]) {
+    setPerfectSquarePopup(true);
+  }
+  // ─────────────────────────────────────────────────────────────
+  setPhase("congrats");
+  setCongratsError("");
+}, 2000);
     } else {
       setWrongCells(new Set(cells));
       setNoRectMsg("");
@@ -334,35 +356,70 @@ const [quiz2HintVisible, setQuiz2HintVisible] = useState(false);
     }
   };
 
-  const handleSubmitPair = () => {
-    const r = parseInt(inputR),
-      c = parseInt(inputC);
-    if (isNaN(r) || isNaN(c) || r <= 0 || c <= 0) {
-      setInputError("Please enter valid numbers!");
-      return;
-    }
-    if (r * c !== luckyNumber) {
-      setInputError(
-        `${r} × ${c} = ${r * c}, but we need ${luckyNumber}! Try again! 🤔`,
-      );
-      return;
-    }
-    const norm: [number, number] = r <= c ? [r, c] : [c, r];
-    if (completed.some((c) => c.rows === norm[0] && c.cols === norm[1])) {
-      setInputError(`Already found ${norm[0]} × ${norm[1]}! Try another!`);
-      return;
-    }
-    if (r > MAX_DIM || c > MAX_DIM) {
-      setInputError(`Too big! Both numbers must be ≤ ${MAX_DIM}`);
-      return;
-    }
-    setCells(new Set());
-    setNoRectMsg("");
-    setPhase("playing");
-  };
+  // const handleSubmitPair = () => {
+  //   const r = parseInt(inputR),
+  //     c = parseInt(inputC);
+  //   if (isNaN(r) || isNaN(c) || r <= 0 || c <= 0) {
+  //     setInputError("Please enter valid numbers!");
+  //     return;
+  //   }
+  //   if (r * c !== luckyNumber) {
+  //     setInputError(
+  //       `${r} × ${c} = ${r * c}, but we need ${luckyNumber}! Try again! 🤔`,
+  //     );
+  //     return;
+  //   }
+  //   const norm: [number, number] = r <= c ? [r, c] : [c, r];
+  //   if (completed.some((c) => c.rows === norm[0] && c.cols === norm[1])) {
+  //     setInputError(`Already found ${norm[0]} × ${norm[1]}! Try another!`);
+  //     return;
+  //   }
+  //   if (r > MAX_DIM || c > MAX_DIM) {
+  //     setInputError(`Too big! Both numbers must be ≤ ${MAX_DIM}`);
+  //     return;
+  //   }
+  //   setCells(new Set());
+  //   setNoRectMsg("");
+  //   setPhase("playing");
+  // };
 
   // ── Quiz 1: Is it a perfect rectangle? ─────────────────────────────────────
   // Correct answer: composite => YES (it IS a rectangle / composite), prime => NO
+ 
+ const handleSubmitPair = () => {
+  const r = parseInt(inputR),
+    c = parseInt(inputC);
+  if (isNaN(r) || isNaN(c) || r <= 0 || c <= 0) {
+    setInputError("Please enter valid numbers!");
+    return;
+  }
+  if (r * c !== luckyNumber) {
+    setInputError(
+      `${r} × ${c} = ${r * c}, but we need ${luckyNumber}! Try again! 🤔`,
+    );
+    return;
+  }
+  const norm: [number, number] = r <= c ? [r, c] : [c, r];
+  if (completed.some((c) => c.rows === norm[0] && c.cols === norm[1])) {
+    setInputError(`Already found ${norm[0]} × ${norm[1]}! Try another!`);
+    return;
+  }
+  if (r > MAX_DIM || c > MAX_DIM) {
+    setInputError(`Too big! Both numbers must be ≤ ${MAX_DIM}`);
+    return;
+  }
+  // ── Grid-fit check ──────────────────────────────────────────────────────
+  if (r > gridRows) {
+    setInputError(
+      `${r} rows is too tall for the grid! Try ${c} rows × ${r} cols instead 😊`,
+    );
+    return;
+  }
+  setCells(new Set());
+  setNoRectMsg("");
+  setPhase("playing");
+};
+
   const handleQuiz1Answer = (answer: "yes" | "no") => {
     setQuiz1Answer(answer);
     const correctAnswer = primeNum ? "no" : "yes";
@@ -387,41 +444,62 @@ const [quiz2HintVisible, setQuiz2HintVisible] = useState(false);
 
   // ── Quiz 2: What are the factors? ──────────────────────────────────────────
 const handleQuiz2Submit = () => {
-  const entered = quiz2FactorsInput
-    .split(/[\s,،]+/)
-    .map((s) => parseInt(s.trim()))
-    .filter((n) => !isNaN(n) && n > 0);
+  const r = parseInt(quiz2InputR);
+  const c = parseInt(quiz2InputC);
 
-  if (entered.length === 0) {
-    setQuiz2Error("Please enter the factors separated by commas!");
+  if (isNaN(r) || isNaN(c) || r <= 0 || c <= 0) {
+    setQuiz2Error("Please enter valid row and column numbers!");
     return;
   }
-
-  const correctFactors: number[] = [];
-  for (let i = 1; i <= luckyNumber; i++) {
-    if (luckyNumber % i === 0) correctFactors.push(i);
-  }
-
-  const enteredUnique = [...new Set(entered)].sort((a, b) => a - b);
-  const correctSorted = [...correctFactors].sort((a, b) => a - b);
-
-  const wrong = enteredUnique.filter((n) => luckyNumber % n !== 0);
-  if (wrong.length > 0) {
-    setQuiz2Error(`${wrong.join(", ")} ${wrong.length === 1 ? "is" : "are"} not a factor of ${luckyNumber}! Try again.`);
+  if (r * c !== luckyNumber) {
+    setQuiz2Error(
+      `${r} × ${c} = ${r * c}, but we need ${luckyNumber}! Try again 🤔`,
+    );
     playSound(incorrectSound);
     return;
   }
 
-  const missing = correctSorted.filter((f) => !enteredUnique.includes(f));
-  if (missing.length > 0) {
-    setQuiz2Error(`You're missing some factors! Check your arrangements again.`);
+  // ── Check if this exact (r, c) order was actually completed ────────────
+  // exact match: r == completed.rows AND c == completed.cols
+  const exactMatch = completed.find((item) => item.rows === r && item.cols === c);
+
+  // flipped match: user entered it reversed
+  const flippedMatch = completed.find((item) => item.rows === c && item.cols === r);
+
+  if (!exactMatch && flippedMatch) {
+    // They filled 3 rows × 31 cols but entered 31 rows × 3 cols
+    setQuiz2Error(
+      `Look at your arrangement again! You made ${flippedMatch.rows} rows × ${flippedMatch.cols} columns, not ${r} rows × ${c} columns 😊`,
+    );
     playSound(incorrectSound);
     return;
   }
 
-  playSound(correctSound);
+  if (!exactMatch && !flippedMatch) {
+    // Not a valid factor pair at all
+    setQuiz2Error(
+      `${r} × ${c} is not one of your arrangements! Check the grid on the left 🤔`,
+    );
+    playSound(incorrectSound);
+    return;
+  }
+
+  // exactMatch found — now check duplicates using exact (r, c)
+  if (quiz2AnsweredPairs.some(([qa, qb]) => qa === r && qb === c)) {
+    setQuiz2Error(`Already entered ${r} × ${c}! Try another pair 😊`);
+    return;
+  }
+
+  const newAnswered: [number, number][] = [...quiz2AnsweredPairs, [r, c]];
+  setQuiz2AnsweredPairs(newAnswered);
+  setQuiz2InputR("");
+  setQuiz2InputC("");
   setQuiz2Error("");
-  setQuiz2Done(true);
+  playSound(correctSound);
+
+  if (newAnswered.length === allPairs.length) {
+    setQuiz2Done(true);
+  }
 };
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -437,103 +515,6 @@ const handleQuiz2Submit = () => {
       : `${Math.floor(s / 60)}m ${(s % 60).toString().padStart(2, "0")}s`;
 
   // ─── Quiz 1 Screen ─────────────────────────────────────────────────────────
-  // if (phase === "quiz1") {
-  //   return (
-  //     <div
-  //       className="min-h-screen flex flex-col items-center justify-center p-6"
-  //       style={{
-  //         background: "linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)",
-  //       }}
-  //     >
-  //       <motion.div
-  //         className="w-full max-w-lg"
-  //         initial={{ opacity: 0, y: 40 }}
-  //         animate={{ opacity: 1, y: 0 }}
-  //         transition={{ type: "spring", stiffness: 180 }}
-  //       >
-  //         {/* Question card */}
-  //         <div
-  //           className="rounded-3xl p-8 text-center shadow-2xl border-2"
-  //           style={{
-  //             background: "linear-gradient(135deg, #1e293b, #0f172a)",
-  //             borderColor: "#FFD700",
-  //             boxShadow: "0 0 60px rgba(255,215,0,0.2)",
-  //           }}
-  //         >
-  //           <div className="text-5xl mb-4">🤔</div>
-  //           <p className="text-yellow-300 text-lg font-semibold mb-2 tracking-widest uppercase">
-  //             Question 1
-  //           </p>
-  //           <h2
-  //             className="text-3xl font-bold text-white mb-2"
-  //             style={{ fontFamily: "var(--font-display)" }}
-  //           >
-  //             Is <span className="text-yellow-400">{luckyNumber}</span> a
-  //             perfect rectangle number?
-  //           </h2>
-  //           <p className="text-gray-400 text-lg mb-8">
-  //             Can {luckyNumber} icons be arranged into a perfect rectangle
-  //             (other than 1 × {luckyNumber})?
-  //           </p>
-
-  //           {quiz1Wrong && (
-  //             <motion.p
-  //               className="text-red-400 font-bold mb-4 text-lg"
-  //               initial={{ opacity: 0, scale: 0.8 }}
-  //               animate={{ opacity: 1, scale: 1 }}
-  //             >
-  //               ❌ Oops! That's not right. Try again! 🤔
-  //             </motion.p>
-  //           )}
-
-  //           <div className="flex gap-6 justify-center">
-  //             <motion.button
-  //               onClick={() => handleQuiz1Answer("yes")}
-  //               className="px-10 py-4 rounded-2xl font-bold text-xl text-white shadow-xl"
-  //               style={{
-  //                 background: "linear-gradient(135deg, #16a34a, #4ade80)",
-  //               }}
-  //               whileHover={{ scale: 1.08 }}
-  //               whileTap={{ scale: 0.95 }}
-  //             >
-  //               ✅ Yes
-  //             </motion.button>
-  //             <motion.button
-  //               onClick={() => handleQuiz1Answer("no")}
-  //               className="px-10 py-4 rounded-2xl font-bold text-xl text-white shadow-xl"
-  //               style={{
-  //                 background: "linear-gradient(135deg, #dc2626, #f97316)",
-  //               }}
-  //               whileHover={{ scale: 1.08 }}
-  //               whileTap={{ scale: 0.95 }}
-  //             >
-  //               ❌ No
-  //             </motion.button>
-  //           </div>
-  //         </div>
-
-  //         {/* Arrangements found hint */}
-  //         {/* {completed.length > 0 && (
-  //           <div className="mt-6 text-center">
-  //             <p className="text-gray-400 text-sm mb-2">
-  //               Arrangements you found:
-  //             </p>
-  //             <div className="flex flex-wrap justify-center gap-2">
-  //               {completed.map((c, i) => (
-  //                 <span
-  //                   key={i}
-  //                   className="bg-yellow-400/20 border border-yellow-400/40 text-yellow-300 font-bold px-4 py-1.5 rounded-full text-lg"
-  //                 >
-  //                   {c.rows} × {c.cols}
-  //                 </span>
-  //               ))}
-  //             </div>
-  //           </div>
-  //         )} */}
-  //       </motion.div>
-  //     </div>
-  //   );
-  // }
   if (phase === "quiz1") {
   const lastArr = completed.length > 0
     ? completed[completed.length - 1]
@@ -776,12 +757,12 @@ const handleQuiz2Submit = () => {
   >
     You have arranged <span className="text-yellow-400">{luckyNumber}</span> counters into rectangular arrangements.
     <br />
-    <span className="text-gray-300 text-xl font-normal">
+    <span className="text-gray-300 text-2xl font-bold">
       In each arrangement, the number of rows and columns are factors of{" "}
       <span className="text-yellow-400 font-bold">{luckyNumber}</span>.
     </span>
   </h1>
-    <p className="text-gray-300 text-lg mt-1">
+    <p className="text-gray-300 text-2xl mt-1">
     Using the rectangular arrangements you made, write all the factors of{" "}
     <span className="text-yellow-400 font-bold">{luckyNumber}</span>.
   </p>
@@ -859,7 +840,7 @@ const handleQuiz2Submit = () => {
               className="rounded-2xl px-4 py-5 border border-yellow-500/30 flex flex-col items-center gap-3"
               style={{ background: "rgba(255,215,0,0.06)" }}
             >
-              <p className="text-yellow-300 font-bold text-xl text-center">
+              <p className="text-yellow-300 font-bold text-2xl text-center">
                 Enter a factor pair:
               </p>
               <div className="flex items-center gap-2">
@@ -877,14 +858,14 @@ const handleQuiz2Submit = () => {
                   value={quiz2InputC}
                   onChange={(e) => setQuiz2InputC(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleQuiz2Submit()}
-                  placeholder="cols"
+                  placeholder="columns"
                   className="w-28 px-2 py-2 rounded-xl text-center text-lg font-bold bg-white/10 text-white border-2 border-white/20 focus:border-yellow-400 focus:outline-none"
                 />
               </div>
               <AnimatePresence>
                 {quiz2Error && (
                   <motion.p
-                    className="text-red-400 text-xs text-center font-semibold"
+                    className="text-red-400 text-xl text-center font-semibold"
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
@@ -896,7 +877,7 @@ const handleQuiz2Submit = () => {
                  <div className="flex flex-col gap-2">
       <motion.button
         onClick={() => setQuiz2HintVisible((v) => !v)}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm border-2 w-fit"
+        className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xl border-2 w-fit"
         style={{
           background: quiz2HintVisible ? "rgba(251,191,36,0.15)" : "transparent",
           borderColor: quiz2HintVisible ? "#fbbf24" : "rgba(251,191,36,0.4)",
@@ -911,7 +892,7 @@ const handleQuiz2Submit = () => {
       <AnimatePresence>
         {quiz2HintVisible && (
           <motion.div
-            className="rounded-xl px-4 py-3 text-sm text-amber-200 leading-relaxed"
+            className="rounded-xl px-4 py-3 text-xl font-bold text-amber-200 leading-relaxed"
             style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.3)" }}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -925,7 +906,7 @@ const handleQuiz2Submit = () => {
     </div>
               <motion.button
                 onClick={handleQuiz2Submit}
-                className="px-6 py-2 rounded-xl font-bold text-white text-base shadow-lg w-full"
+                className="px-6 py-2 rounded-xl font-bold text-white text-xl shadow-lg w-full"
                 style={{
                   background: "linear-gradient(135deg, #4CAF50, #8BC34A)",
                 }}
@@ -934,7 +915,7 @@ const handleQuiz2Submit = () => {
               >
                 ✅ Submit
               </motion.button>
-              <p className="text-gray-500 text-xs text-center">
+              <p className="text-gray-500 text-xl text-center">
                 {remainingQ2.length} pair(s) left
               </p>
               <AnimatePresence>
@@ -945,12 +926,12 @@ const handleQuiz2Submit = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ type: "spring" }}
                   >
-                    <p className="text-base font-bold text-yellow-400 mb-2">
+                    <p className="text-base font-bold text-xl text-yellow-400 mb-2">
                       🎉 All found!
                     </p>
                     <motion.button
                       onClick={() => setPhase("complete")}
-                      className="px-5 py-2 rounded-full font-bold text-sm text-white shadow-xl w-full"
+                      className="px-5 py-2 rounded-full font-bold text-xl text-white shadow-xl w-full"
                       style={{
                         background: "linear-gradient(135deg, #f59e0b, #ef4444)",
                       }}
@@ -969,10 +950,10 @@ const handleQuiz2Submit = () => {
               className="flex-1 rounded-2xl p-4 border border-green-500/30 overflow-y-auto"
               style={{ background: "rgba(255,255,255,0.04)" }}
             >
-              <p className="text-green-300 text-sm font-bold mb-3 uppercase tracking-widest">
-                ✅ Answered
+              <p className="text-green-300 text-xl font-bold mb-3 uppercase tracking-widest">
+                ✅ Factors of {luckyNumber} are:- 
               </p>
-              {quiz2AnsweredPairs.length === 0 && (
+              {/* {quiz2AnsweredPairs.length === 0 && (
                 <p className="text-gray-500 text-center text-sm mt-4">
                   None yet
                 </p>
@@ -1000,7 +981,43 @@ const handleQuiz2Submit = () => {
                     </motion.div>
                   );
                 })}
-              </div>
+              </div> */}
+                {quiz2AnsweredPairs.length === 0 ? (
+    <p className="text-gray-500 text-center text-sm mt-4">None yet</p>
+  ) : (
+    <div className="flex flex-wrap gap-2">
+      {quiz2AnsweredPairs.map(([rows, cols], i) => (
+        <motion.span
+          key={i}
+          className="px-3 py-1.5 rounded-full font-bold text-base"
+          style={{
+            background: "rgba(34,197,94,0.2)",
+            color: "#86efac",
+            border: "1.5px solid rgba(74,222,128,0.45)",
+          }}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", delay: i * 0.05 }}
+        >
+          {rows} , {cols}
+        </motion.span>
+      ))}
+    </div>
+  )}
+  {quiz2AnsweredPairs.length > 0 && !quiz2Done && (
+    <p className="text-gray-500 text-xs mt-3 text-center">
+      {allPairs.length - quiz2AnsweredPairs.length} pair(s) remaining
+    </p>
+  )}
+  {quiz2Done && (
+    <motion.p
+      className="text-yellow-400 font-bold text-sm text-center mt-3"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      🎉 All {allPairs.length} pairs found!
+    </motion.p>
+  )}
             </div>
           </div>
         </div>
@@ -1027,7 +1044,7 @@ const handleQuiz2Submit = () => {
             className="text-4xl font-bold text-secondary"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Level 1 Complete!
+            Level completed!
           </h1>
           <div className="bg-white/80 rounded-2xl p-6 shadow-lg max-w-md mx-auto space-y-3">
             <p
@@ -1065,7 +1082,7 @@ const handleQuiz2Submit = () => {
             </p>
             <button
               onClick={onSpinAgain}
-              className="px-10 py-4 rounded-full font-bold text-xl shadow-xl text-white hover:scale-105 transition-transform"
+              className="px-10 py-4 rounded-full font-bold text-2xl shadow-xl text-white hover:scale-105 transition-transform"
               style={{
                 background: "#8F2424",
                 fontFamily: "var(--font-display)",
@@ -1074,7 +1091,7 @@ const handleQuiz2Submit = () => {
               Do you want to spin the wheel again?
             </button>
           </div>
-          <button
+          {/* <button
             onClick={onComplete}
             className="px-10 py-4 rounded-full font-bold text-xl shadow-xl text-white hover:scale-105 transition-transform"
             style={{
@@ -1083,7 +1100,7 @@ const handleQuiz2Submit = () => {
             }}
           >
             Continue to Level 2 →
-          </button>
+          </button> */}
           <div className="flex justify-center">
             <video
               src={Level1CompleteVideo}
@@ -1606,6 +1623,113 @@ const handleQuiz2Submit = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Perfect Square Modal */}
+<AnimatePresence>
+  {perfectSquarePopup && (
+    <motion.div
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      <motion.div
+        className="relative rounded-3xl p-8 border-2 text-center max-w-md w-full"
+        style={{
+          background: "linear-gradient(135deg, #1a0533, #2d1060, #1a0533)",
+          borderColor: "#a855f7",
+          boxShadow: "0 0 60px rgba(168,85,247,0.5)",
+        }}
+        initial={{ scale: 0.3, rotate: -10 }}
+        animate={{ scale: 1, rotate: 0 }}
+        exit={{ scale: 0.3 }}
+        transition={{ type: "spring", damping: 15, stiffness: 200 }}
+      >
+        {/* Animated stars */}
+        <motion.div
+          className="text-5xl mb-3"
+          animate={{ rotate: [0, 10, -10, 10, 0] }}
+          transition={{ duration: 1.2, repeat: Infinity }}
+        >
+          🌟⬛🌟
+        </motion.div>
+
+        <motion.p
+          className="text-purple-300 text-sm font-bold tracking-[0.25em] uppercase mb-2"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          ✨ Special Achievement ✨
+        </motion.p>
+
+        <motion.h3
+          className="text-3xl font-bold text-white mb-2"
+          style={{ fontFamily: "var(--font-display)" }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, type: "spring" }}
+        >
+          Perfect Square! 🎯
+        </motion.h3>
+
+        <motion.p
+          className="text-lg text-purple-200 mb-2 leading-relaxed"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          You arranged{" "}
+          <span className="text-yellow-400 font-bold text-2xl">
+            {luckyNumber}
+          </span>{" "}
+          counters into a square —
+        </motion.p>
+
+        <motion.p
+          className="text-4xl font-bold mb-3"
+          style={{
+            background: "linear-gradient(135deg, #f59e0b, #a855f7, #06b6d4)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, type: "spring" }}
+        >
+          {Math.sqrt(luckyNumber)} × {Math.sqrt(luckyNumber)}
+        </motion.p>
+
+        <motion.p
+          className="text-purple-300 text-base mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          {luckyNumber} is a <strong className="text-yellow-400">perfect square</strong>!<br />
+          {Math.sqrt(luckyNumber)} × {Math.sqrt(luckyNumber)} = {luckyNumber} 🧮
+        </motion.p>
+
+        <motion.button
+          onClick={() => setPerfectSquarePopup(false)}
+          className="px-8 py-3 rounded-full font-bold text-lg text-white shadow-2xl"
+          style={{
+            background: "linear-gradient(135deg, #a855f7, #7c3aed)",
+            boxShadow: "0 0 20px rgba(168,85,247,0.4)",
+          }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          Awesome! 🚀
+        </motion.button>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
     </div>
   );
 }
