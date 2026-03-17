@@ -345,9 +345,16 @@ const [quiz2HintVisible, setQuiz2HintVisible] = useState(false);
         !completedRef.current.some((c) => c.rows === a && c.cols === b),
     );
     if (currentRemaining.length > 0) {
+      // setCongratsError(
+      //   `Oops! There are still ${currentRemaining.length} more arrangement(s) possible! Think again! 🤔`,
+      // );
       setCongratsError(
-        `Oops! There are still ${currentRemaining.length} more arrangement(s) possible! Think again! 🤔`,
-      );
+  `Oops! There ${currentRemaining.length === 1 ? "is" : "are"} still ${
+    currentRemaining.length
+  } more ${
+    currentRemaining.length === 1 ? "arrangement" : "arrangements"
+  } possible! Think again! 🤔`
+);
     } else {
       // Instead of going directly to "complete", go to quiz1
       setPhase("quiz1");
@@ -409,9 +416,10 @@ const [quiz2HintVisible, setQuiz2HintVisible] = useState(false);
     return;
   }
   // ── Grid-fit check ──────────────────────────────────────────────────────
+  //  49 rows  1 column is not the same as 1 row and 49 columns. Try again!
   if (r > gridRows) {
     setInputError(
-      `${r} rows is too tall for the grid! Try ${c} rows × ${r} cols instead 😊`,
+      `The array of ${r} rows ${c} column is not the same as ${c} row and ${r} columns. Try again! 😊`,
     );
     return;
   }
@@ -469,7 +477,7 @@ const handleQuiz2Submit = () => {
   if (!exactMatch && flippedMatch) {
     // They filled 3 rows × 31 cols but entered 31 rows × 3 cols
     setQuiz2Error(
-      `Look at your arrangement again! You made ${flippedMatch.rows} rows × ${flippedMatch.cols} columns, not ${r} rows × ${c} columns 😊`,
+      `Look at your array arrangement again!`,
     );
     playSound(incorrectSound);
     return;
@@ -522,21 +530,80 @@ const handleQuiz2Submit = () => {
   const R = lastArr.rows;
   const C = lastArr.cols;
 
-  const correctLabel = `${R} rows and ${C} columns`;
+  // const correctLabel = `${R} rows and ${C} columns`;
 
-  const rawOptions: string[] = [
-    correctLabel,
-    `${C} rows and ${R} columns`,
-    `${luckyNumber} rows and 1 column`,
-    `1 row and ${luckyNumber} columns`,
-  ];
+  // ✅ Naya - grammar sahi
+const correctLabel = `${R} ${R === 1 ? "row" : "rows"} and ${C} ${C === 1 ? "column" : "columns"}`;
+
+  // const rawOptions: string[] = [
+  //   correctLabel,
+  //   `${C} rows and ${R} columns`,
+  //   `${luckyNumber} rows and 1 column`,
+  //   `1 row and ${luckyNumber} columns`,
+  // ];
+
+//   const rawOptions: string[] = [
+//   correctLabel,
+//   `${C} ${C === 1 ? "row" : "rows"} and ${R} ${R === 1 ? "column" : "columns"}`,
+//   `${luckyNumber} ${luckyNumber === 1 ? "row" : "rows"} and 1 column`,
+//   `1 row and ${luckyNumber} ${luckyNumber === 1 ? "column" : "columns"}`,
+// ];
+// Guaranteed meaningful options — ? kabhi nahi aayega
+const allLabels = new Set<string>();
+allLabels.add(correctLabel);
+
+// Flipped version
+const flipped = `${C} ${C === 1 ? "row" : "rows"} and ${R} ${R === 1 ? "column" : "columns"}`;
+if (flipped !== correctLabel) allLabels.add(flipped);
+
+// Baaki completed arrangements se
+completed.forEach(({ rows, cols }) => {
+  if (allLabels.size >= 4) return;
+  const label = `${rows} ${rows === 1 ? "row" : "rows"} and ${cols} ${cols === 1 ? "column" : "columns"}`;
+  if (!allLabels.has(label)) allLabels.add(label);
+});
+
+// allPairs se options
+allPairs.forEach(([a, b]) => {
+  if (allLabels.size >= 4) return;
+  const label = `${a} ${a === 1 ? "row" : "rows"} and ${b} ${b === 1 ? "column" : "columns"}`;
+  if (!allLabels.has(label)) allLabels.add(label);
+  const labelFlip = `${b} ${b === 1 ? "row" : "rows"} and ${a} ${a === 1 ? "column" : "columns"}`;
+  if (allLabels.size < 4 && !allLabels.has(labelFlip)) allLabels.add(labelFlip);
+});
+
+// Final fallbacks — ? wala kabhi nahi
+const fallbacks = [
+  `${luckyNumber} ${luckyNumber === 1 ? "row" : "rows"} and 1 column`,
+  `1 row and ${luckyNumber} ${luckyNumber === 1 ? "column" : "columns"}`,
+  `2 rows and ${Math.floor(luckyNumber / 2)} columns`,
+  `${Math.floor(luckyNumber / 3)} rows and 3 columns`,
+];
+fallbacks.forEach((f) => {
+  if (allLabels.size < 4 && !allLabels.has(f)) allLabels.add(f);
+});
+
+const rawOptions: string[] = Array.from(allLabels).slice(0, 4);
 
   const seen = new Set<string>();
   const uniqueOptions: string[] = [];
   for (const o of rawOptions) {
     if (!seen.has(o)) { seen.add(o); uniqueOptions.push(o); }
   }
-  while (uniqueOptions.length < 4) uniqueOptions.push(`${uniqueOptions.length} rows and ? columns`);
+  // while (uniqueOptions.length < 4) uniqueOptions.push(`${uniqueOptions.length} rows and ? columns`);
+  const extraFallbacks = [
+  `${luckyNumber} rows and 1 column`,
+  `1 row and ${luckyNumber} columns`,
+  `2 rows and ${Math.floor(luckyNumber / 2)} columns`,
+  `${Math.ceil(luckyNumber / 3)} rows and 3 columns`,
+];
+let fi = 0;
+while (uniqueOptions.length < 4 && fi < extraFallbacks.length) {
+  if (!uniqueOptions.includes(extraFallbacks[fi])) {
+    uniqueOptions.push(extraFallbacks[fi]);
+  }
+  fi++;
+}
 
   const shuffled = [...uniqueOptions].sort((a, b) => {
     const seed = luckyNumber % 3;
@@ -752,20 +819,23 @@ const handleQuiz2Submit = () => {
           <p className="text-yellow-300 text-sm font-bold tracking-[0.2em] uppercase mb-1">
             Question 2
           </p>
-          <h1 className="text-2xl md:text-3xl font-bold text-white leading-snug"
-    style={{ fontFamily: "var(--font-display)" }}
-  >
-    You have arranged <span className="text-yellow-400">{luckyNumber}</span> counters into rectangular arrangements.
-    <br />
-    <span className="text-gray-300 text-2xl font-bold">
-      In each arrangement, the number of rows and columns are factors of{" "}
-      <span className="text-yellow-400 font-bold">{luckyNumber}</span>.
-    </span>
-  </h1>
-    <p className="text-gray-300 text-2xl mt-1">
-    Using the rectangular arrangements you made, write all the factors of{" "}
-    <span className="text-yellow-400 font-bold">{luckyNumber}</span>.
-  </p>
+          <h1
+            className="text-2xl md:text-3xl font-bold text-white leading-snug"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            You have arranged{" "}
+            <span className="text-yellow-400">{luckyNumber}</span> counters into
+            rectangular arrangements.
+            <br />
+            <span className="text-gray-300 text-2xl font-bold">
+              In each arrangement, the number of rows and columns are factors of{" "}
+              <span className="text-yellow-400 font-bold">{luckyNumber}</span>.
+            </span>
+          </h1>
+          <p className="text-gray-300 text-2xl mt-1">
+            Using the rectangular arrangements you made, write all the factors
+            of <span className="text-yellow-400 font-bold">{luckyNumber}</span>.
+          </p>
           {/* Toggle + Progress in one row */}
           <div className="flex items-center justify-center gap-6 mt-3">
             {/* <button
@@ -874,36 +944,45 @@ const handleQuiz2Submit = () => {
                   </motion.p>
                 )}
               </AnimatePresence>
-                 <div className="flex flex-col gap-2">
-      <motion.button
-        onClick={() => setQuiz2HintVisible((v) => !v)}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xl border-2 w-fit"
-        style={{
-          background: quiz2HintVisible ? "rgba(251,191,36,0.15)" : "transparent",
-          borderColor: quiz2HintVisible ? "#fbbf24" : "rgba(251,191,36,0.4)",
-          color: "#fbbf24",
-        }}
-        whileHover={{ scale: 1.04 }}
-        whileTap={{ scale: 0.96 }}
-      >
-        💡 Hint
-      </motion.button>
+              <div className="flex flex-col gap-2">
+                <motion.button
+                  onClick={() => setQuiz2HintVisible((v) => !v)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xl border-2 w-fit"
+                  style={{
+                    background: quiz2HintVisible
+                      ? "rgba(251,191,36,0.15)"
+                      : "transparent",
+                    borderColor: quiz2HintVisible
+                      ? "#fbbf24"
+                      : "rgba(251,191,36,0.4)",
+                    color: "#fbbf24",
+                  }}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  💡 Hint
+                </motion.button>
 
-      <AnimatePresence>
-        {quiz2HintVisible && (
-          <motion.div
-            className="rounded-xl px-4 py-3 text-xl font-bold text-amber-200 leading-relaxed"
-            style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.3)" }}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            👀 Look at the numbers that appear as <strong>rows</strong> and <strong>columns</strong> in your arrangements.
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+                <AnimatePresence>
+                  {quiz2HintVisible && (
+                    <motion.div
+                      className="rounded-xl px-4 py-3 text-xl font-bold text-amber-200 leading-relaxed"
+                      style={{
+                        background: "rgba(251,191,36,0.1)",
+                        border: "1px solid rgba(251,191,36,0.3)",
+                      }}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      👀 Look at the numbers that appear as{" "}
+                      <strong>rows</strong> and <strong>columns</strong> in your
+                      arrangements.
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               <motion.button
                 onClick={handleQuiz2Submit}
                 className="px-6 py-2 rounded-xl font-bold text-white text-xl shadow-lg w-full"
@@ -951,7 +1030,7 @@ const handleQuiz2Submit = () => {
               style={{ background: "rgba(255,255,255,0.04)" }}
             >
               <p className="text-green-300 text-xl font-bold mb-3 uppercase tracking-widest">
-                ✅ Factors of {luckyNumber} are:- 
+                ✅ Factors of {luckyNumber} are:-
               </p>
               {/* {quiz2AnsweredPairs.length === 0 && (
                 <p className="text-gray-500 text-center text-sm mt-4">
@@ -982,11 +1061,13 @@ const handleQuiz2Submit = () => {
                   );
                 })}
               </div> */}
-                {quiz2AnsweredPairs.length === 0 ? (
-    <p className="text-gray-500 text-center text-sm mt-4">None yet</p>
-  ) : (
-    <div className="flex flex-wrap gap-2">
-      {quiz2AnsweredPairs.map(([rows, cols], i) => (
+              {quiz2AnsweredPairs.length === 0 ? (
+                <p className="text-gray-500 text-center text-sm mt-4">
+                  None yet
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {/* {quiz2AnsweredPairs.map(([rows, cols], i) => (
         <motion.span
           key={i}
           className="px-3 py-1.5 rounded-full font-bold text-base"
@@ -1001,15 +1082,44 @@ const handleQuiz2Submit = () => {
         >
           {rows} , {cols}
         </motion.span>
-      ))}
-    </div>
-  )}
-  {quiz2AnsweredPairs.length > 0 && !quiz2Done && (
-    <p className="text-gray-500 text-xs mt-3 text-center">
-      {allPairs.length - quiz2AnsweredPairs.length} pair(s) remaining
-    </p>
-  )}
-  {quiz2Done && (
+      ))} */}
+                  {(() => {
+                    // Saare unique factors nikalo answered pairs se
+                    const factorSet = new Set<number>();
+                    quiz2AnsweredPairs.forEach(([rows, cols]) => {
+                      factorSet.add(rows);
+                      factorSet.add(cols); // 9×9 mein rows===cols, Set automatically deduplicate karega
+                    });
+                    const sortedFactors = Array.from(factorSet).sort(
+                      (a, b) => a - b,
+                    );
+
+                    return sortedFactors.map((factor, i) => (
+                      <motion.span
+                        key={i}
+                        className="px-3 py-1.5 rounded-full font-bold text-base"
+                        style={{
+                          background: "rgba(34,197,94,0.2)",
+                          color: "#86efac",
+                          border: "1.5px solid rgba(74,222,128,0.45)",
+                        }}
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: "spring", delay: i * 0.05 }}
+                      >
+                        {factor}
+                      </motion.span>
+                    ));
+                  })()}
+                </div>
+              )}
+              {quiz2AnsweredPairs.length > 0 && !quiz2Done && (
+                <p className="text-gray-500 text-xs mt-3 text-center">
+                  {allPairs.length - quiz2AnsweredPairs.length} pair(s)
+                  remaining
+                </p>
+              )}
+              {/* {quiz2Done && (
     <motion.p
       className="text-yellow-400 font-bold text-sm text-center mt-3"
       initial={{ opacity: 0 }}
@@ -1017,7 +1127,7 @@ const handleQuiz2Submit = () => {
     >
       🎉 All {allPairs.length} pairs found!
     </motion.p>
-  )}
+  )} */}
             </div>
           </div>
         </div>
@@ -1054,6 +1164,12 @@ const handleQuiz2Submit = () => {
               {luckyNumber} is a{" "}
               {primeNum ? "Prime Number! 🌟" : "Composite Number! 🎯"}
             </p>
+                  {Number.isInteger(Math.sqrt(luckyNumber)) && (
+              <p className="text-2xl font-bold" style={{ color: "#7c3aed" }}>
+                ⬛ {luckyNumber} is also a Perfect Square Number!{" "}
+                ({Math.sqrt(luckyNumber)} × {Math.sqrt(luckyNumber)} = {luckyNumber})
+              </p>
+            )}
             {primeNum ? (
               <p className="text-muted-foreground">
                 {luckyNumber} can only be divided by 1 and itself. No
@@ -1074,6 +1190,25 @@ const handleQuiz2Submit = () => {
                       {c.rows} × {c.cols}
                     </span>
                   ))}
+                </div>
+                     <p className="text-2xl font-semibold mt-3 mb-2">
+                  Factors of {luckyNumber} are:
+                </p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {Array.from(
+                    new Set(
+                      completed.flatMap((c) => [c.rows, c.cols])
+                    )
+                  )
+                    .sort((a, b) => a - b)
+                    .map((factor, i) => (
+                      <span
+                        key={i}
+                        className="inline-block bg-green-100 text-2xl text-green-700 font-bold px-3 py-1 rounded-full"
+                      >
+                        {factor}
+                      </span>
+                    ))}
                 </div>
               </div>
             )}
@@ -1454,17 +1589,18 @@ const handleQuiz2Submit = () => {
               >
                 Congratulations!
               </h3>
-              <p className="text-lg text-gray-200 mb-4">
-                You made an array of{" "}
-                <span className="text-yellow-400 font-bold text-2xl">
-                  {currentRect[0]} row and {currentRect[1]} columns.
-                </span>{" "}
-              </p>
+           <p className="text-lg text-gray-200 mb-4">
+  You made an array of{" "}
+  <span className="text-yellow-400 font-bold text-2xl">
+    {currentRect[0]} {currentRect[0] === 1 ? "row" : "rows"} and{" "}
+    {currentRect[1]} {currentRect[1] === 1 ? "column" : "columns"}.
+  </span>{" "}
+</p>
               <p className="text-white text-lg mb-4">
                 Are more arrangements possible?
               </p>
               {congratsError && (
-                <p className="text-amber-400 text-sm mb-3 animate-pulse">
+                <p className="text-amber-400 text-xl mb-3 animate-pulse">
                   {congratsError}
                 </p>
               )}
@@ -1606,7 +1742,7 @@ const handleQuiz2Submit = () => {
                 />
               </div>
               {inputError && (
-                <p className="text-amber-400 text-sm mb-3 animate-pulse">
+                <p className="text-amber-400 text-xl mb-3 animate-pulse">
                   {inputError}
                 </p>
               )}

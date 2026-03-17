@@ -49,81 +49,81 @@ export default function SpinWheel({ onLetsPlay }: SpinWheelProps) {
     setRotation(0);
   }, [spinning]);
 
-  // const handleSpin = useCallback(() => {
-  //   if (spinning) return;
-  //     playSound(spinWheelSOund);
-  //   setShowResult(false);
-  //   setSelectedNumber(null);
-  //   setSpinning(true);
-
-  //   // Random spins: 5-10 full rotations + random offset
-  //   const extraSpins = (Math.floor(Math.random() * 5) + 5) * 360;
-  //   const randomAngle = Math.random() * 360;
-  //   const totalRotation = rotation + extraSpins + randomAngle;
-
-  //   setRotation(totalRotation);
-
-  //   // Calculate which segment the arrow points to after spin
-  //   setTimeout(() => {
-  //     // Arrow is at top (0°). The wheel rotates clockwise.
-  //     // Final angle mod 360 tells us where the wheel stopped
-  //     const finalAngle = totalRotation % 360;
-  //     // The arrow points to the segment at (360 - finalAngle) degrees
-  //     const arrowAngle = (360 - finalAngle + 360) % 360;
-  //     const segmentIndex = Math.floor(arrowAngle / segmentAngle) % SEGMENT_COUNT;
-      
-  //     setSelectedNumber(numbers[segmentIndex]);
-  //     setShowResult(true);
-  //     setSpinning(false);
-  //   }, 4500);
-  // }, [spinning, rotation, numbers, segmentAngle]);
-
   const handleSpin = useCallback(() => {
     if (spinning) return;
-    playSound(spinWheelSOund);
+      playSound(spinWheelSOund);
     setShowResult(false);
     setSelectedNumber(null);
     setSpinning(true);
 
-    // ── Force land on a perfect square (49, 36, or 81) ──────────────────────
-    const targetNumbers = [49, 36, 81];
-    const target =
-      targetNumbers[Math.floor(Math.random() * targetNumbers.length)];
-
-    // Put target at a known index in the numbers array (index 0)
-    const newNumbers = [...numbers];
-    const existingIndex = newNumbers.indexOf(target);
-    if (existingIndex !== -1) {
-      // Swap target to index 0
-      [newNumbers[0], newNumbers[existingIndex]] = [
-        newNumbers[existingIndex],
-        newNumbers[0],
-      ];
-    } else {
-      // Replace index 0 with target
-      newNumbers[0] = target;
-    }
-    setNumbers(newNumbers);
-
-    // Target is now at index 0. Arrow is at top (0°).
-    // Segment 0 starts at -90° (top). Mid of segment 0 = (0 + 0.5) * segmentAngle - 90
-    // We want arrow to point at mid of segment 0 after spin.
-    // arrowAngle = 0 means segment index 0 → finalAngle = (360 - 0) % 360 = 0
-    // So totalRotation % 360 must = 0 → totalRotation must be multiple of 360
-    const extraSpins = (Math.floor(Math.random() * 5) + 5) * 360; // 5-10 full rotations
-    // Add small offset to land at center of segment 0
-    const segmentMidOffset = segmentAngle * 0.5;
-    const totalRotation =
-      Math.ceil((rotation + extraSpins) / 360) * 360 - segmentMidOffset;
+    // Random spins: 5-10 full rotations + random offset
+    const extraSpins = (Math.floor(Math.random() * 5) + 5) * 360;
+    const randomAngle = Math.random() * 360;
+    const totalRotation = rotation + extraSpins + randomAngle;
 
     setRotation(totalRotation);
 
+    // Calculate which segment the arrow points to after spin
     setTimeout(() => {
-      setSelectedNumber(target);
+      // Arrow is at top (0°). The wheel rotates clockwise.
+      // Final angle mod 360 tells us where the wheel stopped
+      const finalAngle = totalRotation % 360;
+      // The arrow points to the segment at (360 - finalAngle) degrees
+      const arrowAngle = (360 - finalAngle + 360) % 360;
+      const segmentIndex = Math.floor(arrowAngle / segmentAngle) % SEGMENT_COUNT;
+      
+      setSelectedNumber(numbers[segmentIndex]);
       setShowResult(true);
       setSpinning(false);
     }, 4500);
   }, [spinning, rotation, numbers, segmentAngle]);
+
+  // const handleSpin = useCallback(() => {
+  //   if (spinning) return;
+  //   playSound(spinWheelSOund);
+  //   setShowResult(false);
+  //   setSelectedNumber(null);
+  //   setSpinning(true);
+
+  //   // ── Force land on a perfect square (49, 36, or 81) ──────────────────────
+  //   const targetNumbers = [49, 36, 81];
+  //   const target =
+  //     targetNumbers[Math.floor(Math.random() * targetNumbers.length)];
+
+  //   // Put target at a known index in the numbers array (index 0)
+  //   const newNumbers = [...numbers];
+  //   const existingIndex = newNumbers.indexOf(target);
+  //   if (existingIndex !== -1) {
+  //     // Swap target to index 0
+  //     [newNumbers[0], newNumbers[existingIndex]] = [
+  //       newNumbers[existingIndex],
+  //       newNumbers[0],
+  //     ];
+  //   } else {
+  //     // Replace index 0 with target
+  //     newNumbers[0] = target;
+  //   }
+  //   setNumbers(newNumbers);
+
+  //   // Target is now at index 0. Arrow is at top (0°).
+  //   // Segment 0 starts at -90° (top). Mid of segment 0 = (0 + 0.5) * segmentAngle - 90
+  //   // We want arrow to point at mid of segment 0 after spin.
+  //   // arrowAngle = 0 means segment index 0 → finalAngle = (360 - 0) % 360 = 0
+  //   // So totalRotation % 360 must = 0 → totalRotation must be multiple of 360
+  //   const extraSpins = (Math.floor(Math.random() * 5) + 5) * 360; // 5-10 full rotations
+  //   // Add small offset to land at center of segment 0
+  //   const segmentMidOffset = segmentAngle * 0.5;
+  //   const totalRotation =
+  //     Math.ceil((rotation + extraSpins) / 360) * 360 - segmentMidOffset;
+
+  //   setRotation(totalRotation);
+
+  //   setTimeout(() => {
+  //     setSelectedNumber(target);
+  //     setShowResult(true);
+  //     setSpinning(false);
+  //   }, 4500);
+  // }, [spinning, rotation, numbers, segmentAngle]);
   
   const size = 530;
   const center = size / 2;
