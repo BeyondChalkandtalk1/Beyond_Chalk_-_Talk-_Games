@@ -319,7 +319,7 @@ export default function MathBolaGame({ age, ticketIndex, onComplete, onHome }: P
 
   // ─── MAIN GAME UI ───
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/10">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 bg-card/80 backdrop-blur border-b border-border">
         <div className="flex items-center gap-3">
