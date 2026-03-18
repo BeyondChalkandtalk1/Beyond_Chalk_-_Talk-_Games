@@ -66,7 +66,7 @@ const GAMES = [
       ],
     },
     levels: 1,
-    age: "7+",
+    age: "7-9+",
     path: "/games/mathbola",
     color: "primary" as const,
   },

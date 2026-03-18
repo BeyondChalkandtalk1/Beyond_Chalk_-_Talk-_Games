@@ -418,7 +418,7 @@ const GameCard = ({
 
         {/* Play Button */}
         <div
-          className="mt-5 flex items-center justify-center gap-2 
+          className="mt-auto pt-5 flex items-center justify-center gap-2 
           bg-green-400 text-white py-2 rounded-2xl font-bold shadow-md text-xl
           group-hover:scale-105 transition-all duration-300"
         >
