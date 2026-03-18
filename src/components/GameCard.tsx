@@ -303,7 +303,7 @@ const GameCard = ({
   return (
     <Link
       to={path}
-      className="group block"
+      className="group block h-full"
       style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
     >
       {/* <div
