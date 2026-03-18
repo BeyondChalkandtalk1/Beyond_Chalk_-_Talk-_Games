@@ -31,13 +31,7 @@ export default function PrimePatrol() {
     case 'wheel':
       return <SpinWheel onLetsPlay={handleLetsPlay} />;
     case 'level1':
-      return (
-        <PrimeLevel1
-          luckyNumber={luckyNumber!}
-          onComplete={handleLevel1Complete}
-          onSpinAgain={handlePlayAgain}
-        />
-      );
+      return <PrimeLevel1 luckyNumber={luckyNumber!} onComplete={handleLevel1Complete} />;
     case 'level2':
       return <PrimeLevel2 luckyNumber={luckyNumber!} onComplete={handleLevel2Complete} />;
     case 'complete':

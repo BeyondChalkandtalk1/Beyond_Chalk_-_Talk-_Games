@@ -345,7 +345,7 @@ const GameCard = ({
         </h3>
 
         {/* Description */}
-        <p className="text-2xl text-secondary mb-4 leading-relaxed">
+        <p className="text-xl text-secondary mb-4 leading-relaxed">
           {description}
         </p>
 

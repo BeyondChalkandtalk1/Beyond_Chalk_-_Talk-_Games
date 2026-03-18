@@ -6,7 +6,6 @@ import { useSound } from "@/contexts/SoundContext";
 import { useEffect } from "react";
 import homePageSound from "../assets/cartoon-music-sound.mpeg";
 
-
 const GAMES = [
   {
     title: "Paw Patch Calendar Quest 📅",
@@ -24,29 +23,51 @@ const GAMES = [
         "Develop logical thinking and sequencing skills through a problem-solving task.",
       ],
     },
-    levels: 2,
+    levels:2,
     age: "7+",
     path: "/games/calendar",
     color: "primary" as const,
   },
   {
     title: "Prime Patrol and Combo Detectives",
-    description: "Investigate numbers, discover their secrets! 🏆",
+    description: "Paw made the mess, smart minds patch the calendar.  🏆",
     emoji: "🐾",
     about_game:
-      "The aim of this game is to help children understand the difference between prime numbers and composite numbers through visual and hands-on exploration using arrays on a grid. Children arrange a given number of icons on the grid to form rows and columns. If the icons can be organised into different rectangular arrays, the number is identified as a composite number. If no such rectangular arrangement can be formed (other than the trivial arrangement), the number is identified as a prime number. In the advanced level, children further explore factors of composite numbers through different array formations and identify perfect square numbers by recognising square arrays, without relying on rote memorisation of divisibility rules.",
+      "To help children understand the structure and order of a calendar by arranging mixed calendar pages and solving simple logic-based questions related to days, weeks, and months.",
     learning_object: {
       heading: "After playing the game, learners will be able to:",
       points: [
-        "Distinguish between prime and composite numbers through array formation on a grid.",
-        "Identify factors and factor pairs of numbers through different rectangular arrangements.",
-        "Recognise perfect square numbers by observing square arrays (equal rows and columns).",
-        "Develop reasoning and conceptual understanding of number relationships without relying on rote memorisation of divisibility rules.",
+        "Sequence the months of the year correctly.",
+        "Interpret basic calendar information (days, dates, weeks, months).",
+        "Use reasoning to answer calendar-based questions (before–after days, order of months, simple event timing).",
+        "Apply calendar knowledge to everyday contexts such as holidays, routines, and festivals.",
+        "Develop logical thinking and sequencing skills through a problem-solving task.",
+      ],
+    },
+    levels:2,
+    age: "9+",
+    path: "/games/prime",
+    color: "primary" as const,
+  },
+  {
+    title: "Math Bola 🎯",
+    description: "A Tambola-style math game — solve clues and mark your ticket! 🎫",
+    emoji: "🎲",
+    about_game:
+      "A fun Tambola (Housie) inspired math game where players solve mental math clues announced every 20 seconds and mark matching answers on their ticket to win.",
+    learning_object: {
+      heading: "After playing the game, learners will be able to:",
+      points: [
+        "Perform quick mental arithmetic (addition, subtraction, multiplication, division).",
+        "Improve speed and accuracy in solving math problems.",
+        "Develop listening and attention skills through timed announcements.",
+        "Apply number recognition and matching strategies.",
+        "Build confidence in solving age-appropriate math problems.",
       ],
     },
     levels: 1,
-    age: "9+",
-    path: "/games/prime",
+    age: "7+",
+    path: "/games/mathbola",
     color: "primary" as const,
   },
 ];

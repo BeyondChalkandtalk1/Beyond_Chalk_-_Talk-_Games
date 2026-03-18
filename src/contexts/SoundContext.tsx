@@ -1,3 +1,43 @@
+// import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+
+// interface SoundContextType {
+//   isSoundEnabled: boolean;
+//   toggleSound: () => void;
+//   playSound: (src: string) => void;
+// }
+
+// const SoundContext = createContext<SoundContextType | null>(null);
+
+// export const SoundProvider = ({ children }: { children: ReactNode }) => {
+//   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+
+//   const toggleSound = useCallback(() => {
+//     setIsSoundEnabled((prev) => !prev);
+//   }, []);
+
+//   const playSound = useCallback(
+//     (src: string) => {
+//       if (!isSoundEnabled) return;
+//       const audio = new Audio(src);
+//       audio.currentTime = 0;
+//       audio.play().catch(() => {});
+//     },
+//     [isSoundEnabled]
+//   );
+
+//   return (
+//     <SoundContext.Provider value={{ isSoundEnabled, toggleSound, playSound }}>
+//       {children}
+//     </SoundContext.Provider>
+//   );
+// };
+
+// export const useSound = () => {
+//   const ctx = useContext(SoundContext);
+//   if (!ctx) throw new Error("useSound must be used within SoundProvider");
+//   return ctx;
+// };
+
 import {
   createContext,
   useContext,
@@ -55,83 +95,71 @@ export const SoundProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [isSoundEnabled]);
 
-  const toggleSound = useCallback(() => {
-    setIsSoundEnabled((prev) => {
-      const newValue = !prev;
-      if (!newValue) {
-        // Sound OFF
-        if (loopingAudioRef.current) {
-          loopingAudioRef.current.pause();
-          loopingAudioRef.current.currentTime = 0;
-        }
-      } else {
-        // ✅ Sound ON
-        if (loopingAudioRef.current) {
-          // Ref exist karta hai — resume karo
-          loopingAudioRef.current.play().catch(() => {});
-        } else if (pendingSrcRef.current && userInteractedRef.current) {
-          // ✅ Ref null hai but pending src hai (Index page mounted) — naya audio banao
-          const audio = new Audio(pendingSrcRef.current);
-          audio.loop = true;
-          audio.volume = 0.5;
-          loopingAudioRef.current = audio;
-          audio.play().catch(() => {});
-        }
-        // ✅ pendingSrcRef null hai (koi aur page) — kuch nahi chalega
-      }
-      return newValue;
-    });
-  }, []);
-
-  // const playSound = useCallback(
-  //   (src: string) => {
-  //     if (!isSoundEnabled) return;
-  //     const audio = new Audio(src);
-  //     audio.currentTime = 0;
-  //     audio.play().catch(() => {});
-  //   },
-  //   [isSoundEnabled],
-  // );
-
-  const isSoundEnabledRef = useRef(isSoundEnabled);
-  useEffect(() => {
-    isSoundEnabledRef.current = isSoundEnabled;
-  }, [isSoundEnabled]);
-
-  const playSound = useCallback((src: string) => {
-    if (!isSoundEnabledRef.current) return;
-    const audio = new Audio(src);
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
-  }, []);
-
-  const playLoopingSound = useCallback(
-    (src: string) => {
-      // ✅ Pehle se chal raha ho to band karo
+const toggleSound = useCallback(() => {
+  setIsSoundEnabled((prev) => {
+    const newValue = !prev;
+    if (!newValue) {
+      // Sound OFF
       if (loopingAudioRef.current) {
         loopingAudioRef.current.pause();
         loopingAudioRef.current.currentTime = 0;
-        loopingAudioRef.current = null;
       }
+    } else {
+      // ✅ Sound ON
+      if (loopingAudioRef.current) {
+        // Ref exist karta hai — resume karo
+        loopingAudioRef.current.play().catch(() => {});
+      } else if (pendingSrcRef.current && userInteractedRef.current) {
+        // ✅ Ref null hai but pending src hai (Index page mounted) — naya audio banao
+        const audio = new Audio(pendingSrcRef.current);
+        audio.loop = true;
+        audio.volume = 0.5;
+        loopingAudioRef.current = audio;
+        audio.play().catch(() => {});
+      }
+      // ✅ pendingSrcRef null hai (koi aur page) — kuch nahi chalega
+    }
+    return newValue;
+  });
+}, []);
 
-      // ✅ Src hamesha pending mein store karo (sound off ho tab bhi)
-      pendingSrcRef.current = src;
-
-      // Sound off hai to bas src store karke return karo
+  const playSound = useCallback(
+    (src: string) => {
       if (!isSoundEnabled) return;
-
-      // User ne interact nahi kiya to bhi sirf src store karke return
-      if (!userInteractedRef.current) return;
-
-      // ✅ Dono conditions sahi hain — play karo
       const audio = new Audio(src);
-      audio.loop = true;
-      audio.volume = 0.5;
-      loopingAudioRef.current = audio;
+      audio.currentTime = 0;
       audio.play().catch(() => {});
     },
     [isSoundEnabled],
   );
+
+const playLoopingSound = useCallback(
+  (src: string) => {
+    // ✅ Pehle se chal raha ho to band karo
+    if (loopingAudioRef.current) {
+      loopingAudioRef.current.pause();
+      loopingAudioRef.current.currentTime = 0;
+      loopingAudioRef.current = null;
+    }
+
+    // ✅ Src hamesha pending mein store karo (sound off ho tab bhi)
+    pendingSrcRef.current = src;
+
+    // Sound off hai to bas src store karke return karo
+    if (!isSoundEnabled) return;
+
+    // User ne interact nahi kiya to bhi sirf src store karke return
+    if (!userInteractedRef.current) return;
+
+    // ✅ Dono conditions sahi hain — play karo
+    const audio = new Audio(src);
+    audio.loop = true;
+    audio.volume = 0.5;
+    loopingAudioRef.current = audio;
+    audio.play().catch(() => {});
+  },
+  [isSoundEnabled],
+);
 
   const stopLoopingSound = useCallback(() => {
     if (loopingAudioRef.current) {
@@ -141,14 +169,14 @@ export const SoundProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // ✅ New — ref bhi null karo taaki dusre page pe sound na chale
-  const clearLoopingSound = useCallback(() => {
-    if (loopingAudioRef.current) {
-      loopingAudioRef.current.pause();
-      loopingAudioRef.current.currentTime = 0;
-      loopingAudioRef.current = null;
-    }
-    pendingSrcRef.current = null; // ✅ src bhi clear karo
-  }, []);
+const clearLoopingSound = useCallback(() => {
+  if (loopingAudioRef.current) {
+    loopingAudioRef.current.pause();
+    loopingAudioRef.current.currentTime = 0;
+    loopingAudioRef.current = null;
+  }
+  pendingSrcRef.current = null; // ✅ src bhi clear karo
+}, []);
 
   return (
     <SoundContext.Provider
