@@ -75,20 +75,17 @@ export default function MathBolaGame({ age, ticketIndex, onComplete, onHome }: P
     }
   }, [timer, phase, allMarked]);
 
-  // Add current clue to history when it starts
+  // Add PREVIOUS clue to history when moving to next clue (not the current one)
+  const prevClueRef = useRef<MathClue | null>(null);
   useEffect(() => {
     if (phase === 'playing' && currentClue) {
-      setAnnouncementHistory(prev => {
-        if (prev.find(c => c.id === currentClue.id)) return prev;
-        return [...prev, currentClue];
-      });
+      // Add the previous clue to history (if any)
+      if (prevClueRef.current && !announcementHistory.find(c => c.id === prevClueRef.current!.id)) {
+        setAnnouncementHistory(prev => [prevClueRef.current!, ...prev]);
+      }
+      prevClueRef.current = currentClue;
     }
-  }, [currentClueIndex, phase, currentClue]);
-
-  // Auto-scroll history
-  useEffect(() => {
-    historyEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [announcementHistory]);
+  }, [currentClueIndex, phase]);
 
   // Total elapsed timer
   useEffect(() => {
@@ -154,6 +151,10 @@ export default function MathBolaGame({ age, ticketIndex, onComplete, onHome }: P
       const newMarked = new Set(markedCells).add(key);
       if (newMarked.size >= totalNumbers) {
         if (timerRef.current) clearInterval(timerRef.current);
+        // Add current clue to history before completing
+        if (currentClue && !announcementHistory.find(c => c.id === currentClue.id)) {
+          setAnnouncementHistory(prev => [currentClue, ...prev]);
+        }
         setTimeout(() => setPhase('complete'), 500);
         return;
       }
