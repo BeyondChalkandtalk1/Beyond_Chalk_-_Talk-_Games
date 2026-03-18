@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import PrimePatrol from "./pages/PrimePatrol";
+import MathBola from "./pages/MathBola";
 
 const queryClient = new QueryClient();
 
