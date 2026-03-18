@@ -27,6 +27,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/games/calendar" element={<CalendarGame />} />
               <Route path="/games/prime" element={<PrimePatrol />} />
+              <Route path="/games/mathbola" element={<MathBola />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

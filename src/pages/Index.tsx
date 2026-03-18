@@ -49,6 +49,27 @@ const GAMES = [
     path: "/games/prime",
     color: "primary" as const,
   },
+  {
+    title: "Math Bola 🎯",
+    description: "A Tambola-style math game — solve clues and mark your ticket! 🎫",
+    emoji: "🎲",
+    about_game:
+      "A fun Tambola (Housie) inspired math game where players solve mental math clues announced every 20 seconds and mark matching answers on their ticket to win.",
+    learning_object: {
+      heading: "After playing the game, learners will be able to:",
+      points: [
+        "Perform quick mental arithmetic (addition, subtraction, multiplication, division).",
+        "Improve speed and accuracy in solving math problems.",
+        "Develop listening and attention skills through timed announcements.",
+        "Apply number recognition and matching strategies.",
+        "Build confidence in solving age-appropriate math problems.",
+      ],
+    },
+    levels: 1,
+    age: "7+",
+    path: "/games/mathbola",
+    color: "primary" as const,
+  },
 ];
 
 const Index = () => {
