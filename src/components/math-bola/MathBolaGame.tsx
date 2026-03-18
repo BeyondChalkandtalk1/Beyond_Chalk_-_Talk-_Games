@@ -151,6 +151,10 @@ export default function MathBolaGame({ age, ticketIndex, onComplete, onHome }: P
       const newMarked = new Set(markedCells).add(key);
       if (newMarked.size >= totalNumbers) {
         if (timerRef.current) clearInterval(timerRef.current);
+        // Add current clue to history before completing
+        if (currentClue && !announcementHistory.find(c => c.id === currentClue.id)) {
+          setAnnouncementHistory(prev => [currentClue, ...prev]);
+        }
         setTimeout(() => setPhase('complete'), 500);
         return;
       }
