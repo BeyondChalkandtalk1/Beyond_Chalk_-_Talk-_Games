@@ -11,11 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import PrimePatrol from "./pages/PrimePatrol";
-<<<<<<< Updated upstream
-import MathBola from "./pages/MathBola";
-=======
 import MathBola from "./pages/Mathbola";
->>>>>>> Stashed changes
 
 const queryClient = new QueryClient();
 

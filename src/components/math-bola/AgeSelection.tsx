@@ -1,25 +1,12 @@
-<<<<<<< Updated upstream
-import { motion } from 'framer-motion';
-import { AgeGroup } from '@/data/mathBolaData';
-import { useSound } from '@/contexts/SoundContext';
-import tapSound from '@/assets/tapToOpenSound.mpeg';
-=======
 import { motion } from "framer-motion";
 import { AgeGroup } from "@/data/mathboladata";
 import { useSound } from "@/contexts/SoundContext";
 import tapSound from "@/assets/tapToOpenSound.mpeg";
->>>>>>> Stashed changes
 
 interface Props {
   onSelect: (age: AgeGroup) => void;
 }
 
-<<<<<<< Updated upstream
-const ageOptions: { value: AgeGroup; label: string; emoji: string; desc: string }[] = [
-  { value: '7', label: '7 Years', emoji: '🧒', desc: 'Addition & Subtraction' },
-  { value: '8', label: '8 Years', emoji: '👦', desc: 'Multiplication & Division' },
-  { value: '9+', label: '9+ Years', emoji: '🧑', desc: 'Mixed Operations' },
-=======
 const ageOptions: {
   value: AgeGroup;
   label: string;
@@ -39,7 +26,6 @@ const ageOptions: {
     desc: "Multiplication & Division",
   },
   { value: "9+", label: "8-9 Years", emoji: "🧑", desc: "Mixed Operations" },
->>>>>>> Stashed changes
 ];
 
 export default function AgeSelection({ onSelect }: Props) {
@@ -50,16 +36,6 @@ export default function AgeSelection({ onSelect }: Props) {
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-<<<<<<< Updated upstream
-        transition={{ type: 'spring', damping: 15 }}
-        className="text-center space-y-8 max-w-lg w-full"
-      >
-        <div className="text-5xl">🎯</div>
-        <h1 className="text-3xl md:text-4xl font-bold text-secondary" style={{ fontFamily: 'var(--font-display)' }}>
-          Math Bola
-        </h1>
-        <p className="text-lg text-muted-foreground" style={{ fontFamily: 'var(--font-body)' }}>
-=======
         transition={{ type: "spring", damping: 15 }}
         className="text-center space-y-8 max-w-lg w-full"
       >
@@ -74,7 +50,6 @@ export default function AgeSelection({ onSelect }: Props) {
           className="text-lg text-muted-foreground"
           style={{ fontFamily: "var(--font-body)" }}
         >
->>>>>>> Stashed changes
           Select your age group to start playing!
         </p>
 
@@ -92,14 +67,10 @@ export default function AgeSelection({ onSelect }: Props) {
               className="bg-card border-2 border-primary/20 rounded-2xl p-6 space-y-3 hover:border-primary hover:shadow-lg transition-all hover:scale-105"
             >
               <div className="text-4xl">{opt.emoji}</div>
-<<<<<<< Updated upstream
-              <div className="text-xl font-bold text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
-=======
               <div
                 className="text-xl font-bold text-foreground"
                 style={{ fontFamily: "var(--font-display)" }}
               >
->>>>>>> Stashed changes
                 {opt.label}
               </div>
               <div className="text-sm text-muted-foreground">{opt.desc}</div>
