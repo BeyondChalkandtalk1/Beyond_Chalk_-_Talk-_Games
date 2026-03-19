@@ -27,7 +27,7 @@ export default function TicketSelection({ age, onSelect }: Props) {
         </p>
 
         {/* 2 rows × 3 cols of face-down tickets */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+        <div className="grid grid-cols-3 gap-4 w-full">
           {Array.from({ length: 6 }).map((_, i) => (
             <motion.button
               key={i}
