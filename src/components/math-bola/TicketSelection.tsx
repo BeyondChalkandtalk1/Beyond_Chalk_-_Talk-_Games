@@ -64,8 +64,7 @@ export default function TicketSelection({ age, onSelect }: Props) {
                 <div className="absolute left-6 top-0 bottom-0 border-l-2 border-dashed border-white/20 pointer-events-none" />
               </motion.button>
             );
-          }
-          ))}
+          )}
         </div>
       </motion.div>
     </div>
