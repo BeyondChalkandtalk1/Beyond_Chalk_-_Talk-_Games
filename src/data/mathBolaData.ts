@@ -155,10 +155,22 @@ export function generateCluesForTicket(ticket: (number | null)[][], age: AgeGrou
 
 // How to play instructions for Math Bola
 export const mathBolaInstructions = [
+<<<<<<< Updated upstream
   { emoji: '🎫', text: 'Choose your Math Bola ticket from the 6 available cards.' },
   { emoji: '📢', text: 'A math clue will be announced every 20 seconds.' },
   { emoji: '🧮', text: 'Solve the math clue mentally to find the answer.' },
   { emoji: '✅', text: 'If the answer is on your ticket, click it to mark it!' },
   { emoji: '❌', text: 'Wrong click? You get 10 seconds to try again.' },
   { emoji: '🏆', text: 'Mark all numbers on your ticket to win!' },
+=======
+  { emoji: '🎫', text: '•	You have chosen your MathBola card — let’s begin!' },
+  { emoji: '📢', text: '•	Get ready! A clue will be read aloud and shown on the screen.' },
+  { emoji: '🧮', text: '•	Think fast — you have 20 seconds for each clue.' },
+  { emoji: '✅', text: '•	Solve it and search for the matching number on your card.' },
+  { emoji: '❌', text: '•	Found it? Cross it out quickly!' },
+  { emoji: '🏆', text: '•	Not there? Stay sharp for the next clue.' },
+  { emoji: '🏆', text: '•	There are 15 clues in this round — keep going!' },
+  { emoji: '🏆', text: '•	Race to cross out any 5 numbers on your card.' },
+  { emoji: '🏆', text: '•	Be the fastest to complete your Early 5 and win!' },
+>>>>>>> Stashed changes
 ];

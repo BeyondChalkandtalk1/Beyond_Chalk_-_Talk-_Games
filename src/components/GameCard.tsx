@@ -251,9 +251,7 @@
 
 // export default GameCard;
 
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { CalendarDays, Play } from "lucide-react";
+
 
 // const iconMap = {
 //   primary: <CalendarDays className="w-8 h-8 text-white" />,
@@ -273,14 +271,18 @@ import { CalendarDays, Play } from "lucide-react";
 //   ),
 // };
 
+
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { CalendarDays, Play } from "lucide-react";
 const iconMap = {
-  primary: (
+  primary: (levels) => (
     <div className="relative w-20 h-20 bg-white rounded-xl flex flex-col items-center justify-center shadow-lg border-2 border-yellow-300">
       <div className="w-full bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 text-white text-[17px] font-bold rounded-t-xl text-center">
         Number of levels
       </div>
       <div className="text-2xl font-extrabold text-secondary leading-none">
-        2
+        {levels}
       </div>
       {/* <span className="absolute -top-1 -right-1 text-xs">🌈</span> */}
     </div>
@@ -334,7 +336,12 @@ const GameCard = ({
           className="w-24 h-24 rounded-3xl bg-gradient-to-tr from-yellow-300 via-orange-300 to-pink-300
           flex items-center justify-center mb-4 shadow-lg group-hover:animate-bounce"
         >
-          {iconMap[color] || (
+          {/* {iconMap[color] || (
+            <span className="text-3xl text-white">{emoji}</span>
+          )} */}
+          {iconMap[color] ? (
+            iconMap[color](levels)
+          ) : (
             <span className="text-3xl text-white">{emoji}</span>
           )}
         </div>
