@@ -27,7 +27,7 @@ export default function TicketSelection({ age, onSelect }: Props) {
         </p>
 
         {/* 2 rows × 3 cols of face-down tickets */}
-        <div className="grid grid-cols-3 gap-4 max-w-xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
           {Array.from({ length: 6 }).map((_, i) => (
             <motion.button
               key={i}
@@ -38,18 +38,22 @@ export default function TicketSelection({ age, onSelect }: Props) {
                 playSound(tapSound);
                 onSelect(i);
               }}
-              className="relative aspect-[3/4] rounded-2xl border-2 border-primary/30 overflow-hidden
+              className="relative aspect-[9/4] rounded-2xl border-2 border-primary/30 overflow-hidden
                 bg-gradient-to-br from-primary/80 to-secondary/80 hover:from-primary hover:to-secondary
                 shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer group"
             >
-              {/* Card back design */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-primary-foreground">
-                <div className="text-3xl mb-2 group-hover:animate-bounce">🎲</div>
-                <div className="text-xs font-bold uppercase tracking-widest opacity-80">Math Bola</div>
-                <div className="text-lg font-bold mt-1">Clue #{i + 1}</div>
+              {/* Ticket back design */}
+              <div className="absolute inset-0 flex items-center justify-center gap-3 text-primary-foreground">
+                <div className="text-2xl group-hover:animate-bounce">🎲</div>
+                <div className="flex flex-col items-start">
+                  <div className="text-xs font-bold uppercase tracking-widest opacity-80">Math Bola</div>
+                  <div className="text-lg font-bold">Ticket #{i + 1}</div>
+                </div>
               </div>
-              {/* Decorative pattern */}
+              {/* Decorative border */}
               <div className="absolute inset-2 border-2 border-primary-foreground/20 rounded-xl pointer-events-none" />
+              {/* Dashed line like a ticket stub */}
+              <div className="absolute left-6 top-0 bottom-0 border-l-2 border-dashed border-primary-foreground/20 pointer-events-none" />
             </motion.button>
           ))}
         </div>
