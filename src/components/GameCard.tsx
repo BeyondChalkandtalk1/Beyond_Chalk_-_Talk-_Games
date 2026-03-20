@@ -305,7 +305,7 @@ const GameCard = ({
   return (
     <Link
       to={path}
-      className="group block h-full"
+      className="group block"
       style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
     >
       {/* <div
@@ -315,7 +315,7 @@ const GameCard = ({
       <div
         className="relative rounded-3xl p-6 pb-5 transition-all duration-300 hover:scale-105 
         bg-gradient-to-br from-yellow-100 via-pink-100 to-blue-100 
-        border-4 border-white shadow-xl hover:shadow-2xl overflow-hidden h-full flex flex-col"
+        border-4 border-white shadow-xl hover:shadow-2xl overflow-hidden"
       >
         {/* Decorative Background Blobs */}
         <div className="absolute -top-6 -left-6 w-24 h-24 bg-pink-300 rounded-full blur-3xl opacity-30"></div>
@@ -352,7 +352,7 @@ const GameCard = ({
         </h3>
 
         {/* Description */}
-        <p className="text-xl text-secondary mb-4 leading-relaxed">
+        <p className="text-2xl text-secondary mb-4 leading-relaxed">
           {description}
         </p>
 
@@ -425,7 +425,7 @@ const GameCard = ({
 
         {/* Play Button */}
         <div
-          className="mt-auto pt-5 flex items-center justify-center gap-2 
+          className="mt-5 flex items-center justify-center gap-2 
           bg-green-400 text-white py-2 rounded-2xl font-bold shadow-md text-xl
           group-hover:scale-105 transition-all duration-300"
         >

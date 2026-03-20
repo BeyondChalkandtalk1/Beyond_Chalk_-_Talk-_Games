@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/contexts/SoundContext";
@@ -8,27 +7,29 @@ import {
   generateTickets,
   generateCluesForTicket,
   mathBolaInstructions,
-} from "@/data/mathboladata";
+} from "@/data/mathBolaData";
 import correctSound from "@/assets/correctDargSound.mpeg";
 import incorrectSound from "@/assets/inCorrectDragSound.mpeg";
 import timerSound from "@/assets/TimerSound.mpeg";
 import howtoplaySound from "@/assets/howToPlaySound.mpeg";
 import tapSound from "@/assets/tapToOpenSound.mpeg";
+import game3Complete from "@/assets/game3Complete.mp4";
+import tambulaCardSelection1 from "@/assets/mainGameVideo.mp4";
 
 interface Props {
   age: AgeGroup;
   ticketIndex: number;
+  ticketColor: string;
   onComplete: () => void;
   onHome: () => void;
 }
 
-type Phase = 'howtoplay' | 'timerStart' | 'playing' | 'tryAgain' | 'complete';
-
-
+type Phase = "howtoplay" | "timerStart" | "playing" | "tryAgain" | "complete";
 
 export default function MathBolaGame({
   age,
   ticketIndex,
+  ticketColor,
   onComplete,
   onHome,
 }: Props) {
@@ -42,32 +43,31 @@ export default function MathBolaGame({
     return { ticket, clues };
   });
 
-  const [phase, setPhase] = useState<Phase>('howtoplay');
-
-  // const [phase, setPhase] = useState<Phase>("howtoplay");
+  const [phase, setPhase] = useState<Phase>("howtoplay");
   const [currentClueIndex, setCurrentClueIndex] = useState(0);
   const [markedCells, setMarkedCells] = useState<Set<string>>(new Set());
   const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(20);
   const [totalTime, setTotalTime] = useState(0);
-
-
   const [announcementHistory, setAnnouncementHistory] = useState<MathClue[]>(
     [],
   );
   const [tryAgainTimer, setTryAgainTimer] = useState(0);
+  const [showTryAgainModal, setShowTryAgainModal] = useState(false);
+  const [isTryAgainCountdown, setIsTryAgainCountdown] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [showEarly5, setShowEarly5] = useState(false);
+  const [early5Shown, setEarly5Shown] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const totalTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tryAgainRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const early5TimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const historyEndRef = useRef<HTMLDivElement>(null);
 
   const { ticket, clues } = gameData;
 
-
-
+  // Count total numbers on ticket
   const totalNumbers = ticket.flat().filter((c) => c !== null).length;
-
   const currentClue = clues[currentClueIndex] || null;
 
   // Check if all cells marked
@@ -78,7 +78,6 @@ export default function MathBolaGame({
     setTimer(20);
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
-
       setTimer((prev) => {
         if (prev <= 1) {
           // Move to next announcement
@@ -92,7 +91,6 @@ export default function MathBolaGame({
 
   // When timer hits 0, move to next clue
   useEffect(() => {
-
     if (phase !== "playing") return;
     if (timer === 0 && !allMarked) {
       moveToNextClue();
@@ -102,31 +100,18 @@ export default function MathBolaGame({
   // Add PREVIOUS clue to history when moving to next clue (not the current one)
   const prevClueRef = useRef<MathClue | null>(null);
   useEffect(() => {
-    if (phase === 'playing' && currentClue) {
-      // Add the previous clue to history (if any)
-      if (prevClueRef.current && !announcementHistory.find(c => c.id === prevClueRef.current!.id)) {
-        setAnnouncementHistory(prev => [prevClueRef.current!, ...prev]);
+    if (phase === "playing" && currentClue) {
+      // Add the previous clue to history (if any) — never the current one
+      if (
+        prevClueRef.current &&
+        prevClueRef.current.id !== currentClue.id &&
+        !announcementHistory.find((c) => c.id === prevClueRef.current!.id)
+      ) {
+        setAnnouncementHistory((prev) => [prevClueRef.current!, ...prev]);
       }
       prevClueRef.current = currentClue;
     }
   }, [currentClueIndex, phase]);
-
-  // Total elapsed timer
-
-  // Add current clue to history when it starts
-  useEffect(() => {
-    if (phase === "playing" && currentClue) {
-      setAnnouncementHistory((prev) => {
-        if (prev.find((c) => c.id === currentClue.id)) return prev;
-        return [...prev, currentClue];
-      });
-    }
-  }, [currentClueIndex, phase, currentClue]);
-
-  // Auto-scroll history
-  useEffect(() => {
-    historyEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [announcementHistory]);
 
   // Total elapsed timer
   useEffect(() => {
@@ -148,8 +133,20 @@ export default function MathBolaGame({
       if (timerRef.current) clearInterval(timerRef.current);
       if (totalTimerRef.current) clearInterval(totalTimerRef.current);
       if (tryAgainRef.current) clearInterval(tryAgainRef.current);
+      if (early5TimerRef.current) clearTimeout(early5TimerRef.current);
     };
   }, []);
+
+  // Early 5 modal - show when 5 cells are marked
+  useEffect(() => {
+    if (markedCells.size >= 5 && !early5Shown && phase === "playing") {
+      setShowEarly5(true);
+      setEarly5Shown(true);
+      early5TimerRef.current = setTimeout(() => {
+        setShowEarly5(false);
+      }, 5000);
+    }
+  }, [markedCells.size, early5Shown, phase]);
 
   const moveToNextClue = useCallback(() => {
     if (currentClueIndex + 1 < clues.length) {
@@ -177,7 +174,8 @@ export default function MathBolaGame({
   };
 
   const handleCellClick = (row: number, col: number) => {
-    if (phase === "tryAgain" || !currentClue) return;
+    if (!currentClue) return;
+    if (phase !== "playing" && phase !== "tryAgain") return;
 
     const cellValue = ticket[row][col];
     if (cellValue === null) return;
@@ -191,10 +189,25 @@ export default function MathBolaGame({
       setMarkedCells((prev) => new Set(prev).add(key));
       setScore((prev) => prev + 1);
 
+      // If we were in tryAgain, clear the penalty timer and resume
+      if (phase === "tryAgain") {
+        if (tryAgainRef.current) clearInterval(tryAgainRef.current);
+        setIsTryAgainCountdown(false);
+        setTryAgainTimer(0);
+        setPhase("playing");
+      }
+
       // Check if all marked
       const newMarked = new Set(markedCells).add(key);
       if (newMarked.size >= totalNumbers) {
         if (timerRef.current) clearInterval(timerRef.current);
+        // Add current clue to history before completing
+        if (
+          currentClue &&
+          !announcementHistory.find((c) => c.id === currentClue.id)
+        ) {
+          setAnnouncementHistory((prev) => [currentClue, ...prev]);
+        }
         setTimeout(() => setPhase("complete"), 500);
         return;
       }
@@ -205,21 +218,13 @@ export default function MathBolaGame({
     } else {
       // Wrong!
       playSound(incorrectSound);
-      setPhase("tryAgain");
-      setTryAgainTimer(10);
+      setShowTryAgainModal(true);
       if (timerRef.current) clearInterval(timerRef.current);
-
-      tryAgainRef.current = setInterval(() => {
-        setTryAgainTimer((prev) => {
-          if (prev <= 1) {
-            clearInterval(tryAgainRef.current!);
-            setPhase("playing");
-            moveToNextClue();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+      // If already in tryAgain, clear existing penalty timer
+      if (phase === "tryAgain" && tryAgainRef.current) {
+        clearInterval(tryAgainRef.current);
+        setIsTryAgainCountdown(false);
+      }
     }
   };
 
@@ -249,7 +254,7 @@ export default function MathBolaGame({
             ✖
           </button>
           <h2 className="text-3xl font-bold text-center mb-4 text-secondary">
-            📖 How to Play — Math Bola
+            📖 How to Play — MathBola
           </h2>
           <div className="max-h-[500px]  overflow-y-auto pr-2">
             <ul className="space-y-3 text-foreground text-2xl leading-relaxed">
@@ -308,7 +313,7 @@ export default function MathBolaGame({
               playSound(tapSound);
               handleTimerStart();
             }}
-            className="px-8 py-3 bg-primary text-primary-foreground rounded-full text-lg font-bold shadow-lg hover:scale-105 transition-transform"
+            className="px-8 py-3 bg-primary text-primary-foreground rounded-full text-2xl font-bold shadow-lg hover:scale-105 transition-transform"
             style={{ fontFamily: "var(--font-display)" }}
           >
             ▶️ Start Timer
@@ -334,7 +339,7 @@ export default function MathBolaGame({
             className="text-3xl font-bold text-secondary"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Math Bola Complete!
+            MathBola Complete!
           </h2>
           <p className="text-lg text-muted-foreground">
             You marked all {totalNumbers} numbers on your ticket!
@@ -350,6 +355,15 @@ export default function MathBolaGame({
                 🎯 {score}/{totalNumbers}
               </span>
             </div>
+          </div>
+          <div className="flex justify-center">
+            <video
+              src={game3Complete}
+              autoPlay
+              loop
+              muted
+              className="w-full max-w-xl rounded-xl shadow-lg"
+            />
           </div>
           <div className="flex gap-3 justify-center pt-2">
             <button
@@ -372,225 +386,354 @@ export default function MathBolaGame({
 
   // ─── MAIN GAME UI ───
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/10">
-      {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-card/80 backdrop-blur border-b border-border">
-        <div className="flex items-center gap-3">
-          {/* Timer */}
+    <div className="min-h-screen relative overflow-hidden">
+      {/* ✅ Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src={tambulaCardSelection1} type="video/mp4" />
+      </video>
+
+      <div className="absolute inset-0 bg-black/50 z-10" />
+
+      <div className="relative z-20">
+        {/* Top bar */}
+        <div className="flex items-center justify-between px-4 py-3 bg-card/80 backdrop-blur border-b border-border">
+          <div className="flex items-center gap-3">
+            {/* Timer */}
+            <div className="flex items-center gap-2 bg-primary/10 rounded-full px-4 py-2">
+              <span className="text-lg">⏱️</span>
+              <span
+                className="font-bold text-primary text-lg"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                {formatTime(totalTime)}
+              </span>
+            </div>
+            {/* How to play */}
+            <button
+              onClick={() => {
+                playSound(howtoplaySound);
+                setShowHowToPlay(true);
+              }}
+              className="bg-secondary/10 text-secondary rounded-full px-3 py-2 text-sm font-bold hover:bg-secondary/20 transition"
+            >
+              📖 How to Play
+            </button>
+          </div>
+          {/* Score */}
           <div className="flex items-center gap-2 bg-primary/10 rounded-full px-4 py-2">
-            <span className="text-lg">⏱️</span>
+            <span className="text-lg">🎯</span>
             <span
               className="font-bold text-primary text-lg"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              {formatTime(totalTime)}
+              {score}/{totalNumbers}
             </span>
           </div>
-          {/* How to play */}
-          <button
-            onClick={() => {
-              playSound(howtoplaySound);
-              setShowHowToPlay(true);
-            }}
-            className="bg-secondary/10 text-secondary rounded-full px-3 py-2 text-sm font-bold hover:bg-secondary/20 transition"
-          >
-            📖 How to Play
-          </button>
         </div>
-        {/* Score */}
-        <div className="flex items-center gap-2 bg-primary/10 rounded-full px-4 py-2">
-          <span className="text-lg">🎯</span>
-          <span
-            className="font-bold text-primary text-lg"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {score}/{totalNumbers}
-          </span>
-        </div>
-      </div>
 
-      {/* Try Again overlay */}
-      <AnimatePresence>
-        {phase === "tryAgain" && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-16 left-1/2 -translate-x-1/2 z-40 bg-destructive text-destructive-foreground px-6 py-3 rounded-2xl shadow-lg text-lg font-bold"
-          >
-            ❌ Wrong! Try again in {tryAgainTimer}s
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main content: 40-60 split */}
-      <div className="flex flex-col md:flex-row gap-4 p-4 max-w-6xl mx-auto">
-        {/* LEFT 40% — Score, Timer, Announcement, History */}
-        <div className="md:w-[40%] space-y-4">
-          {/* Score & Timer boxes */}
-          <div className="grid grid-cols-2 gap-3">
-            <div
-              className="bg-card rounded-2xl border border-border p-4 text-center"
-              style={{ boxShadow: "var(--shadow-card)" }}
+        {/* Try Again Modal */}
+        <AnimatePresence>
+          {showTryAgainModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
             >
-              <div className="text-sm text-muted-foreground mb-1">Score</div>
-              <div
-                className="text-3xl font-bold text-primary"
-                style={{ fontFamily: "var(--font-display)" }}
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                transition={{ type: "spring", damping: 12 }}
+                className="relative bg-card rounded-3xl p-8 max-w-sm w-full mx-4 text-center space-y-4"
+                style={{ boxShadow: "var(--shadow-hover)" }}
               >
-                {score}
+                <button
+                  onClick={() => {
+                    setShowTryAgainModal(false);
+                    setIsTryAgainCountdown(true);
+                    setTryAgainTimer(10);
+                    setPhase("tryAgain");
+                    if (tryAgainRef.current) clearInterval(tryAgainRef.current);
+                    tryAgainRef.current = setInterval(() => {
+                      setTryAgainTimer((prev) => {
+                        if (prev <= 1) {
+                          clearInterval(tryAgainRef.current!);
+                          setIsTryAgainCountdown(false);
+                          setPhase("playing");
+                          moveToNextClue();
+                          return 0;
+                        }
+                        return prev - 1;
+                      });
+                    }, 1000);
+                  }}
+                  className="absolute top-3 right-4 text-xl font-bold text-muted-foreground hover:text-foreground transition"
+                >
+                  ✖
+                </button>
+                <div className="text-6xl">😕</div>
+                <h2
+                  className="text-2xl font-bold text-destructive"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  Oops! Wrong Answer
+                </h2>
+                <p className="text-muted-foreground text-lg">
+                  That's not the right number. Try again! 💪
+                </p>
+                <button
+                  onClick={() => {
+                    setShowTryAgainModal(false);
+                    setIsTryAgainCountdown(true);
+                    setTryAgainTimer(10);
+                    setPhase("tryAgain");
+                    if (tryAgainRef.current) clearInterval(tryAgainRef.current);
+                    tryAgainRef.current = setInterval(() => {
+                      setTryAgainTimer((prev) => {
+                        if (prev <= 1) {
+                          clearInterval(tryAgainRef.current!);
+                          setIsTryAgainCountdown(false);
+                          setPhase("playing");
+                          moveToNextClue();
+                          return 0;
+                        }
+                        return prev - 1;
+                      });
+                    }, 1000);
+                  }}
+                  className="px-8 py-3 bg-destructive text-destructive-foreground rounded-full text-lg font-bold shadow-lg hover:scale-105 transition-transform"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  OK 👍
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Main content: 40-60 split */}
+        <div className="flex flex-col md:flex-row gap-4 p-4 max-w-6xl mx-auto">
+          {/* LEFT 40% — Score, Timer, Announcement, History */}
+          <div className="md:w-[40%] space-y-4">
+            {/* Score & Timer boxes */}
+            <div className="grid grid-cols-2 gap-3">
+              <div
+                className="bg-card rounded-2xl border border-border p-4 text-center"
+                style={{ boxShadow: "var(--shadow-card)" }}
+              >
+                <div className="text-sm text-muted-foreground mb-1">Score</div>
+                <div
+                  className="text-3xl font-bold text-primary"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {score}
+                </div>
+              </div>
+              <div
+                className="bg-card rounded-2xl border border-border p-4 text-center"
+                style={{ boxShadow: "var(--shadow-card)" }}
+              >
+                <div className="text-sm text-muted-foreground mb-1">
+                  {isTryAgainCountdown ? "⏳ Try Again In" : "Next Clue In"}
+                </div>
+                <div
+                  className={`text-3xl font-bold ${isTryAgainCountdown ? "text-destructive animate-pulse" : timer <= 5 ? "text-destructive animate-pulse" : "text-primary"}`}
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {isTryAgainCountdown ? `${tryAgainTimer}s` : `${timer}s`}
+                </div>
               </div>
             </div>
-            <div
-              className="bg-card rounded-2xl border border-border p-4 text-center"
+
+            {/* Current Announcement */}
+            <motion.div
+              key={currentClueIndex}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-card rounded-2xl border-2 border-primary/30 p-5 text-center"
               style={{ boxShadow: "var(--shadow-card)" }}
             >
               <div className="text-sm text-muted-foreground mb-1">
-                Next Clue In
+                📢 Current Announcement
               </div>
-              <div
-                className={`text-3xl font-bold ${timer <= 5 ? "text-destructive animate-pulse" : "text-primary"}`}
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                {timer}s
-              </div>
-            </div>
-          </div>
-
-          {/* Current Announcement */}
-          <motion.div
-            key={currentClueIndex}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-card rounded-2xl border-2 border-primary/30 p-5 text-center"
-            style={{ boxShadow: "var(--shadow-card)" }}
-          >
-            <div className="text-sm text-muted-foreground mb-1">
-              📢 Current Announcement
-            </div>
-            {currentClue ? (
-              <div
-                className="text-2xl md:text-3xl font-bold text-secondary"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                {currentClue.clue} = ?
-              </div>
-            ) : (
-              <div className="text-lg text-muted-foreground">Waiting...</div>
-            )}
-          </motion.div>
-
-          {/* Announcement History */}
-          <div
-            className="bg-card rounded-2xl border border-border p-4"
-            style={{ boxShadow: "var(--shadow-card)" }}
-          >
-            <div className="text-sm font-bold text-muted-foreground mb-2">
-              📋 Announcement History
-            </div>
-            <div className="max-h-[200px] overflow-y-auto space-y-2 pr-1">
-              {announcementHistory.length === 0 ? (
-                <p className="text-sm text-muted-foreground italic">
-                  No announcements yet...
-                </p>
+              {currentClue ? (
+                <div
+                  className="text-2xl md:text-3xl font-bold text-secondary"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {currentClue.clue} = ?
+                </div>
               ) : (
-                announcementHistory.map((clue) => {
-                  // Check if this clue's answer is marked
-                  const isAnswered = Array.from(markedCells).some((key) => {
-                    const [r, c] = key.split("-").map(Number);
-                    return ticket[r][c] === clue.answer;
-                  });
-                  return (
-                    <div
-                      key={clue.id}
-                      className={`flex items-center justify-between text-sm px-3 py-2 rounded-lg ${
-                        isAnswered
-                          ? "bg-primary/10 text-primary"
-                          : "bg-muted/50 text-muted-foreground"
-                      }`}
-                    >
-                      <span>
-                        #{clue.id}: {clue.clue} = ?
-                      </span>
-                      <span className="font-bold">
-                        {isAnswered ? "✅" : "⏳"} {clue.answer}
-                      </span>
-                    </div>
-                  );
-                })
+                <div className="text-lg text-muted-foreground">Waiting...</div>
               )}
-              <div ref={historyEndRef} />
+            </motion.div>
+
+            {/* Announcement History */}
+            <div
+              className="bg-card rounded-2xl border border-border p-4"
+              style={{ boxShadow: "var(--shadow-card)" }}
+            >
+              <div className="text-sm font-bold text-muted-foreground mb-2">
+                📋 Announcement History
+              </div>
+              <div className="max-h-[200px] overflow-y-auto space-y-2 pr-1">
+                {announcementHistory.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic">
+                    No announcements yet...
+                  </p>
+                ) : (
+                  announcementHistory.map((clue) => {
+                    // Check if this clue's answer is marked
+                    const isAnswered = Array.from(markedCells).some((key) => {
+                      const [r, c] = key.split("-").map(Number);
+                      return ticket[r][c] === clue.answer;
+                    });
+                    return (
+                      <div
+                        key={clue.id}
+                        className={`flex items-center justify-between text-sm px-3 py-2 rounded-lg ${
+                          isAnswered
+                            ? "bg-primary/10 text-primary"
+                            : "bg-muted/50 text-muted-foreground"
+                        }`}
+                      >
+                        <span>
+                          #{clue.id}: {clue.clue} = ?
+                        </span>
+                        <span className="font-bold">
+                          {isAnswered ? "✅" : "⏳"} {clue.answer}
+                        </span>
+                      </div>
+                    );
+                  })
+                )}
+                <div ref={historyEndRef} />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* RIGHT 60% — Ticket */}
-        <div className="md:w-[60%]">
-          <div
-            className="bg-card rounded-2xl border-2 border-primary/20 p-4"
-            style={{ boxShadow: "var(--shadow-card)" }}
-          >
-            <div className="text-center mb-3">
-              <span className="text-sm font-bold text-muted-foreground">
-                🎫 Your Math Bola Ticket
-              </span>
-            </div>
+          {/* RIGHT 60% — Ticket */}
+          <div className="md:w-[60%]">
+            <div
+              className={`rounded-2xl border-2 border-white/20 p-4 bg-gradient-to-br ${ticketColor}`}
+              style={{ boxShadow: "var(--shadow-card)" }}
+            >
+              <div className="text-center mb-3">
+                <span className="text-2xl font-bold text-white/90">
+                  🎫 Your MathBola card
+                </span>
+              </div>
 
-            {/* 3×9 Grid */}
-            <div className="space-y-1">
-              {ticket.map((row, rowIdx) => (
-                <div key={rowIdx} className="grid grid-cols-9 gap-1">
-                  {row.map((cell, colIdx) => {
-                    const key = `${rowIdx}-${colIdx}`;
-                    const isMarked = markedCells.has(key);
-                    const isEmpty = cell === null;
-                    const isCurrentAnswer =
-                      currentClue && cell === currentClue.answer;
+              {/* 3×9 Grid */}
+              <div className="space-y-1">
+                {ticket.map((row, rowIdx) => (
+                  <div key={rowIdx} className="grid grid-cols-9 gap-1">
+                    {row.map((cell, colIdx) => {
+                      const key = `${rowIdx}-${colIdx}`;
+                      const isMarked = markedCells.has(key);
+                      const isEmpty = cell === null;
+                      const isCurrentAnswer =
+                        currentClue && cell === currentClue.answer;
 
-                    return (
-                      <motion.button
-                        key={colIdx}
-                        disabled={isEmpty || isMarked || phase === "tryAgain"}
-                        onClick={() => handleCellClick(rowIdx, colIdx)}
-                        whileTap={!isEmpty && !isMarked ? { scale: 0.9 } : {}}
-                        className={`
-                          aspect-square rounded-lg text-sm md:text-base font-bold flex items-center justify-center
+                      return (
+                        <motion.button
+                          key={colIdx}
+                          disabled={isEmpty || isMarked}
+                          onClick={() => handleCellClick(rowIdx, colIdx)}
+                          whileTap={!isEmpty && !isMarked ? { scale: 0.9 } : {}}
+                          className={`
+                          aspect-square rounded-lg text-sm md:text-2xl font-bold flex items-center justify-center
                           transition-all relative border
                           ${
                             isEmpty
                               ? "bg-muted/30 border-transparent cursor-default"
                               : isMarked
-                                ? "bg-primary/20 border-primary/40 text-primary cursor-default"
+                                ? "bg-emerald-500/30 border-emerald-400 text-white cursor-default"
                                 : "bg-card border-border hover:border-primary hover:bg-primary/5 cursor-pointer hover:shadow-md"
                           }
                         `}
-                        style={{ fontFamily: "var(--font-display)" }}
-                      >
-                        {!isEmpty && (
-                          <>
-                            <span className={isMarked ? "opacity-40" : ""}>
-                              {cell}
-                            </span>
-                            {isMarked && (
-                              <motion.span
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="absolute inset-0 flex items-center justify-center text-2xl text-primary"
+                          style={{ fontFamily: "var(--font-display)" }}
+                        >
+                          {!isEmpty && (
+                            <>
+                              <span
+                                className={
+                                  isMarked ? "opacity-40" : " hover:scale-150"
+                                }
                               >
-                                ✕
-                              </motion.span>
-                            )}
-                          </>
-                        )}
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              ))}
+                                {cell}
+                              </span>
+                              {isMarked && (
+                                <motion.span
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  className="absolute inset-0 flex items-center justify-center text-2xl text-emerald-300"
+                                >
+                                  ✕
+                                </motion.span>
+                              )}
+                            </>
+                          )}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Early 5 Hurry Modal */}
+      <AnimatePresence>
+        {showEarly5 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ type: "spring", damping: 12 }}
+              className="relative bg-card rounded-3xl p-8 max-w-sm w-full mx-4 text-center space-y-4"
+              style={{ boxShadow: "var(--shadow-hover)" }}
+            >
+              <button
+                onClick={() => setShowEarly5(false)}
+                className="absolute top-3 right-4 text-xl font-bold text-muted-foreground hover:text-foreground transition"
+              >
+                ✖
+              </button>
+              <div className="text-6xl">🎉🏃‍♂️💨</div>
+              <h2
+                className="text-2xl font-bold text-secondary"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                Early 5! Hurry! 🔥
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                Congratulations! You've marked{" "}
+                <span className="font-bold text-primary">5 numbers</span>! Keep
+                going! 🚀
+              </p>
+              <div className="text-4xl animate-bounce">⚡</div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
+
+
