@@ -1,14 +1,35 @@
 // ─── IMAGE IMPORTS ───
-// import runningTrack from '@/assets/mathbola/running-track.png';
-// import blackboard from '@/assets/mathbola/blackboard.png';
-// import ludoBoard from '@/assets/mathbola/ludo-board.png';
-// import chessBoard from '@/assets/mathbola/chess-board.png';
-// import birthdayCap from '@/assets/mathbola/birthday-cap.png';
-// import trafficCone from '@/assets/mathbola/traffic-cone.png';
-// import nachos from '@/assets/mathbola/nachos.png';
-// import clothHanger from '@/assets/mathbola/cloth-hanger.png';
-// import rubiksCube from '@/assets/mathbola/rubiks-cube.png';
-// import gasCylinder from '@/assets/mathbola/gas-cylinder.png';
+// import runningTrack from '@/assets/running-track.png';
+import blackboard from '@/assets/Blackboard.png';
+import Badminton from '@/assets/Badminton-Racquet.png';
+import ludoBoard from '@/assets/Ludo-BOard.png';
+import runningTrack from '@/assets/runninTrack.jpeg';
+import MadAngles from '@/assets/Mad-angles.webp';
+import chessBoard from '@/assets/Chess-Board.png';
+import ChocolateBar from '@/assets/Chocolate-Bar.png';
+import birthdayCap from '@/assets/Birthday-Cap.png';
+import brick from '@/assets/Brick.png';
+import candle from '@/assets/Candle.png';
+import Dice from '@/assets/Dice.png';
+import Eraser from '@/assets/Eraser.png';
+import Funnel from '@/assets/Funnel.png';
+import Matchbox from '@/assets/Matchbox.png';
+import Mirror from '@/assets/Mirror.png';
+import trafficCone from '@/assets/Traffic-Cone.png';
+import Triangularflaginsports from '@/assets/Triangularflaginsports.png';
+import nachos from '@/assets/Nachos.jpeg';
+import Pine from '@/assets/Pine.png';
+import Pole from '@/assets/Pole.png';
+import Rubiccube from '@/assets/Rubiccube.png';
+import Cheeseslice from '@/assets/Cheese-slice.jpeg';
+import TV from '@/assets/TV.png';
+import Waterbottle from '@/assets/Waterbottle.png';
+import Whiteboard from '@/assets/Whiteboard.png';
+// import clothHanger from '@/assets/cloth-hanger.png';
+// import rubiksCube from '@/assets/rubiks-cube.png';
+import gasCylinder from '@/assets/Gas-cylinder.png';
+import Hanger from '@/assets/Hanger.png';
+import IceCreamCone from '@/assets/Ice-cream-cone.png';
 // Math Bola — Tambola-style math game data (Document-based clue cards)
 
 // Math Bola — Tambola-style math game data (Document-based clue cards)
@@ -46,10 +67,10 @@ export const CLUE_CARDS: ClueCard[] = [
     id: 1,
     clues: ['Oval in Shape'],
     answers: [
-      { display: '🪞', label: 'Mirror' },
-      // { display: '🏃', label: 'Running Track' },
+      { display: Mirror, label: 'Mirror', isImage:true },
+      { display: runningTrack, label: 'Running Track', isImage:true },
       // { display: runningTrack, label: 'Running Track', isImage: true }
-      { display: '🏸', label: 'Badminton Racquet' },
+      { display: Badminton, label: 'Badminton Racquet', isImage:true },
     ],
   },
   {
@@ -57,22 +78,23 @@ export const CLUE_CARDS: ClueCard[] = [
     clues: ['A shape of a Rectangle'],
     answers: [
       // { display: '📺', label: 'TV' },
-      // { display: TV, label: 'TV',isImage: true },
+      { display: TV, label: 'TV',isImage: true },
       { display: '📏', label: 'Ruler' },
-      { display: '🍫', label: 'Chocolate Bar' },
+      { display: ChocolateBar, label: 'Chocolate Bar', isImage:true },
       // { display: '📋', label: 'Blackboard' },
-      // { display: blackboard, label: 'Blackboard', isImage: true }
+      { display: blackboard, label: 'Blackboard', isImage: true },
+      { display: Whiteboard, label: 'Whiteboard', isImage: true }
     ],
   },
   {
     id: 3,
     clues: ['A shape of a Square'],
     answers: [
-      { display: '🧀', label: 'Cheese Slice' },
-      // { display: '🎯', label: 'Ludo Board' },
+      { display: Cheeseslice, label: 'Cheese Slice', isImage:true },
+      // { display: , label: 'Ludo Board', isImage:true },
       // { display: '♟️', label: 'Chess Board' },
-    //      { display: ludoBoard, label: 'Ludo Board', isImage: true },   // ✅
-    // { display: chessBoard, label: 'Chess Board', isImage: true },
+         { display: ludoBoard, label: 'Ludo Board', isImage: true },   // ✅
+    { display: chessBoard, label: 'Chess Board', isImage: true },
     ],
   },
   {
@@ -92,10 +114,11 @@ export const CLUE_CARDS: ClueCard[] = [
       // { display: '🎉', label: 'Birthday Cap' },
       // { display: '🍦', label: 'Ice Cream Cone' },
       // { display: '🚧', label: 'Traffic Cone' },
-        // { display: birthdayCap, label: 'Birthday Cap', isImage: true }, // ✅
-    { display: '🍦', label: 'Ice Cream Cone' },
-    // { display: trafficCone, label: 'Traffic Cone', isImage: true }
-      { display: '🌲', label: 'Pine Tree' },
+        { display: birthdayCap, label: 'Birthday Cap', isImage: true }, // ✅
+    { display: IceCreamCone, label: 'Ice Cream Cone',isImage:true },
+    { display: trafficCone, label: 'Traffic Cone', isImage: true },
+      { display: Pine, label: 'Pine Tree',isImage:true },
+      { display: Funnel, label: 'Funnel',isImage:true },
     ],
   },
   {
@@ -103,21 +126,21 @@ export const CLUE_CARDS: ClueCard[] = [
     clues: ['A shape of a Triangle'],
     answers: [
       // { display: '🔺', label: 'Nachos' },
-      // { display: nachos, label: 'Nachos', isImage: true },
-      { display: '📐', label: 'Mad Angles' },
-      { display: '🚩', label: 'Flag' },
+      { display: nachos, label: 'Nachos', isImage: true },
+      { display: MadAngles, label: 'Mad Angles' ,isImage:true},
+      { display: Triangularflaginsports, label: 'Flag',isImage:true },
       // { display: '👔', label: 'Cloth Hanger' },
 
-    // { display: clothHanger, label: 'Cloth Hanger', isImage: true }
+    { display: Hanger, label: 'Cloth Hanger', isImage: true },
     ],
   },
   {
     id: 8,
     clues: ['A shape of a Cuboid'],
     answers: [
-      { display: '📦', label: 'Match Box' },
-      { display: '🧽', label: 'Eraser' },
-      { display: '🧱', label: 'Brick' },
+      { display: Matchbox, label: 'Match Box',isImage:true },
+      { display: Eraser, label: 'Eraser',isImage:true },
+      { display: brick, label: 'Brick',isImage:true },
     ],
   },
   {
@@ -150,15 +173,15 @@ export const CLUE_CARDS: ClueCard[] = [
     clues: ['A shape of a Cube'],
     answers: [
       { display: '🧊', label: 'Sugar Cube' },
-      // { display: '🧩', label: "Rubik's Cube" },
+      { display: Rubiccube, label: "Rubik's Cube",isImage:true },
 
     // { display: rubiksCube, label: "Rubik's Cube", isImage: true }
-      { display: '🎲', label: 'Dice' },
+      { display: Dice, label: 'Dice',isImage:true },
     ],
   },
   {
     id: 15,
-    clues: ['Weekend days'],
+    clues: ['Weekend'],
     answers: [{ display: 'Sat & Sun', label: 'Sat & Sun' }],
   },
   {
@@ -205,9 +228,9 @@ export const CLUE_CARDS: ClueCard[] = [
     id: 24,
     clues: ['A shape of a Cylinder'],
     answers: [
-      { display: '🍶', label: 'Bottle' },
-      { display: '🕯️', label: 'Candle' },
-      // { display: '⛽', label: 'Gas Cylinder' },
+      { display: Waterbottle, label: 'Bottle',isImage:true },
+      { display: candle, label: 'Candle',isImage:true },
+      { display: gasCylinder, label: 'Gas Cylinder',isImage:true},
       // { display: gasCylinder, label: 'Gas Cylinder', isImage: true },
     ],
   },
@@ -399,6 +422,7 @@ export function generateTickets(_age: AgeGroup): { tickets: (TicketCell | null)[
         clueId: card.id,
         display: answer.display,
         label: answer.label,
+         isImage: answer.isImage ?? false
       };
     });
 

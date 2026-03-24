@@ -403,62 +403,62 @@ export default function MathBolaGame({
   // ─── COMPLETE MODAL ───
   if (phase === "complete") {
       return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <motion.div
-          initial={{ scale: 0.7, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", damping: 12 }}
-          className="bg-card rounded-3xl p-8 max-w-md w-full mx-4 text-center space-y-5"
-          style={{ boxShadow: "var(--shadow-hover)" }}
-        >
-          <div className="text-6xl">🎉🏆🎊</div>
-          <h2
-            className="text-3xl font-bold text-secondary"
-            style={{ fontFamily: "var(--font-display)" }}
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", damping: 12 }}
+            className="bg-card rounded-3xl p-8 max-w-md w-full mx-4 text-center space-y-5"
+            style={{ boxShadow: "var(--shadow-hover)" }}
           >
-            MathBola Complete!
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            You marked all {totalNumbers} numbers on your ticket!
-          </p>
-          <div className="flex justify-center gap-4 text-lg">
-            <div className="bg-primary/10 rounded-xl px-4 py-2">
-              <span className="font-bold text-primary">
-                ⏱️ {formatTime(totalTime)}
-              </span>
-            </div>
-            <div className="bg-primary/10 rounded-xl px-4 py-2">
-              <span className="font-bold text-primary">
-                🎯 {score}/{totalNumbers}
-              </span>
-            </div>
-          </div>
-          <div className="flex justify-center">
-            <video
-              src={game3Complete}
-              autoPlay
-              loop
-              muted
-              className="w-full max-w-xl rounded-xl shadow-lg"
-            />
-          </div>
-          <div className="flex gap-3 justify-center pt-2">
-            <button
-              onClick={onComplete}
-              className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-lg hover:scale-105 transition-transform"
+            <div className="text-6xl">🎉🏆🎊</div>
+            <h2
+              className="text-3xl font-bold text-secondary"
+              style={{ fontFamily: "var(--font-display)" }}
             >
-              🔄 Play Again
-            </button>
-            <button
-              onClick={onHome}
-              className="px-6 py-3 rounded-xl bg-muted text-muted-foreground font-bold text-lg hover:scale-105 transition-transform"
-            >
-              🏠 Home
-            </button>
-          </div>
-        </motion.div>
-      </div>
-    );
+              MathBola Complete!
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              You have marked all {totalNumbers} clues on your card!
+            </p>
+            <div className="flex justify-center gap-4 text-lg">
+              <div className="bg-primary/10 rounded-xl px-4 py-2">
+                <span className="font-bold text-primary">
+                  ⏱️ {formatTime(totalTime)}
+                </span>
+              </div>
+              <div className="bg-primary/10 rounded-xl px-4 py-2">
+                <span className="font-bold text-primary">
+                  🎯 {score}/{totalNumbers}
+                </span>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <video
+                src={game3Complete}
+                autoPlay
+                loop
+                muted
+                className="w-full max-w-xl rounded-xl shadow-lg"
+              />
+            </div>
+            <div className="flex gap-3 justify-center pt-2">
+              <button
+                onClick={onComplete}
+                className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-lg hover:scale-105 transition-transform"
+              >
+                🔄 Play Again
+              </button>
+              <button
+                onClick={onHome}
+                className="px-6 py-3 rounded-xl bg-muted text-muted-foreground font-bold text-lg hover:scale-105 transition-transform"
+              >
+                🏠 Home
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      );
   }
   
 
@@ -660,11 +660,11 @@ export default function MathBolaGame({
                               <span
                                 className={`${isMarked ? "opacity-40" : ""} text-center leading-tight`}
                               >
-                                {cell.isImage ? (
+                                {cell?.isImage ==true ? (
                                   <img
                                     src={cell.display}
                                     alt={cell.label}
-                                    className="w-8 h-8 object-contain mx-auto"
+                                    className="w-20 h-20 object-contain mx-auto"
                                   />
                                 ) : (
                                   cell.display

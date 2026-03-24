@@ -16,7 +16,7 @@ const Footer = () => {
                Beyond Chalk and Talk (OPC) Pvt. Ltd.® 2023
             </p>
             <p className="text-lg opacity-60 font-body mt-1">
-              Educational Games for Mathematical Learning 🧒
+              Educational Games for Mathematical Learning 
             </p>
           </div>
         </div>

@@ -374,7 +374,7 @@ const GameCard = ({
                   : "bg-white text-secondary hover:bg-pink-100 shadow"
               }`}
             >
-              🎯 Aim
+              🎯 Learning Objective
             </button>
 
             {/* Learning Button */}

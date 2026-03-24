@@ -124,7 +124,7 @@ useEffect(() => {
                 </span>{" "}
                 Concepts often remain hidden behind procedures.
               </p>
-              <p className="font-semibold text-primary">
+              <p className="font-semibold text-secondary">
                 That's where our games come in.
               </p>
               <p>
@@ -159,7 +159,7 @@ useEffect(() => {
               className="flex flex-col items-center gap-4 bg-card rounded-2xl p-5 border border-border"
               style={{ boxShadow: "var(--shadow-card)" }}
             >
-              <div className="text-xl text-primary font-bold">
+              <div className="text-xl text-secondary font-bold">
                 <h1>The brain behind these games</h1>
               </div>
               <div className="w-full aspect-[3/4] max-w-[320px] rounded-xl bg-muted border-2 border-primary/20 overflow-hidden">
@@ -183,6 +183,12 @@ useEffect(() => {
                   style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
                 >
                   Director
+                </p>
+                <p
+                  className="text-lg text-muted-foreground leading-snug pt-1"
+                  style={{ fontFamily: "'Times New Roman', var(--font-body)" }}
+                >
+                  Beyond Chalk and Talk (OPC) Pvt. Ltd
                 </p>
                 <p
                   className="text-lg text-muted-foreground leading-snug pt-1"
