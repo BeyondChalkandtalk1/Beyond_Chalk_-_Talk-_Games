@@ -40,7 +40,7 @@ export default function MathBolaGame({
   const [gameData] = useState(() => {
     const { tickets } = generateTickets(age);
     const ticket = tickets[ticketIndex] || tickets[0];
-    const clues = generateCluesForTicket(ticket);
+  const clues = generateCluesForTicket(ticket, age);
     return { ticket, clues };
   });
 
