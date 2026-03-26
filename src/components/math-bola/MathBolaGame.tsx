@@ -544,7 +544,7 @@ export default function MathBolaGame({
             </div>
 
             {/* Current Announcement */}
-            <motion.div
+            {/* <motion.div
               key={currentClueIndex}
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -560,6 +560,39 @@ export default function MathBolaGame({
                   style={{ fontFamily: "var(--font-display)" }}
                 >
                   {currentClue.clueText}
+                </div>
+              ) : (
+                <div className="text-lg text-muted-foreground">Waiting...</div>
+              )}
+            </motion.div> */}
+            {/* Current Announcement */}
+            <motion.div
+              key={currentClueIndex}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-card rounded-2xl border-2 border-primary/30 p-5 text-center"
+              style={{ boxShadow: "var(--shadow-card)" }}
+            >
+              <div className="text-2xl text-muted-foreground mb-1">
+                📢 Current Clue
+              </div>
+              {currentClue ? (
+                <div style={{ fontFamily: "var(--font-display)" }}>
+                  {/* Clue Text */}
+                  <div className="text-4xl md:text-5xl font-bold text-secondary mb-3">
+                    {currentClue.clueText}
+                  </div>
+
+                  {/* ✅ Agar clue ka image hai toh dikhao */}
+                  {currentClue.clueImage && (
+                    <div className="flex justify-center mt-2">
+                      <img
+                        src={currentClue.clueImage}
+                        alt="clue visual"
+                        className="max-h-40 max-w-full object-contain rounded-xl border border-border shadow-md"
+                      />
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="text-lg text-muted-foreground">Waiting...</div>
@@ -632,42 +665,112 @@ export default function MathBolaGame({
                       const isEmpty = cell === null;
 
                       return (
+                        // <motion.button
+                        //   key={colIdx}
+                        //   disabled={isEmpty || isMarked}
+                        //   onClick={() => handleCellClick(rowIdx, colIdx)}
+                        //   whileTap={!isEmpty && !isMarked ? { scale: 0.9 } : {}}
+                        //   className={`
+                        //   aspect-square rounded-lg text-base md:text-4xl font-bold flex items-center justify-center
+                        //   transition-all relative border hover:scale-150 hover:z-20 hover:bg-white
+                        //   ${
+                        //     isEmpty
+                        //       ? "bg-muted/30 border-transparent cursor-default"
+                        //       : isMarked
+                        //         ? "bg-emerald-500/30 border-emerald-400 text-white cursor-default"
+                        //         : "bg-card border-border hover:border-primary hover:bg-primary/5 cursor-pointer hover:shadow-md"
+                        //   }
+                        // `}
+                        // >
+                        //   {!isEmpty && (
+                        //     <>
+                        //       {/* <span
+                        //         className={`${isMarked ? "opacity-40" : ""} text-center leading-tight`}
+                        //       >
+                        //         {cell.display}
+                        //       </span> */}
+                        //       {/* // Ticket cell ke andar — display part */}
+                        //       <span
+                        //         className={`${isMarked ? "opacity-40" : ""} text-center leading-tight`}
+                        //       >
+                        //         {cell?.isImage ==true ? (
+                        //           <img
+                        //             src={cell.display}
+                        //             alt={cell.label}
+                        //             className="w-20 h-20 object-contain mx-auto"
+                        //           />
+                        //         ) : (
+                        //           cell.display
+                        //         )}
+                        //       </span>
+                        //       {isMarked && (
+                        //         <motion.span
+                        //           initial={{ scale: 0 }}
+                        //           animate={{ scale: 1 }}
+                        //           className="absolute inset-0 flex items-center justify-center text-2xl text-emerald-300"
+                        //         >
+                        //           ✕
+                        //         </motion.span>
+                        //       )}
+                        //     </>
+                        //   )}
+                        // </motion.button>
                         <motion.button
                           key={colIdx}
                           disabled={isEmpty || isMarked}
                           onClick={() => handleCellClick(rowIdx, colIdx)}
                           whileTap={!isEmpty && !isMarked ? { scale: 0.9 } : {}}
                           className={`
-                          aspect-square rounded-lg text-base md:text-4xl font-bold flex items-center justify-center
-                          transition-all relative border hover:scale-150 hover:z-20 hover:bg-white
-                          ${
-                            isEmpty
-                              ? "bg-muted/30 border-transparent cursor-default"
-                              : isMarked
-                                ? "bg-emerald-500/30 border-emerald-400 text-white cursor-default"
-                                : "bg-card border-border hover:border-primary hover:bg-primary/5 cursor-pointer hover:shadow-md"
-                          }
-                        `}
+    aspect-square rounded-lg font-bold flex items-center justify-center
+    transition-all relative border hover:scale-150 hover:z-20 hover:bg-white
+    overflow-hidden
+    ${
+      isEmpty
+        ? "bg-muted/30 border-transparent cursor-default"
+        : isMarked
+          ? "bg-emerald-500/30 border-emerald-400 text-white cursor-default"
+          : "bg-card border-border hover:border-primary hover:bg-primary/5 cursor-pointer hover:shadow-md"
+    }
+  `}
                         >
                           {!isEmpty && (
                             <>
-                              {/* <span
-                                className={`${isMarked ? "opacity-40" : ""} text-center leading-tight`}
-                              >
-                                {cell.display}
-                              </span> */}
-                              {/* // Ticket cell ke andar — display part */}
                               <span
-                                className={`${isMarked ? "opacity-40" : ""} text-center leading-tight`}
+                                className={`${isMarked ? "opacity-40" : ""} w-full h-full flex items-center justify-center p-1`}
                               >
-                                {cell?.isImage ==true ? (
+                                {cell?.isImage === true ? (
                                   <img
                                     src={cell.display}
                                     alt={cell.label}
-                                    className="w-20 h-20 object-contain mx-auto"
+                                    className="w-full h-full object-contain"
                                   />
                                 ) : (
-                                  cell.display
+                                  // ✅ Text length ke hisaab se font size auto-set
+                                  <span
+                                    className="w-full h-full flex items-center justify-center text-center leading-tight font-bold"
+                                    style={{
+                                      fontSize:
+                                        cell.display.length <= 2
+                                          ? "clamp(14px, 3vw, 32px)" // "45", "6", "<", ">"
+                                          : cell.display.length <= 4
+                                            ? "clamp(11px, 2.2vw, 22px)" // "100", "9+9"
+                                            : cell.display.length <= 7
+                                              ? "clamp(9px, 1.8vw, 20px)" // "October", "15+3+3"
+                                              : "clamp(7px, 1.4vw, 18px)", // "Sat & Sun", "2+2+2+2"
+                                      overflow: "hidden",
+                                      wordBreak: "break-word",
+                                      overflowWrap: "break-word",
+                                      whiteSpace:
+                                        cell.display.length > 7
+                                          ? "normal"
+                                          : "nowrap",
+                                      lineHeight: "1.2",
+                                      maxWidth: "100%",
+                                      maxHeight: "100%",
+                                    }}
+                                  >
+                                    {cell.display}
+                                  </span>
                                 )}
                               </span>
                               {isMarked && (

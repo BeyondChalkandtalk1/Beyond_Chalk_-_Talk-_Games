@@ -750,13 +750,22 @@ import pole from '@/assets/Pole.png';
 import Whiteboard from '@/assets/Whiteboard.png';
 import gasCylinder from '@/assets/Gas-cylinder.png';
 import Hanger from '@/assets/Hanger.png';
+import Ruler from '@/assets/ruler.jpeg';
+import circleImage from '@/assets/circle.jpeg';
+import clock from '@/assets/clock.jpg';
+import ovalImage from '@/assets/oval.jpeg';
+import honeyComb1 from '@/assets/honeyComb1.jpeg';
+import honeyComb2 from '@/assets/honeyComb2.jpeg';
+import representationof2bars from '@/assets/representationof2bars.png';
 import IceCreamCone from '@/assets/Ice-cream-cone.png';
+import blocks45 from '@/assets/image.png';
 
 export type AgeGroup = '7' | '8' | '9+';
 
 export interface ClueCard {
   id: number;
   clues: string[];
+  clueImage?: string; 
   answers: { display: string; label: string; isImage?: boolean }[];
 }
 
@@ -774,6 +783,7 @@ export interface GameClue {
   answerDisplay: string;
   answerLabel: string;
   isImage?: boolean;
+   clueImage?: string; 
 }
 
 // ─────────────────────────────────────────────
@@ -798,7 +808,7 @@ export const CLUE_CARDS_6_7: ClueCard[] =
     answers: [
       // { display: '📺', label: 'TV' },
       { display: TV, label: 'TV',isImage: true },
-      { display: '📏', label: 'Ruler' },
+      { display: Ruler, label: 'Ruler', isImage:true },
       { display: ChocolateBar, label: 'Chocolate Bar', isImage:true },
       // { display: '📋', label: 'Blackboard' },
       { display: blackboard, label: 'Blackboard', isImage: true },
@@ -819,7 +829,9 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   {
     id: 4,
     clues: ['Representation of 2 Tens'],
-    answers: [{ display: '20', label: '20' }],
+    answers: [
+      { display: representationof2bars, label: '20', isImage:true }
+    ],
   },
   {
     id: 5,
@@ -884,8 +896,15 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   },
   {
     id: 13,
-    clues: ['9 + 9 = ?', '8 + 10 = ?', '12 + 6 = ?', '11 + 7 = ?', '14 + 4 = ?', '15 + 3 = ?'],
-    answers: [{ display: '18', label: '18' }],
+    clues: ['Reach the sum of 18 '],
+    answers: [
+      { display: '9+9', label: '9+9' },
+      { display: '8+10', label: '8+10' },
+      { display: '12+6', label: '12+6' },
+      { display: '11+7', label: '11+7' },
+      { display: '14+4', label: '14+4' },
+      { display: '15+3', label: '15+3' },
+    ],
   },
   {
     id: 14,
@@ -930,8 +949,16 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   },
   {
     id: 21,
-    clues: ['10 − 10 = ?', '9 − 9 = ?', '8 − 8 = ?', '7 − 7 = ?', '6 − 6 = ?', '5 − 5 = ?'],
-    answers: [{ display: '0️', label: '0' }],
+    clues: ['Reach the difference of 0'],
+    answers: [
+      { display: '10-10', label: '10-10' },
+      { display: '9-9', label: '9-9' },
+      { display: '8-8', label: '8-8' },
+      { display: '7-7', label: '7-7' },
+      { display: '6-6', label: '6-6' },
+      { display: '5-5', label: '5-5' },
+      { display: '1-1', label: '1-1' },
+    ],
   },
   {
     id: 22,
@@ -956,7 +983,10 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   {
     id: 25,
     clues: ['A shape with no corners'],
-    answers: [{ display: '⭕', label: 'Circle' }],
+    answers: [
+      { display: circleImage, label: 'Circle', isImage:true },
+      { display: ovalImage, label: 'Oval', isImage:true }
+    ],
   },
   {
     id: 26,
@@ -995,7 +1025,7 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   },
   {
     id: 33,
-    clues: ['Number with 0 in Ones place and 1 in Forty place'],
+    clues: ['Number with 0 in Ones place and 4 in Forty place'],
     answers: [{ display: '40', label: '40' }],
   },
   {
@@ -1006,7 +1036,11 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   {
     id: 35,
     clues: ['The shape of a Honeycomb'],
-    answers: [{ display: '⬡', label: 'Hexagon' }],
+    answers: [
+      { display: honeyComb1, label: 'Hexagon shapcirc', isImage:true },
+      { display: honeyComb2, label: 'Hexagon', isImage:true }
+
+    ],
   },
   {
     id: 36,
@@ -1026,12 +1060,18 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   {
     id: 39,
     clues: ['I am two hours before 7 O\'clock'],
-    answers: [{ display: '🕔', label: '5 O\'clock' }],
+    answers: [{ display: clock, label: '5 O\'clock', isImage:true }],
   },
   {
     id: 40,
-    clues: ['19 − 4 = ?', '16 − 1 = ?', '17 − 2 = ?', '20 − 5 = ?', '18 − 3 = ?'],
-    answers: [{ display: '15', label: '15' }],
+    clues: ['Reach to the difference of 15'],
+    answers: [
+      { display: '19-4', label: '19-4' },
+      { display: '16-1', label: '16-1' },
+      { display: '17-2', label: '17-2' },
+      { display: '20-5', label: '20-5' },
+      { display: '18-3', label: '18-3' },
+    ],
   },
 ];
 
@@ -1061,7 +1101,8 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
    answers: [
       // { display: '📺', label: 'TV' },
       { display: TV, label: 'TV',isImage: true },
-      { display: '📏', label: 'Ruler' },
+      
+      { display: Ruler, label: 'Ruler', isImage:true },
       { display: ChocolateBar, label: 'Chocolate Bar', isImage:true },
       // { display: '📋', label: 'Blackboard' },
       { display: blackboard, label: 'Blackboard', isImage: true },
@@ -1115,18 +1156,8 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
       { display: brick, label: 'Brick',isImage:true },
     ],
   },
-  {
+   {
     id: 8,
-    clues: ['Representation of 4 groups of 3'],
-    answers: [{ display: '3+3+3+3', label: '3+3+3+3' }],
-  },
-  {
-    id: 9,
-    clues: ['Representation of 3 groups of 4'],
-    answers: [{ display: '4+4+4', label: '4+4+4' }],
-  },
-  {
-    id: 10,
     clues: ['A shape of a Cube'],
       answers: [
       { display: '🧊', label: 'Sugar Cube' },
@@ -1136,6 +1167,17 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
       { display: Dice, label: 'Dice',isImage:true },
     ],  
   },
+  {
+    id: 9,
+    clues: ['Representation of 3 groups of 4'],
+    answers: [{ display: '4+4+4', label: '4+4+4' }],
+  },
+  {
+    id: 10,
+    clues: ['Representation of 4 groups of 3'],
+    answers: [{ display: '3+3+3+3', label: '3+3+3+3' }],
+  },
+ 
   {
     id: 11,
     clues: ['A shape of a Cylinder'],
@@ -1197,6 +1239,7 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
   {
     id: 19,
     clues: ['Which number is shown?'],
+    clueImage: blocks45,
     answers: [{ display: '45', label: '45' }],
   },
   {
@@ -1296,7 +1339,8 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
     id: 35,
     clues: ['An odd number greater than 10 and less than 15'],
     answers: [
-      { display: '11 ,13', label: '11 and 13' },
+      { display: '11', label: '11' },
+      { display: '13', label: '13' },
     ],
   },
   {
@@ -1317,7 +1361,8 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
   {
     id: 39,
     clues: ['The shape of a Honeycomb'],
-    answers: [{ display: '⬡', label: 'Hexagon' }],
+    answers: [      { display: honeyComb1, label: 'Hexagon shapcirc', isImage:true },
+      { display: honeyComb2, label: 'Hexagon', isImage:true }],
   },
   {
     id: 40,
@@ -1405,15 +1450,81 @@ export function generateTicket(cells: TicketCell[]): (TicketCell | null)[][] {
 }
 
 // ─── UPDATED: generateTickets now uses age-specific clue cards ───
+// export function generateTickets(age: AgeGroup): { tickets: (TicketCell | null)[][][]; } {
+//   const clueCards = getClueCards(age); // ✅ Age-wise cards selected here
+//   const tickets: (TicketCell | null)[][][] = [];
+
+//   for (let t = 0; t < 9; t++) {
+//     const shuffled = shuffle(clueCards);
+//     const ticketCards = shuffled.slice(0, 15);
+
+//     const cells: TicketCell[] = ticketCards.map(card => {
+//       const answer = pickRandom(card.answers);
+//       return {
+//         clueId: card.id,
+//         display: answer.display,
+//         label: answer.label,
+//         isImage: answer.isImage ?? false,
+//       };
+//     });
+
+//     tickets.push(generateTicket(cells));
+//   }
+
+//   return { tickets };
+// }
+
+// ─── PAIRED CLUE IDs — jo hamesha saath aate hain ───
+const PAIRED_CLUE_IDS: [number, number][] = [
+  [9, 10], // "2 groups of 3" aur "3 groups of 2" hamesha saath
+];
+
 export function generateTickets(age: AgeGroup): { tickets: (TicketCell | null)[][][]; } {
-  const clueCards = getClueCards(age); // ✅ Age-wise cards selected here
+  const clueCards = getClueCards(age);
   const tickets: (TicketCell | null)[][][] = [];
 
   for (let t = 0; t < 9; t++) {
-    const shuffled = shuffle(clueCards);
-    const ticketCards = shuffled.slice(0, 15);
+    let selectedCards: ClueCard[] = [];
 
-    const cells: TicketCell[] = ticketCards.map(card => {
+    // Step 1: Pehle check karo koi paired clue include hoga ya nahi
+    const remainingCards = shuffle(clueCards);
+    
+    // Paired IDs ko alag kar lo
+    const pairedGroups: ClueCard[][] = PAIRED_CLUE_IDS.map(([idA, idB]) => {
+      const cardA = clueCards.find(c => c.id === idA)!;
+      const cardB = clueCards.find(c => c.id === idB)!;
+      return [cardA, cardB];
+    }).filter(pair => pair[0] && pair[1]);
+
+    // Wo cards jo kisi pair ka hissa nahi hain
+    const pairedIds = PAIRED_CLUE_IDS.flat();
+    const unpairedCards = remainingCards.filter(c => !pairedIds.includes(c.id));
+
+    // Step 2: Randomly decide karo kaunsi pairs include hongi
+    // (har pair 50% chance se aayegi, ya aap hamesha ek pair force kar sakte ho)
+    const includedPairs: ClueCard[][] = [];
+    for (const pair of pairedGroups) {
+      // 50% chance se pair include hoga — ya hamesha include karna ho toh `true` karo
+      if (Math.random() < 0.5) {
+        includedPairs.push(pair);
+      }
+    }
+
+    // Step 3: Kitne unpaired cards chahiye
+    const pairSlots = includedPairs.reduce((sum, pair) => sum + pair.length, 0);
+    const unpairedNeeded = 15 - pairSlots;
+
+    // Step 4: Unpaired cards se fill karo baaki slots
+    const pickedUnpaired = unpairedCards.slice(0, unpairedNeeded);
+
+    // Step 5: Saare cards combine karo aur shuffle karo
+    selectedCards = shuffle([
+      ...includedPairs.flat(),
+      ...pickedUnpaired,
+    ]);
+
+    // Step 6: TicketCells banao
+    const cells: TicketCell[] = selectedCards.map(card => {
       const answer = pickRandom(card.answers);
       return {
         clueId: card.id,
@@ -1430,6 +1541,32 @@ export function generateTickets(age: AgeGroup): { tickets: (TicketCell | null)[]
 }
 
 // ─── UPDATED: generateCluesForTicket uses age-specific clue cards ───
+// export function generateCluesForTicket(
+//   ticket: (TicketCell | null)[][],
+//   age?: AgeGroup,
+// ): GameClue[] {
+//   const clueCards = age ? getClueCards(age) : CLUE_CARDS;
+
+//   const cells: TicketCell[] = [];
+//   ticket.forEach(row => row.forEach(cell => {
+//     if (cell !== null) cells.push(cell);
+//   }));
+
+//   const shuffled = shuffle(cells);
+
+//   return shuffled.map((cell, idx) => {
+//     const card = clueCards.find(c => c.id === cell.clueId)!;
+//     return {
+//       id: idx + 1,
+//       clueId: cell.clueId,
+//       clueText: pickRandom(card.clues),
+//       answerDisplay: cell.display,
+//       answerLabel: cell.label,
+//       isImage: cell.isImage,
+//     };
+//   });
+// }
+
 export function generateCluesForTicket(
   ticket: (TicketCell | null)[][],
   age?: AgeGroup,
@@ -1441,7 +1578,26 @@ export function generateCluesForTicket(
     if (cell !== null) cells.push(cell);
   }));
 
-  const shuffled = shuffle(cells);
+  // Shuffle karo pehle
+  let shuffled = shuffle(cells);
+
+  // ─── Paired clues ko adjacent positions pe laao ───
+  const pairedIds = PAIRED_CLUE_IDS.flat();
+  
+  for (const [idA, idB] of PAIRED_CLUE_IDS) {
+    const idxA = shuffled.findIndex(c => c.clueId === idA);
+    const idxB = shuffled.findIndex(c => c.clueId === idB);
+
+    // Agar dono ticket mein hain toh idxB ko idxA ke theek baad rakho
+    if (idxA !== -1 && idxB !== -1) {
+      const cellB = shuffled[idxB];
+      // idxB ko remove karo
+      shuffled.splice(idxB, 1);
+      // idxA ke baad insert karo (splice recalculate karo agar idxB < idxA tha)
+      const insertAt = idxB < idxA ? idxA : idxA + 1;
+      shuffled.splice(insertAt, 0, cellB);
+    }
+  }
 
   return shuffled.map((cell, idx) => {
     const card = clueCards.find(c => c.id === cell.clueId)!;
@@ -1452,19 +1608,20 @@ export function generateCluesForTicket(
       answerDisplay: cell.display,
       answerLabel: cell.label,
       isImage: cell.isImage,
+       clueImage: card.clueImage ?? undefined,
     };
   });
 }
 
 // ─── HOW TO PLAY INSTRUCTIONS (unchanged) ───
 export const mathBolaInstructions = [
-  { emoji: '🎫', text: '•	You have chosen your MathBola card — let\'s begin!' },
+  { emoji: '🎫', text: '•	You have chosen your MathBola! card — let\'s begin!' },
   { emoji: '📢', text: '•	Get ready! A clue will be read aloud and shown on the screen.' },
   { emoji: '🧮', text: '•	Think fast — you have 20 seconds for each clue.' },
-  { emoji: '✅', text: '•	Solve it and search for the matching number on your card.' },
+  { emoji: '✅', text: '•	Solve it and search for the matching clue on your card.' },
   { emoji: '❌', text: '•	Found it? Cross it out quickly!' },
   { emoji: '🏆', text: '•	Not there? Stay sharp for the next clue.' },
   { emoji: '🏆', text: '•	There are 15 clues in this round — keep going!' },
-  { emoji: '🏆', text: '•	Race to cross out any 5 numbers on your card.' },
+  { emoji: '🏆', text: '•	Race to cross out any 5 clues on your card.' },
   { emoji: '🏆', text: '•	Be the fastest to complete your Early 5 and win!' },
 ];
