@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { AgeGroup } from "@/data/mathBolaData";
 import { useSound } from "@/contexts/SoundContext";
 import tapSound from "@/assets/tapToOpenSound.mpeg";
-import cardSelectImage from "@/assets/cardSelectImage.jpeg";
+import cardSelectImage from "@/assets/cardSelectImage.png";
 import tambulaCardSelection1 from "@/assets/brainVideoGame3.mp4";
 
 export const TICKET_COLORS = [
