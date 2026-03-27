@@ -990,7 +990,7 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   },
   {
     id: 26,
-    clues: ['6 × 7 = ?'],
+    clues: ['6 times 7 is '],
     answers: [{ display: '42', label: '42' }],
   },
   {
@@ -1025,7 +1025,7 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   },
   {
     id: 33,
-    clues: ['Number with 0 in Ones place and 4 in Forty place'],
+    clues: ['Number with 0 in Ones place and 4 in Tens place'],
     answers: [{ display: '40', label: '40' }],
   },
   {
@@ -1055,7 +1055,7 @@ export const CLUE_CARDS_6_7: ClueCard[] =
   {
     id: 38,
     clues: ['I am the number at the bottom of the clock'],
-    answers: [{ display: '🕕', label: '6' }],
+    answers: [{ display: '6', label: '6' }],
   },
   {
     id: 39,
@@ -1378,8 +1378,172 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
 // (Add your own 8-9 specific cards here when ready)
 // ─────────────────────────────────────────────
 export const CLUE_CARDS_8_9: ClueCard[] = [
-  // ✅ Add 8-9 year specific clue cards here when ready.
-  // Until then, falls back to CLUE_CARDS_7_8 (see getClueCards below).
+  {
+    id: 1,
+    clues: ['Oval in Shape'],
+    answers: [
+      { display: Mirror, label: 'Mirror', isImage:true },
+      { display: runningTrack, label: 'Running Track', isImage:true },
+      // { display: runningTrack, label: 'Running Track', isImage: true }
+      { display: Badminton, label: 'Badminton Racquet', isImage:true },
+    ],
+  },
+  {
+    id: 2,
+    clues: ['A shape of a Rectangle'],
+    answers: [
+      // { display: '📺', label: 'TV' },
+      { display: TV, label: 'TV',isImage: true },
+      { display: Ruler, label: 'Ruler', isImage:true },
+      { display: ChocolateBar, label: 'Chocolate Bar', isImage:true },
+      // { display: '📋', label: 'Blackboard' },
+      { display: blackboard, label: 'Blackboard', isImage: true },
+      { display: Whiteboard, label: 'Whiteboard', isImage: true }
+    ],
+  },
+  {
+    id: 3,
+    clues: ['A shape of a Square'],
+    answers: [
+      { display: Cheeseslice, label: 'Cheese Slice', isImage:true },
+      // { display: , label: 'Ludo Board', isImage:true },
+      // { display: '♟️', label: 'Chess Board' },
+         { display: ludoBoard, label: 'Ludo Board', isImage: true },   // ✅
+    { display: chessBoard, label: 'Chess Board', isImage: true },
+    ],
+  },
+    {
+    id: 4,
+    clues: ['A shape of a Cone'],
+    answers: [
+      // { display: '🎉', label: 'Birthday Cap' },
+      // { display: '🍦', label: 'Ice Cream Cone' },
+      // { display: '🚧', label: 'Traffic Cone' },
+        { display: birthdayCap, label: 'Birthday Cap', isImage: true }, // ✅
+    { display: IceCreamCone, label: 'Ice Cream Cone',isImage:true },
+    { display: trafficCone, label: 'Traffic Cone', isImage: true },
+      { display: Pine, label: 'Pine Tree',isImage:true },
+      { display: Funnel, label: 'Funnel',isImage:true },
+    ],
+  },
+    {
+    id: 5,
+    clues: ['A shape of a Triangle'],
+    answers: [
+      // { display: '🔺', label: 'Nachos' },
+      { display: nachos, label: 'Nachos', isImage: true },
+      { display: MadAngles, label: 'Mad Angles' ,isImage:true},
+      { display: Triangularflaginsports, label: 'Flag',isImage:true },
+      // { display: '👔', label: 'Cloth Hanger' },
+
+    { display: Hanger, label: 'Cloth Hanger', isImage: true },
+    ],
+  },
+    {
+    id: 6,
+    clues: ['A shape of a Cuboid'],
+    answers: [
+      { display: Matchbox, label: 'Match Box',isImage:true },
+      { display: Eraser, label: 'Eraser',isImage:true },
+      { display: brick, label: 'Brick',isImage:true },
+    ],
+  },
+    {
+    id: 7,
+    clues: ['A shape of a Cube'],
+    answers: [
+      { display: '🧊', label: 'Sugar Cube' },
+      { display: Rubiccube, label: "Rubik's Cube",isImage:true },
+
+    // { display: rubiksCube, label: "Rubik's Cube", isImage: true }
+      { display: Dice, label: 'Dice',isImage:true },
+    ],
+  },
+    {
+    id: 8,
+    clues: ['A shape of a Cylinder'],
+    answers: [
+      { display: Waterbottle, label: 'Bottle',isImage:true },
+      { display: candle, label: 'Candle',isImage:true },
+      { display: gasCylinder, label: 'Gas Cylinder',isImage:true},
+      // { display: gasCylinder, label: 'Gas Cylinder', isImage: true },
+    ],
+  },
+    {
+    id: 9,
+    clues: ['Representation of 3 times of 4'],
+    answers: [{ display: '4+4+4', label: '4+4+4' }],
+  },
+  {
+    id: 10,
+    clues: ['Representation of 4 groups of 3'],
+    answers: [{ display: '3+3+3+3', label: '3+3+3+3' }],
+  },
+    {
+    id: 11,
+    clues: ['Number of Ones in 2 Tens'],
+    answers: [{ display: '20', label: '20' }],
+  },
+    {
+    id: 12,
+    clues: ['Number with 5 Tens and 4 more Ones than Tens'],
+    answers: [{ display: '59', label: '59' }],
+  },
+    {
+    id: 13,
+    clues: ['Smallest 3 digit number'],
+    answers: [{ display: '100', label: '100' }],
+  },
+    {
+    id: 14,
+    clues: ['A number greater than 400 and less than 420, divisible by 5'],
+    answers: [{ display: '415', label: '415' }],
+  },
+    {
+    id: 15,
+    clues: ['The difference between 750 and the sum of 200 and 300'],
+    answers: [{ display: '250', label: '250' }],
+  },
+    {
+    id: 16,
+    clues: ['Double the difference of 50 and 18'],
+    answers: [{ display: '64', label: '64' }],
+  },
+    {
+    id: 17,
+    clues: ['The number that is 25 more than 375'],
+    answers: [{ display: '400', label: '400' }],
+  },
+    {
+    id: 18,
+    clues: ['The next multiple of 6 after 42'],
+    answers: [{ display: '48', label: '48' }],
+  },
+    {
+    id: 19,
+    clues: ['The previous multiple of 7 before 50'],
+    answers: [{ display: '49', label: '49' }],
+  },
+    {
+    id: 20,
+    clues: ['The number of Ones in 5 Hundreds'],
+    answers: [{ display: '500', label: '500' }],
+  },
+    {
+    id: 21,
+    clues: ['The sum of the digits of 456'],
+    answers: [{ display: '15', label: '15' }],
+  },
+    {
+    id: 22,
+    clues: ['The product of 7 times 8 minus 10'],
+    answers: [{ display: '46', label: '46' }],
+  },
+    {
+    id: 23,
+    clues: ['The number which when halved gives 36'],
+    answers: [{ display: '72', label: '72' }],
+  },
 ];
 
 // ─────────────────────────────────────────────
