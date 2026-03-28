@@ -1544,6 +1544,91 @@ export const CLUE_CARDS_8_9: ClueCard[] = [
     clues: ['The number which when halved gives 36'],
     answers: [{ display: '72', label: '72' }],
   },
+    {
+    id: 24,
+    clues: ['The total number of days in 3 weeks and 2 days.'],
+    answers: [{ display: '23', label: '23' }],
+  },
+    {
+    id: 25,
+    clues: ['The number of faces in 3 cubes.'],
+    answers: [{ display: '18', label: '18' }],
+  },
+    {
+    id: 26,
+    clues: ['The sum of first four multiples of 3.'],
+    answers: [{ display: '30', label: '30' }],
+  },
+    {
+    id: 27,
+    clues: ['The number of weeks in 28 days.'],
+    answers: [{ display: '4', label: '4' }],
+  },
+    {
+    id: 28,
+    clues: ['Next number in the pattern 5, 11, 23'],
+    answers: [{ display: '47', label: '47' }],
+  },
+    {
+    id: 29,
+    clues: ['The number of sides in two pentagons.'],
+    answers: [{ display: '10', label: '10' }],
+  },
+    {
+    id: 30,
+    clues: ['The sum of 222 and 333.'],
+    answers: [{ display: '555', label: '555' }],
+  },
+    {
+    id: 31,
+    clues: ['The number of Tens in 950.'],
+    answers: [{ display: '95', label: '95' }],
+  },
+    {
+    id: 32,
+    clues: ['The number on reversing the digits of 409.'],
+    answers: [{ display: '904', label: '904' }],
+  },
+    {
+    id: 33,
+    clues: ['The sum of digits of the number formed by 6 hundreds, 8 tens and 5 ones.'],
+    answers: [{ display: '19', label: '19' }],
+  },
+    {
+    id: 34,
+    clues: ['The number of minutes in 1 hour 45 minutes.'],
+    answers: [{ display: '105', label: '105' }],
+  },
+    {
+    id: 35,
+    clues: ['The number of corners in 2 squares and 1 triangle.'],
+    answers: [{ display: '11', label: '11' }],
+  },
+    {
+    id: 36,
+    clues: ['The number which when divided by 5 gives 36.'],
+    answers: [{ display: '108', label: '108' }],
+  },
+    {
+    id: 37,
+    clues: ['The remainder when 100 is divided by 9.'],
+    answers: [{ display: '1', label: '1' }],
+  },
+    {
+    id: 38,
+    clues: ['The number which when divided by 4 gives the same result as 48÷ 6.'],
+    answers: [{ display: '32', label: '32' }],
+  },
+    {
+    id: 39,
+    clues: ['The divisor if dividend is 81 and quotient is 9.'],
+    answers: [{ display: '9', label: '9' }],
+  },
+    {
+    id: 40,
+    clues: ['Next number in the pattern 2, 6, 7, 21, 22.'],
+    answers: [{ display: '66', label: '66' }],
+  },
 ];
 
 // ─────────────────────────────────────────────
