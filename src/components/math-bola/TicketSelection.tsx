@@ -48,7 +48,7 @@ export default function TicketSelection({ age, onSelect }: Props) {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-20 text-center space-y-4 w-full"
       >
-        <div className="text-4xl">🎫</div>
+        
         <h2
           className="text-2xl md:text-5xl font-bold text-white"
           style={{ fontFamily: "var(--font-display)" }}
@@ -60,7 +60,7 @@ export default function TicketSelection({ age, onSelect }: Props) {
           style={{ fontFamily: "var(--font-display)" }}
         >
           <span className="bg-yellow-400 px-3 py-1 rounded-sm">
-            Choose one of the 9 MathBola! cards
+            Choose one of the 9 MathBola cards
           </span>
         </h1>
 
@@ -90,7 +90,7 @@ export default function TicketSelection({ age, onSelect }: Props) {
                   </div>
                   <div className="flex flex-col items-start">
                     <div className="text-3xl font-bold tracking-widest opacity-80">
-                      Let's play MathBola
+                      Let's play MathBola!
                     </div>
                     <div className="text-3xl font-bold mx-auto">
                       Card #{i + 1}
