@@ -80,7 +80,7 @@ export default function AgeSelection({ onSelect }: Props) {
                 playSound(tapSound);
                 onSelect(opt.value);
               }}
-              className="bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-2xl p-6 space-y-3 hover:border-white hover:shadow-lg transition-all hover:scale-105"
+              className="bg-white/20 backdrop-blur-sm border-2 border-yellow-400 rounded-2xl p-6 space-y-3 hover:border-white hover:shadow-lg transition-all hover:scale-105"
             >
               <div
                 className="text-xl font-bold text-white"
@@ -88,7 +88,7 @@ export default function AgeSelection({ onSelect }: Props) {
               >
                 {opt.label}
               </div>
-              <div className="text-sm text-white/80">{opt.desc}</div>
+              {/* <div className="text-sm text-white/80">{opt.desc}</div> */}
             </motion.button>
           ))}
         </div>

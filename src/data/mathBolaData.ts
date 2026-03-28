@@ -759,6 +759,7 @@ import honeyComb2 from '@/assets/honeyComb2.jpeg';
 import representationof2bars from '@/assets/representationof2bars.png';
 import IceCreamCone from '@/assets/Ice-cream-cone.png';
 import blocks45 from '@/assets/image.png';
+import sugarCubeImage from '@/assets/sugarCubeImage.png';
 
 export type AgeGroup = '7' | '8' | '9+';
 
@@ -910,7 +911,8 @@ export const CLUE_CARDS_6_7: ClueCard[] =
     id: 14,
     clues: ['A shape of a Cube'],
     answers: [
-      { display: '🧊', label: 'Sugar Cube' },
+      // { display: '🧊', label: 'Sugar Cube' },
+      { display: sugarCubeImage, label: "Sugar Cube",isImage:true },
       { display: Rubiccube, label: "Rubik's Cube",isImage:true },
 
     // { display: rubiksCube, label: "Rubik's Cube", isImage: true }
@@ -1160,7 +1162,8 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
     id: 8,
     clues: ['A shape of a Cube'],
       answers: [
-      { display: '🧊', label: 'Sugar Cube' },
+      // { display: '🧊', label: 'Sugar Cube' },
+      { display: sugarCubeImage, label: "Sugar Cube",isImage:true },
       { display: Rubiccube, label: "Rubik's Cube",isImage:true },
 
     // { display: rubiksCube, label: "Rubik's Cube", isImage: true }
@@ -1191,7 +1194,7 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
   {
     id: 12,
     clues: ['The word that will make the statement true: 89 ______ 98'],
-    answers: [{ display: '<', label: 'is less than' }],
+    answers: [{ display: 'less than', label: 'less than' }],
   },
   {
     id: 13,
@@ -1269,8 +1272,8 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
   },
   {
     id: 25,
-    clues: ['Number of faces in a cuboid'],
-    answers: [{ display: '6', label: '6' }],
+    clues: ['Number of faces in five cuboid'],
+    answers: [{ display: '30', label: '30' }],
   },
   {
     id: 26,
@@ -1287,7 +1290,7 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
     clues: ['Subtract two numbers to reach 32'],
     answers: [
       { display: '34-2', label: '34-2' },
-      { display: '38-4', label: '38-4' },
+      { display: '36-4', label: '36-4' },
       { display: '37-5', label: '37-5' },
       { display: '40-8', label: '40-8' },
       { display: '42-10', label: '42-10' },
@@ -1295,14 +1298,14 @@ export const CLUE_CARDS_7_8: ClueCard[] = [
   },
   {
     id: 29,
-    clues: ['A number with 5 at the Tens Place'],
+    clues: ['A number with 2 at the Tens Place'],
     answers: [
-      { display: '56', label: '56' },
-      { display: '57', label: '57' },
-      { display: '59', label: '59' },
-      { display: '51', label: '51' },
-      { display: '52', label: '52' },
-      { display: '53', label: '53' },
+      { display: '26', label: '26' },
+      { display: '27', label: '27' },
+      { display: '29', label: '29' },
+      { display: '21', label: '21' },
+      { display: '22', label: '22' },
+      { display: '23', label: '23' },
     ],
   },
   {
@@ -1452,7 +1455,8 @@ export const CLUE_CARDS_8_9: ClueCard[] = [
     id: 7,
     clues: ['A shape of a Cube'],
     answers: [
-      { display: '🧊', label: 'Sugar Cube' },
+      // { display: '🧊', label: 'Sugar Cube' },
+      { display: sugarCubeImage, label: "Sugar Cube",isImage:true },
       { display: Rubiccube, label: "Rubik's Cube",isImage:true },
 
     // { display: rubiksCube, label: "Rubik's Cube", isImage: true }
@@ -1864,7 +1868,7 @@ export function generateCluesForTicket(
 
 // ─── HOW TO PLAY INSTRUCTIONS (unchanged) ───
 export const mathBolaInstructions = [
-  { emoji: '🎫', text: '•	You have chosen your MathBola! card — let\'s begin!' },
+  { emoji: '🎫', text: '•	You have chosen your MathBola card — let\'s begin!' },
   { emoji: '📢', text: '•	Get ready! A clue will be read aloud and shown on the screen.' },
   { emoji: '🧮', text: '•	Think fast — you have 20 seconds for each clue.' },
   { emoji: '✅', text: '•	Solve it and search for the matching clue on your card.' },
