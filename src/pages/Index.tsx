@@ -71,6 +71,29 @@ const GAMES = [
     path: "/games/mathbola",
     color: "primary" as const,
   },
+  {
+    title:
+      "B.H.A.R.A.T (Building Holistic Understanding through Representations of Arithmetic Tables)🚀",
+    description: "  From Representation to Real Understanding.",
+    emoji: "🎲",
+    about_game:
+      "To help the learners develop a comprehensive understanding of mathematical concepts such as number, operations, patterns, and spatial relationships by interpreting and applying them in real-life contexts through interactive, game-based experiences.",
+    learning_object: {
+      heading: "After playing the game, learners will be able to:",
+      points: [
+        "Demonstrate understanding of mathematical concepts in real-life contexts.",
+        "Use logical reasoning to make decisions and justify their thinking.",
+        "Recognize patterns, relationships, and structures in different situations.",
+        "Connect different mathematical ideas and apply them flexibly.",
+        "Reflect on their thinking and identify errors to improve solutions.",
+        "Show confidence and persistence while engaging with mathematical tasks.",
+      ],
+    },
+    levels: 2,
+    age: "4+",
+    path: "/games/bharat",
+    color: "primary" as const,
+  },
 ];
 
 const Index = () => {

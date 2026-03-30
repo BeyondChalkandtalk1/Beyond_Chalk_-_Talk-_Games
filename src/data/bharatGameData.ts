@@ -1,0 +1,118 @@
+// Number words for constructing statements
+const numberWords = [
+  '', 'Ones', 'Two', 'Three', 'Four', 'Five', 
+  'Six', 'Seven', 'Eight', 'Nine', 'Ten'
+];
+
+const resultWords: Record<number, string> = {
+  1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five',
+  6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten',
+  11: 'Eleven', 12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen',
+  16: 'Sixteen', 17: 'Seventeen', 18: 'Eighteen', 19: 'Nineteen', 20: 'Twenty',
+  21: 'Twenty One', 22: 'Twenty Two', 23: 'Twenty Three', 24: 'Twenty Four',
+  25: 'Twenty Five', 26: 'Twenty Six', 27: 'Twenty Seven', 28: 'Twenty Eight',
+  29: 'Twenty Nine', 30: 'Thirty', 31: 'Thirty One', 32: 'Thirty Two',
+  33: 'Thirty Three', 34: 'Thirty Four', 35: 'Thirty Five', 36: 'Thirty Six',
+  37: 'Thirty Seven', 38: 'Thirty Eight', 39: 'Thirty Nine', 40: 'Forty',
+  41: 'Forty One', 42: 'Forty Two', 43: 'Forty Three', 44: 'Forty Four',
+  45: 'Forty Five', 46: 'Forty Six', 47: 'Forty Seven', 48: 'Forty Eight',
+  49: 'Forty Nine', 50: 'Fifty', 54: 'Fifty Four', 56: 'Fifty Six',
+  60: 'Sixty', 63: 'Sixty Three', 64: 'Sixty Four', 70: 'Seventy',
+  72: 'Seventy Two', 80: 'Eighty', 81: 'Eighty One', 90: 'Ninety', 100: 'Hundred'
+};
+
+// Graphical icons for each number (from counting document)
+export const numberIcons: Record<number, { emoji: string; label: string }> = {
+  1: { emoji: '☀️', label: 'sun' },
+  2: { emoji: '🖐️', label: 'hand' },
+  3: { emoji: '🚦', label: 'traffic light' },
+  4: { emoji: '🚗', label: 'car wheel' },
+  5: { emoji: '✋', label: 'fingers' },
+  6: { emoji: '❄️', label: 'snowflake' },
+  7: { emoji: '🌈', label: 'rainbow' },
+  8: { emoji: '🐙', label: 'octopus' },
+  9: { emoji: '🎯', label: 'tic-tac-toe' },
+  10: { emoji: '🎳', label: 'bowling pins' },
+};
+
+export interface StepData {
+  step: number;
+  title: string;
+  content: {
+    writtenText: string;
+    additionForm: string;
+    graphicalIcons: string[];
+    graphicalLabel: string;
+    arrayRows: number;
+    arrayCols: number;
+    multiplicationForm: string;
+    result: number;
+  };
+}
+
+export function getStatementText(tableOf: number, multipliedBy: number): string {
+  const result = tableOf * multipliedBy;
+  const tableWord = numberWords[tableOf];
+  const multWord = numberWords[multipliedBy];
+  const resultWord = resultWords[result] || result.toString();
+  
+  // Format: "Three Ones are Three" or "Three One is Three"
+  const pluralMult = multipliedBy === 1 ? multWord : multWord + 's';
+  const verb = multipliedBy === 0 ? 'is' : 'are';
+  
+  return `${tableWord} ${pluralMult} ${verb} ${resultWord}`;
+}
+
+export function getAdditionForm(tableOf: number, multipliedBy: number): string {
+  const result = tableOf * multipliedBy;
+  if (tableOf === 1) {
+    return `${multipliedBy} = ${result}`;
+  }
+  const parts = Array(tableOf).fill(multipliedBy).join('+');
+  return `${parts} = ${result}`;
+}
+
+export function getMultiplicationForm(tableOf: number, multipliedBy: number): string {
+  return `${tableOf} × ${multipliedBy} = ${tableOf * multipliedBy}`;
+}
+
+export function getGraphicalRepresentation(tableOf: number, multipliedBy: number) {
+  const icon = numberIcons[multipliedBy];
+  // Show tableOf groups of the icon
+  const groups: string[][] = [];
+  for (let i = 0; i < tableOf; i++) {
+    groups.push([icon.emoji]);
+  }
+  return { groups, label: icon.label, emoji: icon.emoji };
+}
+
+export function generateStepData(tableOf: number, multipliedBy: number): StepData {
+  const icon = numberIcons[multipliedBy];
+  const graphicalIcons = Array(tableOf).fill(icon.emoji);
+  
+  return {
+    step: multipliedBy,
+    title: `${tableOf} × ${multipliedBy}`,
+    content: {
+      writtenText: getStatementText(tableOf, multipliedBy),
+      additionForm: getAdditionForm(tableOf, multipliedBy),
+      graphicalIcons,
+      graphicalLabel: icon.label,
+      arrayRows: tableOf,
+      arrayCols: multipliedBy,
+      multiplicationForm: getMultiplicationForm(tableOf, multipliedBy),
+      result: tableOf * multipliedBy,
+    },
+  };
+}
+
+export const TABLES_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+export const STEP_LABELS = [
+  'Written Text',
+  'Say It Aloud',
+  'Addition Form',
+  'Graphical Representation',
+  'Array / Grid Form',
+  'Multiplication Form',
+];

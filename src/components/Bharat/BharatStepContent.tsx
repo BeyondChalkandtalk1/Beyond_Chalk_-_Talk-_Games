@@ -1,0 +1,409 @@
+import { motion } from "framer-motion";
+import { Volume2 } from "lucide-react";
+import type { StepData } from "@/data/bharatGameData";
+
+interface Props {
+  stepIndex: number;
+  stepData: StepData;
+  tableOf: number;
+  multipliedBy: number;
+  onSpeak: (text: string) => void;
+}
+
+const BharatStepContent = ({
+  stepIndex,
+  stepData,
+  tableOf,
+  multipliedBy,
+  onSpeak,
+}: Props) => {
+  const { content } = stepData;
+
+  switch (stepIndex) {
+    case 0: // Written Text
+      return (
+        <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+          <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+            Step 1 — Written Text
+          </p>
+          <motion.h3
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="text-3xl md:text-4xl font-display font-bold text-foreground text-center"
+          >
+            {content.writtenText}
+          </motion.h3>
+          <p className="text-muted-foreground font-body text-sm">
+            Read the statement carefully 📖
+          </p>
+        </div>
+      );
+
+    case 1: // Say It Aloud
+      return (
+        <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+          <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+            Step 2 — Say It Out Aloud
+          </p>
+          <motion.h3
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="text-3xl md:text-4xl font-display font-bold text-foreground text-center"
+          >
+            {content.writtenText}
+          </motion.h3>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onSpeak(content.writtenText)}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-secondary text-secondary-foreground font-display font-semibold text-lg hover:opacity-90 transition"
+          >
+            <Volume2 size={24} /> Listen & Repeat 🔊
+          </motion.button>
+        </div>
+      );
+
+    case 2: // Addition Form
+      return (
+        <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+          <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+            Step 3 — Addition Form
+          </p>
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="text-3xl md:text-5xl font-display font-bold text-primary text-center"
+          >
+            {content.additionForm}
+          </motion.div>
+          <p className="text-muted-foreground font-body text-sm text-center max-w-md">
+            Multiplication is repeated addition! Adding{" "}
+            <span className="font-semibold">{multipliedBy}</span> a total of{" "}
+            <span className="font-semibold">{tableOf}</span> times.
+          </p>
+        </div>
+      );
+
+    case 3: // Graphical Representation
+      return (
+        <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+          <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+            Step 4 — Graphical Representation
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2 text-4xl md:text-5xl">
+            {content.graphicalIcons.map((icon, i) => (
+              <motion.span
+                key={i}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: i * 0.15 }}
+                className="inline-flex items-center"
+              >
+                {i > 0 && (
+                  <span className="text-2xl text-muted-foreground mx-1 font-display">
+                    +
+                  </span>
+                )}
+                <span className="text-4xl md:text-5xl">{icon}</span>
+              </motion.span>
+            ))}
+            <span className="text-2xl text-muted-foreground mx-2 font-display">
+              =
+            </span>
+            <span className="font-display font-bold text-primary text-3xl md:text-4xl">
+              {content.result}
+            </span>
+          </div>
+          <p className="text-muted-foreground font-body text-sm text-center">
+            {tableOf} {content.graphicalLabel}
+            {tableOf > 1 ? "s" : ""} make {content.result}!
+          </p>
+        </div>
+      );
+
+    case 4: // Array / Grid Form
+      return (
+        <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+          <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+            Step 5 — Array / Grid Form
+          </p>
+          <div className="flex flex-col items-center gap-1.5">
+            {Array.from({ length: content.arrayRows }, (_, row) => (
+              <motion.div
+                key={row}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: row * 0.1 }}
+                className="flex gap-1.5"
+              >
+                {Array.from({ length: content.arrayCols }, (_, col) => (
+                  <motion.div
+                    key={col}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: row * 0.1 + col * 0.04 }}
+                    className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-game-dot flex items-center justify-center text-xs"
+                  >
+                    😊
+                  </motion.div>
+                ))}
+              </motion.div>
+            ))}
+          </div>
+          <p className="text-muted-foreground font-body text-sm text-center">
+            {content.arrayRows} rows × {content.arrayCols} columns ={" "}
+            <span className="font-semibold text-primary">{content.result}</span>{" "}
+            smiley balls
+          </p>
+        </div>
+      );
+
+    case 5: // Multiplication Form
+      return (
+        <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+          <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+            Step 6 — Multiplication Form
+          </p>
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="text-4xl md:text-6xl font-display font-bold text-primary"
+          >
+            {content.multiplicationForm}
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-muted-foreground font-body text-sm text-center max-w-md"
+          >
+            🎉 You've seen this fact as text, addition, pictures, and an array.
+            Now you know{" "}
+            <span className="font-semibold text-primary">
+              {content.multiplicationForm}
+            </span>{" "}
+            deeply!
+          </motion.p>
+        </div>
+      );
+
+    default:
+      return null;
+  }
+};
+
+export default BharatStepContent;
+
+
+
+// ---------final
+// import { useEffect, useRef } from "react";
+// import { motion } from "framer-motion";
+// import { Volume2 } from "lucide-react";
+// import type { StepData } from "@/data/bharatGameData";
+
+// interface Props {
+//   stepIndex: number;
+//   stepData: StepData;
+//   tableOf: number;
+//   multipliedBy: number;
+//   onSpeak: (text: string) => void;
+// }
+
+// const BharatStepContent = ({
+//   stepIndex,
+//   stepData,
+//   tableOf,
+//   multipliedBy,
+//   onSpeak,
+// }: Props) => {
+//   const { content } = stepData;
+//   const hasAutoPlayed = useRef(false);
+
+//   // Auto-play sound when step 2 (index 1) appears
+//   useEffect(() => {
+//     if (stepIndex === 1 && !hasAutoPlayed.current) {
+//       hasAutoPlayed.current = true;
+//       onSpeak(content.writtenText);
+//     }
+//     if (stepIndex !== 1) {
+//       hasAutoPlayed.current = false;
+//     }
+//   }, [stepIndex, content.writtenText, onSpeak]);
+
+//   switch (stepIndex) {
+//     case 0: // Written Text
+//       return (
+//         <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+//           <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+//             Step 1 — Written Text
+//           </p>
+//           <motion.h3
+//             initial={{ scale: 0.8, opacity: 0 }}
+//             animate={{ scale: 1, opacity: 1 }}
+//             className="text-3xl md:text-4xl font-display font-bold text-foreground text-center"
+//           >
+//             {content.writtenText}
+//           </motion.h3>
+//           <p className="text-muted-foreground font-body text-sm">
+//             Read the statement carefully 📖
+//           </p>
+//         </div>
+//       );
+
+//     case 1: // Say It Aloud
+//       return (
+//         <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+//           <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+//             Step 2 — Say It Out Aloud
+//           </p>
+//           <motion.h3
+//             initial={{ scale: 0.8, opacity: 0 }}
+//             animate={{ scale: 1, opacity: 1 }}
+//             className="text-3xl md:text-4xl font-display font-bold text-foreground text-center"
+//           >
+//             {content.writtenText}
+//           </motion.h3>
+//           <motion.button
+//             whileHover={{ scale: 1.05 }}
+//             whileTap={{ scale: 0.95 }}
+//             onClick={() => onSpeak(content.writtenText)}
+//             className="flex items-center gap-2 px-6 py-3 rounded-xl bg-secondary text-secondary-foreground font-display font-semibold text-lg hover:opacity-90 transition"
+//           >
+//             <Volume2 size={24} /> Listen & Repeat 🔊
+//           </motion.button>
+//         </div>
+//       );
+
+//     case 2: // Addition Form
+//       return (
+//         <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+//           <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+//             Step 3 — Addition Form
+//           </p>
+//           <motion.div
+//             initial={{ scale: 0.8, opacity: 0 }}
+//             animate={{ scale: 1, opacity: 1 }}
+//             className="text-3xl md:text-5xl font-display font-bold text-primary text-center"
+//           >
+//             {content.additionForm}
+//           </motion.div>
+//           <p className="text-muted-foreground font-body text-sm text-center max-w-md">
+//             Multiplication is repeated addition! Adding{" "}
+//             <span className="font-semibold">{multipliedBy}</span> a total of{" "}
+//             <span className="font-semibold">{tableOf}</span> times.
+//           </p>
+//         </div>
+//       );
+
+//     case 3: // Graphical Representation
+//       return (
+//         <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+//           <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+//             Step 4 — Graphical Representation
+//           </p>
+//           <div className="flex flex-wrap items-center justify-center gap-2 text-4xl md:text-5xl">
+//             {content.graphicalIcons.map((icon, i) => (
+//               <motion.span
+//                 key={i}
+//                 initial={{ scale: 0, opacity: 0 }}
+//                 animate={{ scale: 1, opacity: 1 }}
+//                 transition={{ delay: i * 0.15 }}
+//                 className="inline-flex items-center"
+//               >
+//                 {i > 0 && (
+//                   <span className="text-2xl text-muted-foreground mx-1 font-display">
+//                     +
+//                   </span>
+//                 )}
+//                 <span className="text-4xl md:text-5xl">{icon}</span>
+//               </motion.span>
+//             ))}
+//             <span className="text-2xl text-muted-foreground mx-2 font-display">
+//               =
+//             </span>
+//             <span className="font-display font-bold text-primary text-3xl md:text-4xl">
+//               {content.result}
+//             </span>
+//           </div>
+//           <p className="text-muted-foreground font-body text-sm text-center">
+//             {tableOf} {content.graphicalLabel}
+//             {tableOf > 1 ? "s" : ""} make {content.result}!
+//           </p>
+//         </div>
+//       );
+
+//     case 4: // Array / Grid Form
+//       return (
+//         <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+//           <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+//             Step 5 — Array / Grid Form
+//           </p>
+//           <div className="flex flex-col items-center gap-1.5">
+//             {Array.from({ length: content.arrayRows }, (_, row) => (
+//               <motion.div
+//                 key={row}
+//                 initial={{ opacity: 0, x: -20 }}
+//                 animate={{ opacity: 1, x: 0 }}
+//                 transition={{ delay: row * 0.1 }}
+//                 className="flex gap-1.5"
+//               >
+//                 {Array.from({ length: content.arrayCols }, (_, col) => (
+//                   <motion.div
+//                     key={col}
+//                     initial={{ scale: 0 }}
+//                     animate={{ scale: 1 }}
+//                     transition={{ delay: row * 0.1 + col * 0.04 }}
+//                     className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-game-dot flex items-center justify-center text-xs"
+//                   >
+//                     😊
+//                   </motion.div>
+//                 ))}
+//               </motion.div>
+//             ))}
+//           </div>
+//           <p className="text-muted-foreground font-body text-sm text-center">
+//             {content.arrayRows} rows × {content.arrayCols} columns ={" "}
+//             <span className="font-semibold text-primary">{content.result}</span>{" "}
+//             smiley balls
+//           </p>
+//         </div>
+//       );
+
+//     case 5: // Multiplication Form
+//       return (
+//         <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+//           <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+//             Step 6 — Multiplication Form
+//           </p>
+//           <motion.div
+//             initial={{ scale: 0.5, opacity: 0 }}
+//             animate={{ scale: 1, opacity: 1 }}
+//             className="text-4xl md:text-6xl font-display font-bold text-primary"
+//           >
+//             {content.multiplicationForm}
+//           </motion.div>
+//           <motion.p
+//             initial={{ opacity: 0, y: 10 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ delay: 0.3 }}
+//             className="text-muted-foreground font-body text-sm text-center max-w-md"
+//           >
+//             🎉 You've seen this fact as text, addition, pictures, and an array.
+//             Now you know{" "}
+//             <span className="font-semibold text-primary">
+//               {content.multiplicationForm}
+//             </span>{" "}
+//             deeply!
+//           </motion.p>
+//         </div>
+//       );
+
+//     default:
+//       return null;
+//   }
+// };
+
+// export default BharatStepContent;
+
+

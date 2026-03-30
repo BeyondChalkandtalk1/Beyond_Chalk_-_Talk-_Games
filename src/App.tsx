@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import PrimePatrol from "./pages/PrimePatrol";
 import MathBola from "./pages/Mathbola";
+import BharatGame from "./pages/BharatGame";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/games/calendar" element={<CalendarGame />} />
               <Route path="/games/prime" element={<PrimePatrol />} />
               <Route path="/games/mathbola" element={<MathBola />} />
+              <Route path="/games/bharat" element={<BharatGame />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
