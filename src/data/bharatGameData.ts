@@ -1,3 +1,15 @@
+import table1 from "../assets/Bharat/Table/1.png"
+import table2 from "../assets/Bharat/Table/2.png"
+import table3 from "../assets/Bharat/Table/3.png"
+import table4 from "../assets/Bharat/Table/4.png"
+import table5 from "../assets/Bharat/Table/5.png"
+import table6 from "../assets/Bharat/Table/6.png"
+import table7 from "../assets/Bharat/Table/7.png"
+import table8 from "../assets/Bharat/Table/8.png"
+import table9 from "../assets/Bharat/Table/9.png"
+import table10 from "../assets/Bharat/Table/10.png"
+
+
 // Number words for constructing statements
 const numberWords = [
   '', 'Ones', 'Two', 'Three', 'Four', 'Five', 
@@ -106,7 +118,49 @@ export function generateStepData(tableOf: number, multipliedBy: number): StepDat
   };
 }
 
-export const TABLES_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+// export const TABLES_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const TABLES_RANGE =[{
+  table: 1,
+  image: table1,
+  bg:"from-red-400 to-yellow-400 border-red-300" 
+},{
+  table: 2,
+  image: table2,
+  bg:"from-purple-500 to-pink-500 border-purple-400"
+},{
+
+  table: 3,
+  image: table3,
+  bg:"from-cyan-400 to-blue-500 border-cyan-300"
+},{
+  table: 4,
+  image: table4,
+  bg:"from-green-400 to-emerald-500 border-green-300"
+},{
+  table: 5,
+  image: table5,
+  bg:"from-orange-400 to-amber-400 border-orange-300"
+},{
+  table: 6,
+  image: table6,
+  bg:"from-fuchsia-500 to-rose-500 border-fuchsia-400"
+},{
+  table: 7,
+  image: table7,
+  bg:"from-indigo-500 to-violet-500 border-indigo-400"
+},{
+  table: 8,
+  image: table8,
+  bg:"from-teal-400 to-green-400 border-teal-300"
+},{
+  table: 9,   
+  image: table9,
+  bg:"from-red-500 to-orange-400 border-red-400"
+},{
+  table: 10,
+  image: table10,
+  bg:"from-yellow-400 to-sky-400 border-yellow-300"
+}];
 
 export const STEP_LABELS = [
   'Written Text',

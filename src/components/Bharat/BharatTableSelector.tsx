@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 interface Props {
-  tables: number[];
+  tables: { table: number; image: string, bg:String }[];
   onSelect: (table: number) => void;
   level: 1 | 2;
   onLevelChange: (level: 1 | 2) => void;
@@ -20,13 +20,15 @@ const BharatTableSelector = ({
         {/* <p className="text-muted-foreground text-sm">
           Age: 4+ years • 2 Levels
         </p> */}
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground">
-          From Representation to Real Understanding
+        <h2 className="text-4xl md:text-4xl font-display font-bold  text-[#8F2424]">
+          B.H.A.R.A.T
         </h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Learn multiplication tables through 6 different representations —
-          text, speech, addition, graphics, arrays, and multiplication. Build
-          deep understanding step by step!
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground">
+          Building Holistic Understanding through Representations of Arithmetic
+          Tables
+        </h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto text-2xl">
+          Begin your B.H.A.R.A.T. journey—select a table to explore and play.
         </p>
       </div>
 
@@ -48,21 +50,22 @@ const BharatTableSelector = ({
       </div> */}
 
       {/* Table grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-3xl mx-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-8xl mx-auto">
         {tables.map((t, i) => (
           <motion.button
-            key={t}
+            key={t?.table}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.05 }}
-            onClick={() => onSelect(t)}
-            className="bg-card rounded-xl p-6 game-card-shadow hover:scale-105 transition-transform border border-border group"
+            onClick={() => onSelect(t?.table)}
+            className={`bg-card rounded-xl p-6 game-card-shadow hover:scale-105 transition-transform border border-border group bg-gradient-to-br ${t?.bg}`}
           >
             <div className="text-4xl font-display font-bold text-primary group-hover:text-secondary transition-colors">
-              {t}
+              {/* {t?.table} */}
+              <img src={t?.image} alt={`Table ${t?.table}`} />
             </div>
-            <div className="text-sm text-muted-foreground mt-1 font-body">
-              Table of {t}
+            <div className="text-2xl font-bold mt-1  text-black">
+              Times table of {t?.table}
             </div>
           </motion.button>
         ))}
