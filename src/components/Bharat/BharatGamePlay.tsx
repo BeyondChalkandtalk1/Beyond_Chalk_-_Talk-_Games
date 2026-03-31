@@ -6,7 +6,7 @@ import {
   STEP_LABELS,
   getMultiplicationForm,
 } from "@/data/bharatGameData";
-import BharatStepContent from "./BharatStepContent";
+import BharatStepContent from "../Bharat/BharatStepContent";
 
 interface Props {
   tableOf: number;
@@ -22,6 +22,7 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
   const stepData = generateStepData(tableOf, currentMultiplier);
   const totalSteps = 6;
   const maxMultiplier = level === 1 ? 5 : 10;
+  // const maxMultiplier = level === 1 ? 10 : 10;
 
   const handleNextStep = useCallback(() => {
     if (currentStep < totalSteps - 1) {
@@ -145,7 +146,7 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
               <ArrowLeft size={16} /> Previous
             </button>
             <button
-            //   onClick={handleNextStep}
+              // onClick={handleNextStep}
               disabled={isComplete}
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-body text-sm font-medium hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition"
             >

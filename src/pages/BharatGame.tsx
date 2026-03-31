@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { TABLES_RANGE } from "@/data/bharatGameData";
-import BharatTableSelector from "@/components/bharat/BharatTableSelector";
-import BharatGamePlay from "@/components/bharat/BharatGamePlay";
+import BharatTableSelector from "@/components/Bharat/BharatTableSelector";
+import BharatGamePlay from "@/components/Bharat/BharatGamePlay";
 
 const BharatGame = () => {
   const [selectedTable, setSelectedTable] = useState<number | null>(null);
