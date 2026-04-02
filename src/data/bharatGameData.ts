@@ -34,18 +34,32 @@ const resultWords: Record<number, string> = {
 };
 
 // Graphical icons for each number (from counting document)
-export const numberIcons: Record<number, { emoji: string; label: string }> = {
-  1: { emoji: '☀️', label: 'sun' },
-  2: { emoji: '🖐️', label: 'hand' },
-  3: { emoji: '🚦', label: 'traffic light' },
-  4: { emoji: '🚗', label: 'car wheel' },
-  5: { emoji: '✋', label: 'fingers' },
-  6: { emoji: '❄️', label: 'snowflake' },
-  7: { emoji: '🌈', label: 'rainbow' },
-  8: { emoji: '🐙', label: 'octopus' },
-  9: { emoji: '🎯', label: 'tic-tac-toe' },
-  10: { emoji: '🎳', label: 'bowling pins' },
+// export const numberIcons: Record<number, { emoji: string; label: string }> = {
+//   1: { emoji: '☀️', label: 'sun' },
+//   2: { emoji: '🖐️', label: 'hand' },
+//   3: { emoji: '🚦', label: 'traffic light' },
+//   4: { emoji: '🚗', label: 'car wheel' },
+//   5: { emoji: '✋', label: 'fingers' },
+//   6: { emoji: '❄️', label: 'snowflake' },
+//   7: { emoji: '🌈', label: 'rainbow' },
+//   8: { emoji: '🐙', label: 'octopus' },
+//   9: { emoji: '🎯', label: 'tic-tac-toe' },
+//   10: { emoji: '🎳', label: 'bowling pins' },
+// };
+
+export const numberIcons: Record<number, { emoji: string; label: string; represents: string }> = {
+  1: { emoji: '🌍', label: 'earth', represents: '1 – Represents the Earth' },
+  2: { emoji: '🚲', label: 'bicycle', represents: '2 – Represents the wheels of a bicycle' },
+  3: { emoji: '🌿', label: 'bael plant', represents: '3 – Represents the leaves of a Bael plant' },
+  4: { emoji: '🎻', label: 'violin', represents: '4 – Represents the strings of a violin' },
+  5: { emoji: '⭐', label: 'starfish', represents: '5 – Represents the arms of a starfish' },
+  6: { emoji: '❄️', label: 'snowflake', represents: '6 – Represents the sides of a snowflake' },
+  7: { emoji: '🌈', label: 'rainbow', represents: '7 – Represents the colors of a rainbow' },
+  8: { emoji: '🐙', label: 'octopus', represents: '8 – Represents the arms of an octopus' },
+  9: { emoji: '🪐', label: 'planets', represents: '9 – Represents the planets in the solar system' },
+  10: { emoji: '🎳', label: 'bowling pins', represents: '10 – Represents the bowling pins' },
 };
+
 
 export interface StepData {
   step: number;

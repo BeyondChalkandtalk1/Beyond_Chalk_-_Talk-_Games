@@ -415,6 +415,7 @@ import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import type { StepData } from "@/data/bharatGameData";
 import smileImage from "@/assets/Bharat/smilyImage.png";
+import { numberIcons } from "@/data/bharatGameData";
 
 const numberWordsLower: Record<number, string> = {
   1: "one",
@@ -474,7 +475,7 @@ const BharatStepContent = ({
           </motion.h3>
           <p className="text-muted-foreground font-body text-2xl">
             Read the sentence carefully — it says "<em>ones are</em>", not "
-            <em>za</em>" 📖
+            <em>za</em>"
           </p>
         </div>
       );
@@ -495,7 +496,7 @@ const BharatStepContent = ({
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => onSpeak(content.writtenText)}
+            // onClick={() => onSpeak(content.writtenText)}
             className="flex items-center gap-2 px-6 py-3 rounded-xl bg-secondary text-secondary-foreground font-display font-semibold text-2xl hover:opacity-90 transition"
           >
             <Volume2 size={24} /> Let's Hear it Again 🔊
@@ -524,31 +525,63 @@ const BharatStepContent = ({
       );
 
     case 3: // Graphical Representation
-      return (
-        <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
-          {/* <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
-            Step 4 — Graphical Representation
-          </p> */}
-          <div className="flex flex-wrap items-center justify-center gap-2 text-4xl md:text-5xl">
-            {content.graphicalIcons.map((icon, i) => (
-              <motion.span
-                key={i}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: i * 0.15 }}
-                className="inline-flex items-center"
-              >
-                {i > 0 && (
-                  <span className="text-2xl text-muted-foreground mx-1 font-display">
-                    +
-                  </span>
-                )}
-                <span className="text-4xl md:text-5xl">{icon}</span>
-              </motion.span>
-            ))}
-          </div>
-        </div>
-      );
+      // return (
+      //   <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+      //     {/* <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+      //       Step 4 — Graphical Representation
+      //     </p> */}
+      //     <div className="flex flex-wrap items-center justify-center gap-2 text-4xl md:text-5xl">
+      //       {content.graphicalIcons.map((icon, i) => (
+      //         <motion.span
+      //           key={i}
+      //           initial={{ scale: 0, opacity: 0 }}
+      //           animate={{ scale: 1, opacity: 1 }}
+      //           transition={{ delay: i * 0.15 }}
+      //           className="inline-flex items-center"
+      //         >
+      //           {i > 0 && (
+      //             <span className="text-2xl text-muted-foreground mx-1 font-display">
+      //               +
+      //             </span>
+      //           )}
+      //           <span className="text-4xl md:text-5xl">{icon}</span>
+      //         </motion.span>
+      //       ))}
+      //     </div>
+      //   </div>
+      // );
+
+            return (
+              <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6">
+                {/* <p className="text-sm font-body text-muted-foreground uppercase tracking-widest">
+                  Step 4 — Graphical Representation
+                </p> */}
+                <div className="flex flex-wrap items-center justify-center gap-2 text-4xl md:text-5xl">
+                  {content.graphicalIcons.map((icon, i) => (
+                    <motion.span
+                      key={i}
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: i * 0.15 }}
+                      className="inline-flex items-center"
+                    >
+                      {i > 0 && (
+                        <span className="text-2xl text-muted-foreground mx-1 font-display">
+                          +
+                        </span>
+                      )}
+                      <span className="text-4xl md:text-5xl">{icon}</span>
+                    </motion.span>
+                  ))}
+                </div>
+                {/* Representation label at bottom right */}
+                <div className="w-full flex justify-end mt-4">
+                  <p className="text-xs text-muted-foreground font-body italic">
+                    {numberIcons[multipliedBy]?.represents}
+                  </p>
+                </div>
+              </div>
+            );
 
     case 4: // Array / Grid Form
       return (
