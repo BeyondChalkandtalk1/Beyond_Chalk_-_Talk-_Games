@@ -8,6 +8,17 @@ import table7 from "../assets/Bharat/Table/7.png"
 import table8 from "../assets/Bharat/Table/8.png"
 import table9 from "../assets/Bharat/Table/9.png"
 import table10 from "../assets/Bharat/Table/10.png"
+import earth from "../assets/Bharat/earth.png"
+import bicycle from "../assets/Bharat/2_wheels_of_bicycle.png"
+import bealPlant from "../assets/Bharat/3_leaves_in_bael_plant.png"
+import violin from "../assets/Bharat/4_strings_in_violin.png"
+import starfish from "../assets/Bharat/5_hands_of_starfish.png"
+import snowflake from "../assets/Bharat/6_Snowflake.png"
+import rainbow from "../assets/Bharat/7_colors_in_rainbow.jpg"
+import octopus from "../assets/Bharat/8_hands_of_octopus.png"
+import ticTac from "../assets/Bharat/9_squares_in_tic_tac_toe.png"
+import bowling from "../assets/Bharat/10_bowling_pins.png"
+
 
 
 // Number words for constructing statements
@@ -48,16 +59,16 @@ const resultWords: Record<number, string> = {
 // };
 
 export const numberIcons: Record<number, { emoji: string; label: string; represents: string }> = {
-  1: { emoji: '🌍', label: 'earth', represents: '1 – Represents the Earth' },
-  2: { emoji: '🚲', label: 'bicycle', represents: '2 – Represents the wheels of a bicycle' },
-  3: { emoji: '🌿', label: 'bael plant', represents: '3 – Represents the leaves of a Bael plant' },
-  4: { emoji: '🎻', label: 'violin', represents: '4 – Represents the strings of a violin' },
-  5: { emoji: '⭐', label: 'starfish', represents: '5 – Represents the arms of a starfish' },
-  6: { emoji: '❄️', label: 'snowflake', represents: '6 – Represents the sides of a snowflake' },
-  7: { emoji: '🌈', label: 'rainbow', represents: '7 – Represents the colors of a rainbow' },
-  8: { emoji: '🐙', label: 'octopus', represents: '8 – Represents the arms of an octopus' },
-  9: { emoji: '🪐', label: 'planets', represents: '9 – Represents the planets in the solar system' },
-  10: { emoji: '🎳', label: 'bowling pins', represents: '10 – Represents the bowling pins' },
+  1: { emoji: earth, label: 'earth', represents: '1 – Represents the Earth' },
+  2: { emoji: bicycle, label: 'bicycle', represents: '2 – Represents the wheels of a bicycle' },
+  3: { emoji: bealPlant, label: 'bael plant', represents: '3 – Represents the leaves of a Bael plant' },
+  4: { emoji: violin, label: 'violin', represents: '4 – Represents the strings of a violin' },
+  5: { emoji: starfish, label: 'starfish', represents: '5 – Represents the arms of a starfish' },
+  6: { emoji: snowflake, label: 'snowflake', represents: '6 – Represents the sides of a snowflake' },
+  7: { emoji: rainbow, label: 'rainbow', represents: '7 – Represents the colors of a rainbow' },
+  8: { emoji: octopus, label: 'octopus', represents: '8 – Represents the arms of an octopus' },
+  9: { emoji: ticTac, label: 'tic-tac-toe', represents: '9 – Represents the squares of a tic-tac-toe board' },
+  10: { emoji: bowling, label: 'bowling pins', represents: '10 – Represents the bowling pins' },
 };
 
 

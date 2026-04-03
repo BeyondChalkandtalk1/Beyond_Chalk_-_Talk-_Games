@@ -53,7 +53,7 @@ const BharatGame = () => {
   //   </div>
   // );
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative min-h-screen w-full">
       {/* Background Video — only shows when BharatGamePlay is active */}
       {/* {selectedTable && (
         <video
@@ -73,8 +73,7 @@ const BharatGame = () => {
     loop
     muted
     playsInline
-    className="fixed top-0 left-0 w-full -z-10"
-    style={{ height: '100vh' }} 
+    className="absolute w-full bottom-0 object-cover "
   >
     <source src={video} type="video/mp4" />
   </video>
@@ -102,6 +101,7 @@ const BharatGame = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
+              
             >
               <BharatGamePlay
                 tableOf={selectedTable}

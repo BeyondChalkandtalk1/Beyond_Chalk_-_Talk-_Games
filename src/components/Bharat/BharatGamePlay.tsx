@@ -814,7 +814,7 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
 
   const stepData = generateStepData(tableOf, currentMultiplier);
   const totalSteps = 6;
-  const maxMultiplier = level === 1 ? 5 : 10;
+  const maxMultiplier = level === 1 ? 10 : 10;
 
   const isComplete =
     completedEntries.includes(currentMultiplier) &&
@@ -898,25 +898,26 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
   return (
     <div className=" space-y-4 ">
       {/* Top bar */}
-  
+
       {/* <div className="fixed inset-0 bg-black/40 -z-10" /> */}
+      <h2 className="text-3xl md:text-5xl font-display font-bold text-secondary text-center flex-1">
+        Times Table of {tableOf}
+      </h2>
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition font-body text-sm"
+          className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition font-bold text-xl"
         >
-          <ChevronLeft size={18} /> Back to Times Table
+          <ChevronLeft size={28} /> Back to Times Table
         </button>
-        <h2 className="text-3xl md:text-5xl font-display font-bold text-secondary text-center flex-1">
-          Times Table of {tableOf}
-        </h2>
-        <div className="text-sm text-muted-foreground font-body">
-          {/* {currentMultiplier} of {maxMultiplier} */}
-        </div>
+
+        {/* <div className="text-sm text-muted-foreground font-body">
+          {currentMultiplier} of {maxMultiplier}
+        </div> */}
       </div>
 
       {/* Progress bar */}
-      <div className="flex gap-1">
+      {/* <div className="flex gap-1">
         {Array.from({ length: maxMultiplier }, (_, i) => (
           <div
             key={i}
@@ -929,7 +930,7 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
             }`}
           />
         ))}
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main area */}
@@ -942,7 +943,7 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.25 }}
-              className="bg-card rounded-xl border border-border p-6 md:p-8 min-h-[300px] game-card-shadow"
+              className=" rounded-xl border border-border p-6 md:p-8 min-h-[300px] game-card-shadow"
             >
               <BharatStepContent
                 stepIndex={currentStep}
@@ -959,21 +960,21 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
             <button
               onClick={handlePrevious}
               disabled={currentMultiplier === 1 && currentStep === 0}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-secondary text-secondary-foreground font-display font-semibold text-sm hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-secondary text-secondary-foreground font-display font-semibold text-2xl hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <SkipBack size={18} /> Previous
+              <SkipBack size={24} /> Previous
             </button>
             <button
               onClick={() => setIsPaused((p) => !p)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-display font-semibold text-sm hover:opacity-90 transition"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-display font-semibold text-2xl hover:opacity-90 transition"
             >
               {isPaused ? (
                 <>
-                  <Play size={18} /> Play
+                  <Play size={24} /> Play
                 </>
               ) : (
                 <>
-                  <Pause size={18} /> Pause
+                  <Pause size={24} /> Pause
                 </>
               )}
             </button>
@@ -981,8 +982,8 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
         </div>
 
         {/* Summary panel */}
-        <div className="bg-card rounded-xl border border-border p-5 game-card-shadow">
-          <h3 className="font-display font-bold text-lg text-primary mb-4">
+        <div className="rounded-xl  p-1 game-card-shadow">
+          <h3 className="font-display font-bold text-3xl text-primary mb-1">
             📋 Times Table of {tableOf}
           </h3>
           <div className="space-y-2">
@@ -993,7 +994,7 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
                   key={mult}
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="px-3 py-2 rounded-lg text-sm font-body bg-game-done/10 text-game-done font-semibold"
+                  className="px-3 py-2 rounded-lg text-2xl font-body bg-game-done/10 text-game-done font-semibold"
                 >
                   {getMultiplicationForm(tableOf, mult)}
                 </motion.div>
@@ -1004,15 +1005,15 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-6 p-4 bg-game-done/10 rounded-xl text-center"
+              className="mt-3 p-1 bg-game-done/10 rounded-xl text-center text-2xl"
             >
-              <p className="text-2xl mb-1">🏆</p>
+              {/* <p className="text-5xl mb-1">🏆</p>
               <p className="font-display font-bold text-game-done">
                 Table of {tableOf} Complete!
-              </p>
+              </p> */}
               <button
                 onClick={onBack}
-                className="mt-3 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-body font-medium hover:opacity-90 transition"
+                className="mt-3 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-2xl font-body font-medium hover:opacity-90 transition"
               >
                 Try Another Table
               </button>

@@ -570,13 +570,13 @@ const BharatStepContent = ({
                           +
                         </span>
                       )}
-                      <span className="text-4xl md:text-5xl">{icon}</span>
+                      <img src={icon} alt="" className="w-28 h-28"/>
                     </motion.span>
                   ))}
                 </div>
                 {/* Representation label at bottom right */}
                 <div className="w-full flex justify-end mt-4">
-                  <p className="text-xs text-muted-foreground font-body italic">
+                  <p className="text-2xl  font-bold ">
                     {numberIcons[multipliedBy]?.represents}
                   </p>
                 </div>
@@ -610,7 +610,7 @@ const BharatStepContent = ({
                       className={`w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-xs ${
                         isFilled
                           ? "bg-game-dot"
-                          : "bg-muted/40 border border-border"
+                          : "bg-white border border-border"
                       }`}
                     >
                       {isFilled ? <img src={smileImage} alt="Smile" className="w-full h-full object-contain" /> : ""}
@@ -646,7 +646,7 @@ const BharatStepContent = ({
             transition={{ delay: 0.3 }}
             className="text-muted-foreground font-body text-2xl text-center max-w-md"
           >
-            🎉 Great job! You've learned this the B.H.A.R.A.T. way!
+            Great job! You've learned this the B.H.A.R.A.T. way!
           </motion.p>
         </div>
       );
