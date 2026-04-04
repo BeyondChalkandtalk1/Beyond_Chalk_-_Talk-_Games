@@ -449,15 +449,15 @@ const BharatStepContent = ({
   const hasAutoPlayed = useRef(false);
 
   // Auto-play sound when step 2 (index 1) appears
-  // useEffect(() => {
-  //   if (stepIndex === 1 && !hasAutoPlayed.current) {
-  //     hasAutoPlayed.current = true;
-  //     onSpeak(content.writtenText);
-  //   }
-  //   if (stepIndex !== 1) {
-  //     hasAutoPlayed.current = false;
-  //   }
-  // }, [stepIndex, content.writtenText, onSpeak]);
+  useEffect(() => {
+    if (stepIndex === 1 && !hasAutoPlayed.current) {
+      hasAutoPlayed.current = true;
+      onSpeak(content.writtenText);
+    }
+    if (stepIndex !== 1) {
+      hasAutoPlayed.current = false;
+    }
+  }, [stepIndex, content.writtenText, onSpeak]);
 
   switch (stepIndex) {
     case 0: // Written Text
@@ -496,7 +496,7 @@ const BharatStepContent = ({
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            // onClick={() => onSpeak(content.writtenText)}
+            onClick={() => onSpeak(content.writtenText)}
             className="flex items-center gap-2 px-6 py-3 rounded-xl bg-secondary text-secondary-foreground font-display font-semibold text-2xl hover:opacity-90 transition"
           >
             <Volume2 size={24} /> Let's Hear it Again 🔊

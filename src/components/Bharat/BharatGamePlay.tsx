@@ -798,7 +798,7 @@ import {
   numberIcons,
 } from "@/data/bharatGameData";
 import BharatStepContent from "./BharatStepContent";
-import video from "@/assets/Bharat/game4bg.mp4";
+import video from "@/assets/Bharat/After completion of every table .mp4";
 
 interface Props {
   tableOf: number;
@@ -811,6 +811,8 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedEntries, setCompletedEntries] = useState<number[]>([]);
   const [isPaused, setIsPaused] = useState(false);
+  
+  const [showModal, setShowModal] = useState(false);
 
   const stepData = generateStepData(tableOf, currentMultiplier);
   const totalSteps = 6;
@@ -894,6 +896,19 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
       setCurrentStep(totalSteps - 1);
     }
   };
+
+
+// isComplete hone par modal open karo
+useEffect(() => {
+  if (isComplete) {
+    setShowModal(true);
+    // 5 second baad auto-close
+    const timer = setTimeout(() => {
+      setShowModal(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }
+}, [isComplete]);
 
   return (
     <div className=" space-y-4 ">
@@ -1021,6 +1036,51 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
           )}
         </div>
       </div>
+      {/* 🎉 Completion Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              className="relative rounded-2xl overflow-hidden shadow-2xl w-[90vw] max-w-lg"
+            >
+              {/* Cross Button - Top Right */}
+              <button
+                onClick={() => setShowModal(false)}
+                className="absolute top-3 right-3 z-10 bg-black/60 hover:bg-black/80 text-white rounded-full w-9 h-9 flex items-center justify-center transition text-xl font-bold"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+
+              {/* Video */}
+              <video
+                src={video}
+                autoPlay
+                muted
+                playsInline
+                className="w-full h-auto max-h-[70vh] object-cover"
+                onEnded={() => setShowModal(false)}
+              />
+
+              {/* Overlay Text */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-5 text-center">
+                <p className="text-white font-display font-bold text-3xl">
+                  🏆 Table of {tableOf} Complete!
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
