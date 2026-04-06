@@ -799,6 +799,7 @@ import {
 } from "@/data/bharatGameData";
 import BharatStepContent from "./BharatStepContent";
 import video from "@/assets/Bharat/After completion of every table .mp4";
+import BharatQuizModal from "./BharatQuizModal";
 
 interface Props {
   tableOf: number;
@@ -809,6 +810,8 @@ interface Props {
 const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
   const [currentMultiplier, setCurrentMultiplier] = useState(1);
   const [currentStep, setCurrentStep] = useState(0);
+  const [showQuiz, setShowQuiz] = useState(false);
+
   const [completedEntries, setCompletedEntries] = useState<number[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   
@@ -899,12 +902,24 @@ const BharatGamePlay = ({ tableOf, level, onBack }: Props) => {
 
 
 // isComplete hone par modal open karo
+// useEffect(() => {
+//   if (isComplete) {
+//     setShowModal(true);
+//     // 5 second baad auto-close
+//     const timer = setTimeout(() => {
+//       setShowModal(false);
+//     }, 5000);
+//     return () => clearTimeout(timer);
+//   }
+// }, [isComplete]);
+
 useEffect(() => {
   if (isComplete) {
     setShowModal(true);
-    // 5 second baad auto-close
+    // After 5 s (or when video ends) open the quiz
     const timer = setTimeout(() => {
       setShowModal(false);
+      setShowQuiz(true);
     }, 5000);
     return () => clearTimeout(timer);
   }
@@ -1081,6 +1096,15 @@ useEffect(() => {
           </motion.div>
         )}
       </AnimatePresence>
+      {showQuiz && (
+        <BharatQuizModal
+          tableOf={tableOf}
+          onClose={() => {
+            setShowQuiz(false);
+            onBack(); // optional: go back after quiz
+          }}
+        />
+      )}
     </div>
   );
 };
