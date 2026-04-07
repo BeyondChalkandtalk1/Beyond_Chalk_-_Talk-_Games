@@ -91,7 +91,7 @@ const GAMES = [
         "Recall multiplication facts with meaning rather than rote memorization.",
       ],
     },
-    levels: 2,
+    levels: 1,
     age: "4+",
     path: "/games/bharat",
     color: "primary" as const,

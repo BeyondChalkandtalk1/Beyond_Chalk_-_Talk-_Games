@@ -144,11 +144,13 @@ export function generateStepData(tableOf: number, multipliedBy: number): StepDat
 }
 
 // export const TABLES_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-export const TABLES_RANGE =[{
+export const TABLES_RANGE =[
+    {
   table: 1,
   image: table1,
   bg:"from-red-400 to-yellow-400 border-red-300" 
-},{
+},
+{
   table: 2,
   image: table2,
   bg:"from-purple-500 to-pink-500 border-purple-400"
@@ -185,7 +187,9 @@ export const TABLES_RANGE =[{
   table: 10,
   image: table10,
   bg:"from-yellow-400 to-sky-400 border-yellow-300"
-}];
+}
+
+];
 
 export const STEP_LABELS = [
   'Written Text',
