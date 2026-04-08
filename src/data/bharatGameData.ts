@@ -20,6 +20,19 @@ import ticTac from "../assets/Bharat/9_squares_in_tic_tac_toe.png"
 import bowling from "../assets/Bharat/10_bowling_pins.png"
 
 
+// Graphical icons for each number (from counting document)
+// export const numberIcons: Record<number, { emoji: string; label: string }> = {
+//   1: { emoji: '☀️', label: 'sun' },
+//   2: { emoji: '🖐️', label: 'hand' },
+//   3: { emoji: '🚦', label: 'traffic light' },
+//   4: { emoji: '🚗', label: 'car wheel' },
+//   5: { emoji: '✋', label: 'fingers' },
+//   6: { emoji: '❄️', label: 'snowflake' },
+//   7: { emoji: '🌈', label: 'rainbow' },
+//   8: { emoji: '🐙', label: 'octopus' },
+//   9: { emoji: '🎯', label: 'tic-tac-toe' },
+//   10: { emoji: '🎳', label: 'bowling pins' },
+// };
 
 // Number words for constructing statements
 const numberWords = [
@@ -44,19 +57,6 @@ const resultWords: Record<number, string> = {
   72: 'Seventy Two', 80: 'Eighty', 81: 'Eighty One', 90: 'Ninety', 100: 'Hundred'
 };
 
-// Graphical icons for each number (from counting document)
-// export const numberIcons: Record<number, { emoji: string; label: string }> = {
-//   1: { emoji: '☀️', label: 'sun' },
-//   2: { emoji: '🖐️', label: 'hand' },
-//   3: { emoji: '🚦', label: 'traffic light' },
-//   4: { emoji: '🚗', label: 'car wheel' },
-//   5: { emoji: '✋', label: 'fingers' },
-//   6: { emoji: '❄️', label: 'snowflake' },
-//   7: { emoji: '🌈', label: 'rainbow' },
-//   8: { emoji: '🐙', label: 'octopus' },
-//   9: { emoji: '🎯', label: 'tic-tac-toe' },
-//   10: { emoji: '🎳', label: 'bowling pins' },
-// };
 
 export const numberIcons: Record<number, { emoji: string; label: string; represents: string }> = {
   1: { emoji: earth, label: 'earth', represents: '1 – Represents the Earth' },
@@ -87,16 +87,42 @@ export interface StepData {
   };
 }
 
+const pluralWords: Record<string, string> = {
+  'One': 'Ones',
+  'Two': 'Twos',
+  'Three': 'Threes',
+  'Four': 'Fours',
+  'Five': 'Fives',
+  'Six': 'Sixes',
+  'Seven': 'Sevens',
+  'Eight': 'Eights',
+  'Nine': 'Nines',
+  'Ten': 'Tens',
+};
+
+// export function getStatementText(tableOf: number, multipliedBy: number): string {
+//   const result = tableOf * multipliedBy;
+//   const tableWord = numberWords[tableOf];
+//   const multWord = numberWords[multipliedBy];
+//   const resultWord = resultWords[result] || result.toString();
+  
+//   // Format: "Three Ones are Three" or "Three One is Three"
+//   const pluralMult = tableOf === 1 ? multWord : multWord;
+//   const verb = tableOf === 1 ? 'is' : 'are';
+  
+//   return `${tableWord} ${pluralMult} ${verb} ${resultWord}`;
+// }
+
 export function getStatementText(tableOf: number, multipliedBy: number): string {
   const result = tableOf * multipliedBy;
   const tableWord = numberWords[tableOf];
   const multWord = numberWords[multipliedBy];
   const resultWord = resultWords[result] || result.toString();
-  
-  // Format: "Three Ones are Three" or "Three One is Three"
-  const pluralMult = multipliedBy === 1 ? multWord : multWord + 's';
-  const verb = multipliedBy === 0 ? 'is' : 'are';
-  
+
+  // Plural tabOf > 1 ho to plural form use karo
+  const pluralMult = tableOf === 1 ? multWord : (pluralWords[multWord] ?? multWord);
+  const verb = tableOf === 1 ? 'is' : 'are';
+
   return `${tableWord} ${pluralMult} ${verb} ${resultWord}`;
 }
 
