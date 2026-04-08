@@ -30,6 +30,7 @@ const App = () => (
               <Route path="/games/prime" element={<PrimePatrol />} />
               <Route path="/games/mathbola" element={<MathBola />} />
               <Route path="/games/bharat" element={<BharatGame />} />
+              {/* <Route path="/" element={<BharatGame />} /> */}
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

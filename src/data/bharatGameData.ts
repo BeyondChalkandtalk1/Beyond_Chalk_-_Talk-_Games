@@ -35,8 +35,13 @@ import bowling from "../assets/Bharat/10_bowling_pins.png"
 // };
 
 // Number words for constructing statements
+// const numberWords = [
+//   '', 'Ones', 'Two', 'Three', 'Four', 'Five', 
+//   'Six', 'Seven', 'Eight', 'Nine', 'Ten'
+// ];
+// ✅ Sahi
 const numberWords = [
-  '', 'Ones', 'Two', 'Three', 'Four', 'Five', 
+  '', 'One', 'Two', 'Three', 'Four', 'Five', 
   'Six', 'Seven', 'Eight', 'Nine', 'Ten'
 ];
 
@@ -126,12 +131,21 @@ export function getStatementText(tableOf: number, multipliedBy: number): string 
   return `${tableWord} ${pluralMult} ${verb} ${resultWord}`;
 }
 
+// export function getAdditionForm(tableOf: number, multipliedBy: number): string {
+//   const result = tableOf * multipliedBy;
+//   if (tableOf === 1) {
+//     return `${multipliedBy} = ${result}`;
+//   }
+//   const parts = Array(tableOf).fill(multipliedBy).join('+');
+//   return `${parts} = ${result}`;
+// }
+
 export function getAdditionForm(tableOf: number, multipliedBy: number): string {
   const result = tableOf * multipliedBy;
   if (tableOf === 1) {
-    return `${multipliedBy} = ${result}`;
+    return `${multipliedBy}`;  // ✅ Sirf number dikhao, koi = nahi
   }
-  const parts = Array(tableOf).fill(multipliedBy).join('+');
+  const parts = Array(tableOf).fill(multipliedBy).join(' + ');
   return `${parts} = ${result}`;
 }
 
