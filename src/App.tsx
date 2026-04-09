@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import PrimePatrol from "./pages/PrimePatrol";
 import MathBola from "./pages/Mathbola";
 import BharatGame from "./pages/BharatGame";
+import PahalGame from "./pages/PahalGame";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/games/prime" element={<PrimePatrol />} />
               <Route path="/games/mathbola" element={<MathBola />} />
               <Route path="/games/bharat" element={<BharatGame />} />
+              <Route path="/games/pahal" element={<PahalGame />} />
               {/* <Route path="/" element={<BharatGame />} /> */}
             </Route>
             <Route path="/login" element={<Login />} />

@@ -96,6 +96,28 @@ const GAMES = [
     path: "/games/bharat",
     color: "primary" as const,
   },
+  {
+    title: "PAHAL (Place Value, Addition, Hands-on grouping, and Lending)",
+    description: "Laying the Foundation for Arithmetic.",
+    emoji: "🎲",
+    about_game:
+      "To help learners develop a deep understanding of Place value, Addition with regrouping, and Subtraction with borrowing, this game uses interactive visual representations to make abstract mathematical concepts more concrete and meaningful. It enables learners to clearly distinguish between Place values, and to understand what is carried over or borrowed during operations through engaging, hands-on experiences. Designed across progressive levels, the game supports the gradual development of conceptual clarity and strengthens learners’ confidence in performing arithmetic operations. ",
+    learning_object: {
+      heading: "After playing the game, learners will be able to:",
+      points: [
+        "Identify and represent numbers based on place values using visual models.",
+        "Explain the value of a digit according to its position in a number.",
+        "Perform addition of two-digit numbers with regrouping and explain the concept of carrying over.",
+        "Solve subtraction problems with borrowing and explain the process of decomposing place values.",
+        "Use visual representations to model and solve addition and subtraction problems accurately.",
+        "Demonstrate improved conceptual understanding and confidence in performing basic arithmetic operations.",
+      ],
+    },
+    levels: 3,
+    age: "5+",
+    path: "/games/pahal",
+    color: "primary" as const,
+  },
 ];
 
 const Index = () => {
