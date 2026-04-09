@@ -65,8 +65,8 @@ const BharatStepContent = ({
           </motion.h3>
           <p className="text-muted-foreground font-body text-2xl">
             Read the sentence carefully — it says "
-            <em> {tableOf == 1 ? "one is" : "ones are"} </em>", not "
-            <em> {tableOf == 1 ? "isss" : "za"} </em>"
+            <em> {tableOf == 1 ? "one is" : "ones are"} </em>{tableOf==1?"":`", not "`}
+            <em> {tableOf == 1 ? "" : "za"} </em>"
           </p>
         </div>
       );
@@ -109,8 +109,12 @@ const BharatStepContent = ({
             {content.additionForm}
           </motion.div>
           <p className="text-muted-foreground font-body text-2xl text-center max-w-md">
-            We add {multipliedBy} {numberWordsLower[tableOf] || tableOf} times.
-            That makes {tableOf * multipliedBy}!
+            {`${
+              tableOf == 1
+                ? ""
+                : `We add ${multipliedBy} ${numberWordsLower[tableOf] || tableOf} times.
+            That makes ${tableOf * multipliedBy}!`
+            } `}
           </p>
         </div>
       );
@@ -212,7 +216,7 @@ const BharatStepContent = ({
             ))}
           </div>
           <p className="text-muted-foreground font-body text-2xl text-center">
-            {tableOf} groups of {multipliedBy} or {tableOf} times {multipliedBy}{" "}
+            {tableOf} {tableOf==1?"group":"groups"} of {multipliedBy} or {tableOf} times {multipliedBy}{" "}
             in the form of array look like this.
           </p>
         </div>

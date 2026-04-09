@@ -81,34 +81,87 @@ function buildQuestion(
 
   switch (type) {
     // Q1: Repeated addition → product
+    // case 1: {
+    //   const addends = Array(multiplier).fill(tableOf).join(" + ");
+    //   const correct = product;
+    //   const options = shuffle([correct, ...wrongs4(correct)]);
+    //   return { type, tableOf, multiplier, product, answer: correct, options };
+    // }
     case 1: {
       const addends = Array(multiplier).fill(tableOf).join(" + ");
       const correct = product;
       const options = shuffle([correct, ...wrongs4(correct)]);
-      return { type, tableOf, multiplier, product, answer: correct, options };
+      return {
+        type,
+        tableOf,
+        multiplier,
+        product,
+        answer: correct,
+        options,
+        // addends stored nahi hota, QuestionBody mein directly calculate hota hai
+      };
     }
 
     // Q2: Correct statement for tableOf × multiplier
+    // case 2: {
+    //   const correct = `${tableOf} times ${multiplier}`;
+    //   const wrongs = [
+    //     `${multiplier} times ${tableOf}`,
+    //     `${tableOf} added ${multiplier} times`,
+    //     `${multiplier} added ${tableOf} times`,
+    //   ];
+    //   const options = shuffle([correct, ...wrongs]);
+    //   return { type, tableOf, multiplier, product, answer: correct, options };
+    // }
     case 2: {
       const correct = `${tableOf} times ${multiplier}`;
-      const wrongs = [
+
+      const allWrongs = [
         `${multiplier} times ${tableOf}`,
         `${tableOf} added ${multiplier} times`,
         `${multiplier} added ${tableOf} times`,
+        `${tableOf} times ${tableOf + 1}`,
+        `${multiplier + 1} times ${tableOf}`,
       ];
-      const options = shuffle([correct, ...wrongs]);
+
+      const uniqueWrongs = [...new Set(allWrongs)]
+        .filter((w) => w !== correct)
+        .slice(0, 3);
+
+      const options = shuffle([correct, ...uniqueWrongs]);
       return { type, tableOf, multiplier, product, answer: correct, options };
     }
 
     // Q3: Emoji grid (rows × cols) → which expression?
+    // case 3: {
+    //   const correct = `${tableOf} × ${multiplier}`;
+    //   const alt = `${multiplier} × ${tableOf}`;
+    //   const wrongs = [
+    //     `${tableOf} + ${multiplier}`,
+    //     `${multiplier} + ${multiplier}`,
+    //   ];
+    //   const options = shuffle([correct, alt, ...wrongs]);
+    //   return { type, tableOf, multiplier, product, answer: correct, options };
+    // }
+
     case 3: {
       const correct = `${tableOf} × ${multiplier}`;
-      const alt = `${multiplier} × ${tableOf}`;
-      const wrongs = [
+
+      const allOptions = [
+        correct,
+        `${multiplier} × ${tableOf}`,
         `${tableOf} + ${multiplier}`,
         `${multiplier} + ${multiplier}`,
+        `${tableOf} + ${tableOf}`,
+        `${tableOf} × ${tableOf + 1}`,
       ];
-      const options = shuffle([correct, alt, ...wrongs]);
+
+      // Duplicates hatao, correct alag rakho, 3 unique wrongs lo
+      const uniqueWrongs = [...new Set(allOptions)]
+        .filter((o) => o !== correct)
+        .slice(0, 3);
+
+      const options = shuffle([correct, ...uniqueWrongs]);
       return { type, tableOf, multiplier, product, answer: correct, options };
     }
 
@@ -123,29 +176,100 @@ function buildQuestion(
     }
 
     // Q5: Which of these are the same as tableOf × multiplier?
+    // case 5: {
+    //   const addStr = Array(multiplier).fill(tableOf).join("+");
+    //   const correct = `${tableOf}×${multiplier} and ${addStr}`;
+    //   const wrongs = [
+    //     `${tableOf}×${multiplier} and ${Array(tableOf).fill(multiplier).join("+")}`,
+    //     `${tableOf}×${multiplier} and ${tableOf}+${multiplier}`,
+    //     `${tableOf}×${multiplier} and ${multiplier}+${tableOf}`,
+    //   ];
+    //   const options = shuffle([correct, ...wrongs]);
+    //   return { type, tableOf, multiplier, product, answer: correct, options };
+    // }
+
+    // case 5: {
+    //   const addStr = Array(multiplier).fill(tableOf).join("+");
+    //   const correct = `${tableOf}×${multiplier} and ${addStr}`;
+
+    //   const allWrongs = [
+    //     `${tableOf}×${multiplier} and ${Array(tableOf).fill(multiplier).join("+")}`,
+    //     `${tableOf}×${multiplier} and ${tableOf}+${multiplier}`,
+    //     `${tableOf}×${multiplier} and ${multiplier}+${tableOf}`,
+    //     `${tableOf}×${multiplier} and ${tableOf}×${multiplier}`,
+    //     `${tableOf}×${multiplier} and ${product}`,
+    //   ];
+
+    //   // Duplicates aur correct jaisi values hataao, phir 3 lo
+    //   const uniqueWrongs = [...new Set(allWrongs)]
+    //     .filter((w) => w !== correct)
+    //     .slice(0, 3);
+
+    //   const options = shuffle([correct, ...uniqueWrongs]);
+    //   return { type, tableOf, multiplier, product, answer: correct, options };
+    // }
+
     case 5: {
       const addStr = Array(multiplier).fill(tableOf).join("+");
       const correct = `${tableOf}×${multiplier} and ${addStr}`;
-      const wrongs = [
+
+      const allWrongs = [
         `${tableOf}×${multiplier} and ${Array(tableOf).fill(multiplier).join("+")}`,
         `${tableOf}×${multiplier} and ${tableOf}+${multiplier}`,
         `${tableOf}×${multiplier} and ${multiplier}+${tableOf}`,
+        `${tableOf}×${multiplier} and ${product}`,
+        `${tableOf}×${multiplier} and ${tableOf}×${tableOf + 1}`,
+        `${tableOf}×${multiplier} and ${tableOf + 1}×${multiplier}`,
+        `${tableOf}×${multiplier} and ${product + tableOf}`,
       ];
-      const options = shuffle([correct, ...wrongs]);
+
+      // Seen set use karo - correct aur duplicates dono hataao
+      const seen = new Set<string>([correct]);
+      const uniqueWrongs: string[] = [];
+
+      for (const w of allWrongs) {
+        if (!seen.has(w) && uniqueWrongs.length < 3) {
+          seen.add(w);
+          uniqueWrongs.push(w);
+        }
+      }
+
+      const options = shuffle([correct, ...uniqueWrongs]);
       return { type, tableOf, multiplier, product, answer: correct, options };
     }
 
     // Q6: Which shows tableOf×multiplier but NOT multiplier×tableOf?
+    // case 6: {
+    //   const addStr = Array(multiplier).fill(tableOf).join("+");
+    //   const addStrRev = Array(tableOf).fill(multiplier).join("+");
+    //   const correct = addStr; // tableOf added multiplier-times
+    //   const wrongs = [
+    //     addStrRev,
+    //     String(product),
+    //     `${multiplier} groups of ${tableOf}`,
+    //   ];
+    //   const options = shuffle([correct, ...wrongs]);
+    //   return { type, tableOf, multiplier, product, answer: correct, options };
+    // }
+
     case 6: {
       const addStr = Array(multiplier).fill(tableOf).join("+");
       const addStrRev = Array(tableOf).fill(multiplier).join("+");
-      const correct = addStr; // tableOf added multiplier-times
-      const wrongs = [
+      const correct = addStr;
+
+      const allWrongs = [
         addStrRev,
         String(product),
         `${multiplier} groups of ${tableOf}`,
+        `${tableOf} groups of ${multiplier}`,
+        `${tableOf}+${multiplier}`,
       ];
-      const options = shuffle([correct, ...wrongs]);
+
+      const uniqueWrongs = [...new Set(allWrongs)]
+        .filter((w) => w !== correct)
+        .slice(0, 3);
+
+      const options = shuffle([correct, ...uniqueWrongs]);
       return { type, tableOf, multiplier, product, answer: correct, options };
     }
 
@@ -168,7 +292,7 @@ function buildQuestion(
         tableOf,
         multiplier,
         product,
-        answer: "True",
+        answer: "False",
         options: ["True", "False"],
       };
     }
@@ -201,16 +325,90 @@ function buildQuestion(
     }
 
     // Q10: Which one does NOT belong?
+    // case 10: {
+    //   const addStr = Array(multiplier).fill(tableOf).join("+");
+    //   // The odd one out: multiplier×tableOf (same value but different expression)
+    //   // We mark tableOf+multiplier as the one that does NOT belong
+    //   const doesNotBelong = `${tableOf}+${multiplier}`;
+    //   const rest = [
+    //     `${tableOf}×${multiplier}`,
+    //     addStr,
+    //     `${multiplier}×${tableOf}`,
+    //   ];
+    //   const options = shuffle([doesNotBelong, ...rest]);
+    //   return {
+    //     type,
+    //     tableOf,
+    //     multiplier,
+    //     product,
+    //     answer: doesNotBelong,
+    //     options,
+    //   };
+    // }
+    // case 10: {
+    //   const addStr = Array(multiplier).fill(tableOf).join("+");
+    //   const doesNotBelong = `${tableOf}+${multiplier}`;
+
+    //   const allOptions = [
+    //     doesNotBelong,
+    //     `${tableOf}×${multiplier}`,
+    //     addStr,
+    //     `${multiplier}×${tableOf}`,
+    //     String(product),
+    //   ];
+
+    //   // Duplicates hatao, doesNotBelong + 3 unique rest lo
+    //   const rest = [...new Set(allOptions)]
+    //     .filter((o) => o !== doesNotBelong)
+    //     .slice(0, 3);
+
+    //   const options = shuffle([doesNotBelong, ...rest]);
+    //   return {
+    //     type,
+    //     tableOf,
+    //     multiplier,
+    //     product,
+    //     answer: doesNotBelong,
+    //     options,
+    //   };
+    // }
     case 10: {
       const addStr = Array(multiplier).fill(tableOf).join("+");
-      // The odd one out: multiplier×tableOf (same value but different expression)
-      // We mark tableOf+multiplier as the one that does NOT belong
       const doesNotBelong = `${tableOf}+${multiplier}`;
-      const rest = [
+
+      // Always generate 4 distinct options with variety
+      const candidates = [
         `${tableOf}×${multiplier}`,
         addStr,
         `${multiplier}×${tableOf}`,
+        String(product),
+        `${tableOf}×${multiplier}=${product}`,
+        Array(multiplier + 1)
+          .fill(tableOf)
+          .join("+"),
       ];
+
+      // Filter duplicates and doesNotBelong, pick first 3 unique
+      const seen = new Set<string>([doesNotBelong]);
+      const rest: string[] = [];
+      for (const c of candidates) {
+        if (!seen.has(c) && rest.length < 3) {
+          seen.add(c);
+          rest.push(c);
+        }
+      }
+
+      // If still less than 3, add numeric fillers
+      let filler = product + tableOf;
+      while (rest.length < 3) {
+        const s = String(filler);
+        if (!seen.has(s)) {
+          seen.add(s);
+          rest.push(s);
+        }
+        filler += tableOf;
+      }
+
       const options = shuffle([doesNotBelong, ...rest]);
       return {
         type,
@@ -433,6 +631,19 @@ function QuestionBody({ q }: { q: Question }) {
 
   switch (q.type) {
     // Q1: Repeated addition
+    // case 1: {
+    //   const addends = Array(q.multiplier).fill(q.tableOf).join(" + ");
+    //   return (
+    //     <div className="text-center">
+    //       <p className="text-lg text-gray-600 mb-3 font-semibold">
+    //         What is the answer?
+    //       </p>
+    //       <div className="text-3xl font-black text-[#8F2424] my-3 break-words leading-snug">
+    //         {addends} = ?
+    //       </div>
+    //     </div>
+    //   );
+    // }
     case 1: {
       const addends = Array(q.multiplier).fill(q.tableOf).join(" + ");
       return (
@@ -441,7 +652,9 @@ function QuestionBody({ q }: { q: Question }) {
             What is the answer?
           </p>
           <div className="text-3xl font-black text-[#8F2424] my-3 break-words leading-snug">
-            {addends} = ?
+            {q.multiplier === 1
+              ? `${q.tableOf} × ${q.multiplier} = ?`
+              : `${addends} = ?`}
           </div>
         </div>
       );
@@ -467,12 +680,12 @@ function QuestionBody({ q }: { q: Question }) {
       return (
         <div className="text-center">
           <p className="text-lg text-gray-600 mb-1 font-semibold">
-            There are {q.multiplier} rows and {q.tableOf} columns of objects.
+            There are {q.tableOf} rows and {q.multiplier} columns of objects.
             What does this show?
           </p>
-          <div className="text-4xl font-black text-[#8F2424] my-3">
+          {/* <div className="text-4xl font-black text-[#8F2424] my-3">
             {q.multiplier} rows × {q.tableOf} columns
-          </div>
+          </div> */}
         </div>
       );
     }
@@ -556,8 +769,8 @@ function QuestionBody({ q }: { q: Question }) {
             True or False?
           </p>
           <div className="text-3xl font-black text-[#8F2424] my-3 leading-snug">
-            {q.tableOf} × {q.multiplier} and {q.multiplier} × {q.tableOf} mean
-            the same thing.
+            {q.tableOf} × {q.multiplier} or {q.multiplier} × {q.tableOf}{" "}
+            represent the same thing or not?
           </div>
         </div>
       );
@@ -589,9 +802,9 @@ function QuestionBody({ q }: { q: Question }) {
             Which one does <span className="text-red-500 font-black">NOT</span>{" "}
             belong?
           </p>
-          <p className="text-sm text-gray-400">
+          {/* <p className="text-sm text-gray-400">
             (All others equal {q.tableOf} × {q.multiplier} = {q.product})
-          </p>
+          </p> */}
         </div>
       );
     }
@@ -879,16 +1092,25 @@ export default function BharatQuizModal({
                     <OptionButton
                       key={i}
                       label={opt}
+                      // display={
+                      //   q.type === 2
+                      //     ? `${emoji.repeat(Math.min(Number(opt), 5))}… (${opt})`
+                      //     : q.type == 6
+                      //       ? typeof opt === "boolean"
+                      //         ? opt
+                      //           ? "True"
+                      //           : "False"
+                      //         : String(opt)
+                      //       : String(opt)
+                      // }
                       display={
-                        q.type === 2
-                          ? `${emoji.repeat(Math.min(Number(opt), 5))}… (${opt})`
-                          : q.type == 6
-                            ? typeof opt === "boolean"
-                              ? opt
-                                ? "True"
-                                : "False"
-                              : String(opt)
+                        q.type === 6
+                          ? typeof opt === "boolean"
+                            ? opt
+                              ? "True"
+                              : "False"
                             : String(opt)
+                          : String(opt)
                       }
                       selected={isSelected}
                       correct={
