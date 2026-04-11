@@ -53,6 +53,14 @@
     --success: 140 60% 45%;
     --success-foreground: 0 0% 100%;
 
+     /* Game-specific tokens */
+    --game-step-bg: 40 40% 96%;
+    --game-step-active: 0 70% 35%;
+    --game-step-done: 160 50% 40%;
+    --game-highlight: 40 80% 55%;
+    --game-array-dot: 340 80% 50%;
+    --game-sun: 45 100% 50%;
+
     /* Gradients */
     --gradient-golden: linear-gradient(135deg, hsl(36 80% 50%), hsl(45 90% 55%));
     --gradient-maroon: linear-gradient(135deg, hsl(0 60% 35%), hsl(0 50% 45%));
