@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { X, CheckCircle, XCircle } from "lucide-react";
 import { handRepresentations, tenEqualsImage } from "@/data/pahalGameData";
@@ -13,6 +13,7 @@ interface Props {
   validateAnswer?: (
     droppedHands: { number: number; label: string }[],
   ) => boolean;
+  onReset?: () => void;
 }
 
 interface DroppedHand {
@@ -124,6 +125,14 @@ const handleSubmit = () => {
     if (submitted) return;
     setDroppedHands([]);
   };
+
+  useEffect(() => {
+    if (!showFeedback) {
+      setDroppedHands([]);
+      setIsCorrect(false);
+      setSubmitted(false);
+    }
+  }, [showFeedback]);
 
   return (
     <div className="space-y-4">
@@ -273,7 +282,7 @@ const handleSubmit = () => {
           )}
         </motion.div>
       )} */}
-      {submitted && (
+      {/* {submitted && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -290,11 +299,10 @@ const handleSubmit = () => {
           ) : (
             <span className="flex items-center justify-center gap-2 text-2xl">
               <XCircle size={28} /> Wrong combination! Use the correct hands.
-              {/* ✅ Generic message, specific value mat dikhao */}
             </span>
           )}
         </motion.div>
-      )}
+      )} */}
     </div>
   );
 };

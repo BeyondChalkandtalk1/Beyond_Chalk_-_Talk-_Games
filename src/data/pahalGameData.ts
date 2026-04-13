@@ -214,15 +214,28 @@ export function getPrePahalQuestions(): PracticeQuestion[] {
       options: ['7', '7 Ones', '70'],
       correctAnswer: '7 Ones',
     },
+    // {
+    //   type: 'drag-count',
+    //   question: 'Drag the hands to show 9 Ones.',
+    //   options: [],
+    //   correctAnswer: '9',
+    //   dragImage: handRepresentations[1].image,
+    //   correctCount: 9,
+    //   gridSize: 12,
+    // },
     {
-      type: 'drag-count',
-      question: 'Drag the hands to show 9 Ones.',
-      options: [],
-      correctAnswer: '9',
-      dragImage: handRepresentations[1].image,
-      correctCount: 9,
-      gridSize: 12,
-    },
+  type: 'drag-count',
+  question: 'Drag the hands to show 9 Ones.',
+  options: [],
+  correctAnswer: '9',
+  dragImage: handRepresentations[1].image,
+  correctCount: 9,
+  gridSize: 12,
+  validateAnswer: (droppedHands: { number: number; label: string }[]) => {
+    if (droppedHands.length !== 1) return false;
+    return droppedHands[0].number === 9 && droppedHands[0].label === '9 Ones';
+  },
+},
     {
       type: 'mcq',
       question: 'Look at the hands. What number is shown?',
@@ -249,26 +262,31 @@ export function getPrePahalQuestions(): PracticeQuestion[] {
   options: ['36', '3 Tens and 6 Ones', '30+6'],
   correctAnswer: '36',
 },
-    // {
-    //   type: 'drag-count',
-    //   question: 'Drag the hands to show how many ‘Ones’ make 2 Tens.',
-    //   options: [],
-    //   correctAnswer: '20 ones',
-    //   dragImage: handRepresentations[1].image,
-    //   correctCount: 20,
-    //   gridSize: 24,
-    // },
-    {
+//     {
+//   type: 'drag-count',
+//   question: "Drag the hands to show how many 'Ones' make 2 Tens.",
+//   options: [],
+//   correctAnswer: '2 Tens',
+//   dragImage: handRepresentations[1].image,
+//   correctCount: 20,
+//   gridSize: 24,
+//   // ✅ Custom validator: sirf 2x Ten image allowed
+//   validateAnswer: (droppedHands: { number: number; label: string }[]) => {
+//     const tenCount = droppedHands.filter(h => h.label === '1 Ten').length;
+//     const totalValue = droppedHands.reduce((sum, h) => sum + h.number, 0);
+//     return tenCount === 2 && totalValue === 20;
+//   },
+// },
+{
   type: 'drag-count',
   question: "Drag the hands to show how many 'Ones' make 2 Tens.",
   options: [],
   correctAnswer: '2 Tens',
-  dragImage: handRepresentations[1].image,
+  dragImage: handRepresentations[10].image, // ✅ hand_10 (Ten fist) use hoga
   correctCount: 20,
   gridSize: 24,
-  // ✅ Custom validator: sirf 2x Ten image allowed
   validateAnswer: (droppedHands: { number: number; label: string }[]) => {
-    const tenCount = droppedHands.filter(h => h.label === '1 Ten').length;
+    const tenCount = droppedHands.filter(h => h.label === '10 Ones').length;
     const totalValue = droppedHands.reduce((sum, h) => sum + h.number, 0);
     return tenCount === 2 && totalValue === 20;
   },
