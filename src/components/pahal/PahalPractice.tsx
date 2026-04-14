@@ -15,6 +15,8 @@ import {
 } from "@/data/pahalGameData";
 import DragCountQuestion from "./DragCountQuestion";
 import bgVideo1 from "@/assets/pahal/bgVideo1.mp4";
+import TensAndOnesIntro from "./TensAndOnesIntro";
+import BuildAndBreakChallenge from "./BuildAndBreakChallenge";
 
 export type PlaceValueCategory = 'tens-ones' | 'hto' | 'thto';
 
@@ -31,6 +33,9 @@ const QUESTION_TIME = 30;
 const TOTAL_QUESTIONS = 10;
 
 const PahalPractice = ({ onBack,category = 'tens-ones'  }: Props) => {
+  const [phase, setPhase] = useState<"intro" | "challenge" | "quiz">(
+    category === "tens-ones" ? "intro" : "quiz",
+  );
   const questions = useMemo(() => getPrePahalQuestions(), []);
   const [currentQ, setCurrentQ] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -115,6 +120,50 @@ const PahalPractice = ({ onBack,category = 'tens-ones'  }: Props) => {
   const totalTimeSec = Math.round((Date.now() - startTime.current) / 1000);
   const totalTimeMin = Math.floor(totalTimeSec / 60);
   const totalTimeRemSec = totalTimeSec % 60;
+
+
+    if (phase === "intro") {
+      return (
+        <>
+          <div className="text-center mt-5">
+            <h2 className="text-2xl md:text-5xl font-display font-bold text-secondary">
+              Level 1
+            </h2>
+            <p className="text-muted-foreground font-bold text-2xl mt-1">
+              {category === "tens-ones"
+                ? "Place Value – Tens and Ones"
+                : category === "hto"
+                  ? "Place Value – Hundreds, Tens, and Ones"
+                  : "Place Value – Thousands, Hundreds, Tens, and Ones"}
+            </p>
+          </div>
+          {/* <TensAndOnesIntro
+            onStartQuiz={() => {
+              setPhase("challenge");
+              startTime.current = Date.now();
+            }}
+          /> */}
+          <TensAndOnesIntro
+            onStartQuiz={() => {
+              setPhase("challenge");
+            }}
+          />
+          ;
+        </>
+      );
+    }
+
+     if (phase === "challenge") {
+       return (
+         <BuildAndBreakChallenge
+           onComplete={() => {
+             setPhase("quiz");
+             startTime.current = Date.now();
+           }}
+           onBack={onBack}
+         />
+       );
+     }
 
   if (isFinished) {
     return (
