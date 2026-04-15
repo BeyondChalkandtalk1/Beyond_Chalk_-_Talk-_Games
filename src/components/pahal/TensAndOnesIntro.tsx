@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gifVideo from "@/assets/pahal/ballCount.mp4";
+import blueBall from "@/assets/pahal/For_Ones.png"
 
 interface Props {
   onStartQuiz: () => void;
@@ -24,6 +25,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [showContinueButton, setShowContinueButton] = useState(false);
 
   const speakText = useCallback((text: string) => {
     speechSynthesis.cancel();
@@ -41,7 +43,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
       2: 2000, // text -> start counting
       // 3-12: balls, each 2s
       13: 2000, // "Now we have 10 Ones" -> right side
-      14: 2000, // "Let's make a Ten" -> GIF
+      14: 9000, // "Let's make a Ten" -> GIF
       15: 10000, // GIF plays for 10s -> bottom
       16: 5000, // Big Idea -> popup
     };
@@ -69,7 +71,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
 
   // Voice effects
   useEffect(() => {
-    if (step === 1) speakText("One ball");
+    if (step === 1) speakText("One");
     if (step >= 3 && step <= 12) {
       const ballNum = step - 2;
       const words = [
@@ -106,6 +108,21 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
     transition: { type: "spring" as const, stiffness: 300, damping: 15 },
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "e") {
+        e.preventDefault();
+        setShowPopup(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <div className="relative min-h-[80vh]">
       {/* Background video */}
@@ -120,12 +137,12 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
       </video>
       <div className="absolute inset-0 bg-background/80 z-0" />
 
-      <div className="relative z-10 p-4 md:p-6">
+      <div className="relative z-10 p-4 md:p-3">
         <div className="max-w-9xl mx-auto">
           {/* Split screen layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[50vh]">
             {/* LEFT SECTION */}
-            <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow flex flex-col items-center justify-start gap-4">
+            <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-1 game-card-shadow flex flex-col items-center justify-start gap-4">
               {/* Meet "One" */}
               {step >= 0 && (
                 <motion.h2
@@ -139,7 +156,12 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
               {/* Single blue ball */}
               {step >= 1 && step < 25 && (
                 <motion.div {...bounceIn}>
-                  <div className="w-12 h-12 rounded-full bg-blue-700 shadow-lg" />
+                  {/* <div className="w-12 h-12 rounded-full bg-blue-700 shadow-lg" /> */}
+                  <img
+                    src={blueBall}
+                    alt=""
+                    className="w-12 h-12 object-cover"
+                  />
                 </motion.div>
               )}
 
@@ -168,8 +190,17 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                       }}
                       className="flex flex-col items-center"
                     >
-                      <div
+                      {/* <div
                         className="w-10 h-10 md:w-16 md:h-16 rounded-full bg-blue-700 shadow-lg animate-bounce"
+                        style={{
+                          animationDelay: `${i * 0.1}s`,
+                          animationDuration: "1s",
+                        }}
+                      /> */}
+                      <img
+                        src={blueBall}
+                        alt=""
+                        className="w-10 h-10 md:w-16 md:h-16 rounded-full shadow-lg animate-bounce"
                         style={{
                           animationDelay: `${i * 0.1}s`,
                           animationDuration: "1s",
@@ -189,7 +220,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                   {...fadeIn}
                   className="text-5xl font-display font-bold text-game-done"
                 >
-                  Now we have 10 Ones 🎉
+                  Now we have 10 Ones 
                 </motion.p>
               )}
             </div>
@@ -206,22 +237,27 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                   </motion.h2>
 
                   {step >= 15 && (
-                    <motion.div {...fadeIn} className=" max-w-xs">
-                      {/* <img
+                    <>
+                      <motion.div {...fadeIn} className=" max-w-xs">
+                        {/* <img
                         src={gifVideo}
                         alt="Making a ten"
                         className="w-full rounded-lg"
                       /> */}
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-96 object-cover "
-                      >
-                        <source src={gifVideo} type="video/mp4" />
-                      </video>
-                    </motion.div>
+                        <video
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="w-full h-96 object-cover "
+                        >
+                          <source src={gifVideo} type="video/mp4" />
+                        </video>
+                      </motion.div>
+                      <p className="text-4xl font-display font-bold text-foreground mb-2">
+                        A "Ten" is a group of 10 Ones.
+                      </p>
+                    </>
                   )}
                 </>
               ) : (
@@ -238,10 +274,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
               {...fadeIn}
               className="mt-6 bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center"
             >
-              <p className="text-3xl font-display text-foreground mb-2">
-                A "Ten" is a group of 10 Ones.
-              </p>
-              <h3 className="text-5xl font-display font-bold text-primary mb-1">
+              <h3 className="text-5xl font-display font-bold text-primary mb-4">
                 Big Idea
               </h3>
               <p className="text-4xl md:text-3xl font-display font-bold text-game-done">
@@ -249,10 +282,27 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
               </p>
             </motion.div>
           )}
+
+          {showContinueButton && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="mt-6 flex justify-center"
+            >
+              <button
+                onClick={onStartQuiz}
+                className="px-10 py-4 bg-primary text-primary-foreground text-2xl rounded-xl font-display font-semibold hover:opacity-90 transition shadow-lg"
+              >
+                Continue ➡️
+              </button>
+            </motion.div>
+          )}
         </div>
       </div>
 
       {/* POPUP */}
+
       <AnimatePresence>
         {showPopup && (
           <motion.div
@@ -270,17 +320,31 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                 stiffness: 300,
                 damping: 20,
               }}
-              className="bg-card rounded-2xl border border-border p-8 game-card-shadow max-w-xl mx-4 text-center"
+              className="relative bg-card rounded-2xl border border-border p-8 game-card-shadow max-w-xl mx-4 text-center"
             >
+              {/* Close button */}
+              {/* Close button */}
+              <button
+                onClick={() => {
+                  setShowPopup(false);
+                  setShowContinueButton(true);
+                  speechSynthesis.cancel();
+                }}
+                className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-muted hover:bg-muted/70 text-muted-foreground hover:text-foreground transition text-lg font-bold"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+
               <p className="text-2xl font-display font-bold text-foreground mb-6">
-                📌 Are you ready to take PAHAL Practice Challenge!
+               Are you ready to take PAHAL Practice Challenge!
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   onClick={onStartQuiz}
                   className="px-6 py-3 bg-primary text-primary-foreground text-2xl rounded-xl font-display font-semibold hover:opacity-90 transition"
                 >
-                  Yes ✅
+                  Yes 
                 </button>
                 <button
                   onClick={() => {
@@ -290,13 +354,15 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                   }}
                   className="px-6 py-3 bg-secondary text-secondary-foreground text-2xl rounded-xl font-display font-semibold hover:opacity-90 transition"
                 >
-                  I want to understand the concept again 🔄
+                  I want to understand the concept again 
                 </button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* CONTINUE BUTTON - only shown after closing popup via ✕ */}
     </div>
   );
 };

@@ -101,7 +101,7 @@ const levels = [
     title: "Level 1",
     description: "Place value",
     icon: PlaceValueImage,
-    color: "bg-secondary",
+    color: "bg-accent",
     locked: false,
   },
   {
@@ -109,7 +109,7 @@ const levels = [
     title: "Level 2",
     description: "Addition",
     icon: AdditionImage,
-    color: "bg-secondary",
+    color: "bg-accent",
     locked: false,
   },
   {
@@ -117,7 +117,7 @@ const levels = [
     title: "Level 3",
     description: "Subtraction",
     icon: SubtractionImage,
-    color: "bg-secondary",
+    color: "bg-accent",
     locked: false,
   },
 ];
@@ -129,7 +129,7 @@ const placeValueCategories = [
     title: "Tens and Ones",
     description: "Learn place value with Tens and Ones",
     icon: Hash,
-    color: "bg-primary",
+    color: "bg-accent",
   },
   {
     id: "hto" as PlaceValueCategory,
@@ -145,7 +145,7 @@ const placeValueCategories = [
     title: "Thousands, Hundreds, Tens, and Ones",
     description: "Master Thousands place value",
     icon: Building2,
-    color: "bg-game-done",
+    color: "bg-accent",
   },
 ];
 
@@ -169,61 +169,6 @@ const PahalGame = () => {
     <div className="min-h-screen bg-background">
       <main className="w-full p-0">
         <AnimatePresence mode="wait">
-          {/* {phase === "level-select" && (
-            <motion.div
-              key="level-select"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="container max-w-12xl py-1"
-            >
-              <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-5xl font-display font-bold text-secondary">
-                  Kindly select a level and begin your PAHAL Journey
-                </h2>
-                 <p className="text-muted-foreground text-2xl font-bold mt-1">
-                  Select where you want to start
-                // </p> 
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 max-w-8xl mx-auto">
-                {levels.map((level, index) => {
-                  const Icon = level.icon;
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => !level.locked && setPhase(level.id)}
-                      disabled={level.locked}
-                      className={`relative p-6 rounded-xl border-2 border-border bg-card game-card-shadow flex flex-col items-center gap-3 transition-all ${
-                        level.locked
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:border-primary/50 hover:scale-105 cursor-pointer"
-                      }`}
-                    >
-                      {level.locked && (
-                        <Lock
-                          size={20}
-                          className="absolute top-3 right-3 text-muted-foreground"
-                        />
-                      )}
-                      <div
-                        className={`w-14 h-14 rounded-full ${level.color} flex items-center justify-center`}
-                      >
-                        <Icon size={28} className="text-primary-foreground" /> 
-                        <img src={Icon} alt={`${level.title} icon`} className="w-8 h-8" />
-                      </div>
-                      <h3 className="text-4xl font-display font-bold text-foreground">
-                        {level.title}
-                      </h3>
-                      <p className="text-3xl text-muted-foreground font-bold">
-                        {level.description}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )} */}
-
           {phase === "level-select" && (
             <div className="relative w-full min-h-screen">
               {/* Background image */}
@@ -241,7 +186,7 @@ const PahalGame = () => {
                 exit={{ opacity: 0, y: -20 }}
                 className="relative z-10 container max-w-12xl py-1"
               >
-                <div className="text-center mb-8">
+                <div className="text-center mb-8 mt-7">
                   <h2 className="text-3xl md:text-5xl font-display font-bold text-secondary">
                     Kindly select a level and begin your PAHAL Journey
                   </h2>
@@ -254,7 +199,7 @@ const PahalGame = () => {
                         key={index}
                         onClick={() => !level.locked && setPhase(level.id)}
                         disabled={level.locked}
-                        className={`relative p-6 rounded-xl border-2 border-border bg-card game-card-shadow flex flex-col items-center gap-3 transition-all ${
+                        className={`relative p-6 rounded-xl border-2 border-border bg-card game-card-shadow flex flex-col items-center justify-center  gap-3 transition-all ${
                           level.locked
                             ? "opacity-50 cursor-not-allowed"
                             : "hover:border-primary/50 hover:scale-105 cursor-pointer"
@@ -296,15 +241,15 @@ const PahalGame = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <div className="text-center mb-8">
-                <h2 className="text-2xl md:text-3xl font-display font-bold text-primary">
+              <div className="text-center mb-8 mt-5">
+                <h2 className="text-2xl md:text-5xl font-display font-bold text-primary">
                   Level 1
                 </h2>
-                <p className="text-muted-foreground text-sm mt-1">
+                <p className="text-muted-foreground font-bold text-4xl mt-5">
                   Choose the place value you want to explore!
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl mx-auto">
                 {placeValueCategories.map((cat) => {
                   const Icon = cat.icon;
                   return (
@@ -316,12 +261,12 @@ const PahalGame = () => {
                       <div
                         className={`w-14 h-14 rounded-full ${cat.color} flex items-center justify-center`}
                       >
-                        <Icon size={28} className="text-primary-foreground" />
+                        <Icon size={28} className="text-secondary" />
                       </div>
-                      <h3 className="text-lg font-display font-bold text-foreground">
+                      <h3 className="text-4xl font-display font-bold text-foreground">
                         {cat.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-2xl text-muted-foreground font-bold">
                         {cat.description}
                       </p>
                     </button>
@@ -413,7 +358,8 @@ const PahalGame = () => {
                       ? "hto"
                       : "thto"
                 }
-                onBack={() => setPhase("level-1-select")}
+                onBack={() => setPhase("level-select")}
+                onPlayAgain={() => setPhase("level-1-select")}
               />
             </motion.div>
           )}

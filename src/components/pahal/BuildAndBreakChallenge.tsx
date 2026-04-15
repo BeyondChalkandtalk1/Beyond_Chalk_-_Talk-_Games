@@ -1,10 +1,12 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
+import blueBall from "@/assets/pahal/For_Ones.png";
 
 interface Props {
   onComplete: () => void;
   onBack: () => void;
+  onPlayAgain: () => void;
 }
 
 interface BallItem {
@@ -36,7 +38,7 @@ const questions: QuestionDef[] = [
     type: "drag-input",
     preFilledBalls: 7,
     correctDragCount: 10,
-    correctInput: "3",
+    correctInput: "3 Ones",
     inputLabel: "How many Ones did you add?",
   },
   {
@@ -44,7 +46,7 @@ const questions: QuestionDef[] = [
     type: "drag-input",
     preFilledBalls: 0,
     correctDragCount: 15,
-    correctInput: "5",
+    correctInput: "5 Ones",
     inputLabel: "How many Ones are left?",
     requireGrouping: true,
     groupSize: 10,
@@ -56,7 +58,7 @@ const questions: QuestionDef[] = [
     type: "drag-input",
     preFilledBalls: 0,
     correctDragCount: 21,
-    correctInput: "1",
+    correctInput: "1 One",
     inputLabel: "How many Ones are left over? (2 Tens and ___ One)",
     requireGrouping: true,
     groupSize: 10,
@@ -66,15 +68,15 @@ const questions: QuestionDef[] = [
   {
     text: "Choose Wisely: You can pick 1 Ten or 9 Ones. Which one gives you more?",
     type: "choice",
-    choices: ["1 Ten (10 Ones)", "9 Ones"],
-    correctChoice: "1 Ten (10 Ones)",
+    choices: ["1 Ten", "9 Ones"],
+    correctChoice: "1 Ten",
   },
   {
     text: "You have 30 Ones scattered around. Make as many Tens as you can. How many Tens did you build?",
     type: "drag-input",
     preFilledBalls: 0,
     correctDragCount: 30,
-    correctInput: "3",
+    correctInput: "3 Tens",
     inputLabel: "How many Tens did you build?",
     requireGrouping: true,
     groupSize: 10,
@@ -85,7 +87,7 @@ const questions: QuestionDef[] = [
 
 const TOTAL = questions.length;
 
-const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
+const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
   const [currentQ, setCurrentQ] = useState(0);
   const [balls, setBalls] = useState<BallItem[][]>(() =>
     questions.map((q) =>
@@ -189,6 +191,21 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
   //   setFeedbacks(newFeedbacks);
   // };
 
+  useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "e") {
+      e.preventDefault();
+      setIsFinished(true);
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+
+  return () => {
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, []);
+
   const handleTryAgain = () => {
     const newFeedbacks = [...feedbacks];
     newFeedbacks[currentQ] = null;
@@ -253,33 +270,103 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
 
   const score = feedbacks.filter((f) => f === "correct").length;
 
+  // if (isFinished) {
+  //   return (
+  //     <div className="max-w-2xl mx-auto">
+  //       <motion.div
+  //         initial={{ opacity: 0, scale: 0.9 }}
+  //         animate={{ opacity: 1, scale: 1 }}
+  //         className="bg-card rounded-xl border border-border p-8 md:p-12 game-card-shadow text-center"
+  //       >
+  //         <Trophy className="w-16 h-16 text-game-done mx-auto mb-4" />
+  //         <h2 className="text-3xl font-display font-bold text-primary mb-2">
+  //           Challenge Complete!
+  //         </h2>
+  //         <p className="text-xl font-display font-semibold text-foreground mb-6">
+  //           Score: {score} / {TOTAL}
+  //         </p>
+  //         <div className="flex gap-4 justify-center">
+  //           <button
+  //             onClick={onBack}
+  //             className="px-6 py-3 bg-secondary text-secondary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
+  //           >
+  //             Go Back
+  //           </button>
+  //           <button
+  //             onClick={onComplete}
+  //             className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
+  //           >
+  //             Continue →
+  //           </button>
+  //         </div>
+  //       </motion.div>
+  //     </div>
+  //   );
+  // }
+
   if (isFinished) {
     return (
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-3xl mx-auto px-4 py-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-card rounded-xl border border-border p-8 md:p-12 game-card-shadow text-center"
+          className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-8 md:p-12 game-card-shadow text-center mt-5"
         >
           <Trophy className="w-16 h-16 text-game-done mx-auto mb-4" />
-          <h2 className="text-3xl font-display font-bold text-primary mb-2">
-            Challenge Complete! 🎉
+          <h2 className="text-5xl font-display font-bold text-primary mb-4">
+            Challenge Complete!
           </h2>
-          <p className="text-xl font-display font-semibold text-foreground mb-6">
+          <p className="text-3xl font-display font-semibold text-foreground mb-4">
             Score: {score} / {TOTAL}
           </p>
+
+          {/* ===== QUESTION SUMMARY — same as PrePahalSkill ===== */}
+          <div className="space-y-2 text-left max-w-2xl mx-auto mb-6">
+            {questions.map((ques, i) => {
+              const isCorrect = feedbacks[i] === "correct";
+              const userAnswer =
+                ques.type === "choice"
+                  ? choices[i] || "No answer"
+                  : inputs[i]
+                    ? `Balls: ${balls[i].length}, Input: "${inputs[i]}"`
+                    : "No answer";
+              const correctAns =
+                ques.type === "choice"
+                  ? ques.correctChoice
+                  : `Balls: ${ques.correctDragCount}, Input: "${ques.correctInput}"`;
+
+              return (
+                <div
+                  key={i}
+                  className={`px-4 py-2 rounded-lg text-3xl font-body flex justify-between ${
+                    isCorrect
+                      ? "bg-green-200 text-game-done"
+                      : "bg-red-200 text-destructive"
+                  }`}
+                >
+                  <span>PC {i + 1}.</span>
+                  <span>
+                    {isCorrect ? "✓" : `✗ (${correctAns})`} ({userAnswer})
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Action buttons */}
           <div className="flex gap-4 justify-center">
             <button
               onClick={onBack}
-              className="px-6 py-3 bg-secondary text-secondary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
+              className="px-6 py-3 bg-secondary text-secondary-foreground rounded-xl text-4xl font-display font-semibold hover:opacity-90 transition"
             >
               Go Back
             </button>
             <button
-              onClick={onComplete}
-              className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
+              // onClick={onComplete}
+              onClick={onPlayAgain}
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-xl text-4xl font-display font-semibold hover:opacity-90 transition"
             >
-              Continue →
+              Play again
             </button>
           </div>
         </motion.div>
@@ -309,7 +396,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
             PAHAL Practice: Build and Break
           </h2>
           <p className="text-muted-foreground font-bold text-2xl mt-1">
-            Question {currentQ + 1} of {TOTAL}
+            PAHAL Challenge: {currentQ + 1} of {TOTAL}
           </p>
         </div>
 
@@ -352,7 +439,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                           setChoices(newChoices);
                         }}
                         disabled={!!submitted[currentQ]}
-                        className={`p-5 rounded-xl border-2 font-display font-semibold text-base transition-all ${
+                        className={`p-5 rounded-xl border-2 font-display font-bold text-4xl transition-all ${
                           isCorrectChoice
                             ? "border-game-done bg-game-done/10 text-game-done scale-105"
                             : isWrongChoice
@@ -369,7 +456,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                 </div>
               ) : (
                 /* Drag-input question */
-                <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_260px] gap-4">
                   {/* Left: Drop Zone */}
                   <div
                     onDragOver={handleDragOver}
@@ -383,7 +470,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                     }`}
                   >
                     <p className="text-3xl font-display font-semibold text-foreground/70 uppercase tracking-wide mb-3 text-center">
-                      Drop Zone – Drag balls here
+                      Drop Zone – Drag ones here
                     </p>
 
                     {q.requireGrouping && grouped ? (
@@ -392,11 +479,26 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                         {grouped.groups.map((group, gi) => (
                           <div key={gi} className="flex flex-col items-center">
                             <span className="text-2xl font-display font-semibold text-game-done mb-1">
-                              Ten {gi + 1}
+                              {gi + 1} Ten
                             </span>
                             <div className="flex gap-1 flex-wrap justify-center p-2 bg-game-done/10 rounded-lg border border-game-done/30">
                               {group.map((ball) => (
-                                <motion.div
+                                // <motion.div
+                                //   key={ball.id}
+                                //   initial={{ opacity: 0, scale: 0, y: -20 }}
+                                //   animate={{ opacity: 1, scale: 1, y: 0 }}
+                                //   transition={{
+                                //     type: "spring",
+                                //     stiffness: 400,
+                                //     damping: 15,
+                                //   }}
+                                //   onClick={() => removeBall(ball.id)}
+                                //   className="w-7 h-7 md:w-12 md:h-12 rounded-full bg-blue-700 shadow-md cursor-pointer hover:scale-110 transition-transform"
+                                //   title="Click to remove"
+                                // />
+                                <img
+                                  src={blueBall}
+                                  alt=""
                                   key={ball.id}
                                   initial={{ opacity: 0, scale: 0, y: -20 }}
                                   animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -420,7 +522,22 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                             </span>
                             <div className="flex gap-1 flex-wrap justify-center p-2 bg-muted/20 rounded-lg border border-border">
                               {grouped.remainder.map((ball) => (
-                                <motion.div
+                                // <motion.div
+                                //   key={ball.id}
+                                //   initial={{ opacity: 0, scale: 0, y: -20 }}
+                                //   animate={{ opacity: 1, scale: 1, y: 0 }}
+                                //   transition={{
+                                //     type: "spring",
+                                //     stiffness: 400,
+                                //     damping: 15,
+                                //   }}
+                                //   onClick={() => removeBall(ball.id)}
+                                //   className="w-7 h-7 md:w-12 md:h-12 rounded-full bg-blue-700 shadow-md cursor-pointer hover:scale-110 transition-transform"
+                                //   title="Click to remove"
+                                // />
+                                <img
+                                  src={blueBall}
+                                  alt=""
                                   key={ball.id}
                                   initial={{ opacity: 0, scale: 0, y: -20 }}
                                   animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -442,7 +559,22 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                       /* Simple vertical stack */
                       <div className="flex flex-wrap gap-1.5 justify-center">
                         {currentBalls.map((ball) => (
-                          <motion.div
+                          // <motion.div
+                          //   key={ball.id}
+                          //   initial={{ opacity: 0, scale: 0, y: -20 }}
+                          //   animate={{ opacity: 1, scale: 1, y: 0 }}
+                          //   transition={{
+                          //     type: "spring",
+                          //     stiffness: 400,
+                          //     damping: 15,
+                          //   }}
+                          //   onClick={() => removeBall(ball.id)}
+                          //   className="w-7 h-7 md:w-12 md:h-12 rounded-full bg-blue-700 shadow-md cursor-pointer hover:scale-110 transition-transform"
+                          //   title="Click to remove"
+                          // />
+                          <img
+                            src={blueBall}
+                            alt=""
                             key={ball.id}
                             initial={{ opacity: 0, scale: 0, y: -20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -459,28 +591,40 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                       </div>
                     )}
 
-                    <div className="mt-5 text-center">
+                    {/* <div className="mt-5 text-center">
                       <span className="bg-card rounded-lg px-3 py-1.5 border border-border text-2xl font-display font-bold text-foreground">
                         Total: {currentBalls.length} Ones
                       </span>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Right: Ball Source */}
                   <div className="bg-accent/10 border-2 border-accent/30 rounded-xl p-3 flex flex-col items-center justify-center gap-3">
                     <p className="text-2xl font-display font-semibold text-foreground uppercase tracking-wide text-center">
-                      Ball Source
+                      'Ones' Source
                     </p>
                     <div
-                      draggable={!submitted[currentQ]}
-                      onDragStart={handleDragStart}
-                      onClick={addBall}
-                      className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-700 shadow-lg flex items-center justify-center transition-all ${
-                        submitted[currentQ]
-                          ? "opacity-40 cursor-not-allowed"
-                          : "cursor-pointer hover:scale-110 active:scale-95"
-                      }`}
+                    // draggable={!submitted[currentQ]}
+                    // onDragStart={handleDragStart}
+                    // onClick={addBall}
+                    // className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-700 shadow-lg flex items-center justify-center transition-all ${
+                    //   submitted[currentQ]
+                    //     ? "opacity-40 cursor-not-allowed"
+                    //     : "cursor-pointer hover:scale-110 active:scale-95"
+                    // }`}
                     >
+                      <img
+                        src={blueBall}
+                        alt=""
+                        draggable={!submitted[currentQ]}
+                        onDragStart={handleDragStart}
+                        onClick={addBall}
+                        className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-700 shadow-lg flex items-center justify-center transition-all ${
+                          submitted[currentQ]
+                            ? "opacity-40 cursor-not-allowed"
+                            : "cursor-pointer hover:scale-110 active:scale-95"
+                        }`}
+                      />
                       {/* <span className="text-primary-foreground font-display font-bold text-lg">
                         1
                       </span> */}
@@ -494,12 +638,12 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
 
               {/* Input box for drag-input questions */}
               {q.type === "drag-input" && (
-                <div className="mt-4 max-w-xl mx-auto">
+                <div className="mt-4 max-w-4xl mx-auto">
                   <label className="text-4xl font-display font-semibold text-secondary block mb-1">
                     {q.inputLabel}
                   </label>
                   <input
-                    type="number"
+                    type="string"
                     value={inputs[currentQ]}
                     onChange={(e) => {
                       if (submitted[currentQ]) return;
@@ -526,7 +670,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                   }`}
                 >
                   {feedback === "correct"
-                    ? "🎉 Well done! Bravo."
+                    ? " Well done! Bravo."
                     : "❌ Try again."}
                 </motion.div>
               )}
