@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trophy, Clock } from "lucide-react";
 import blueBall from "@/assets/pahal/For_Ones.png";
+import celebrationVideo from "@/assets/Level2CompleteVideo.mp4";
 
 interface Props {
   onComplete: () => void;
@@ -89,6 +90,8 @@ const TOTAL = questions.length;
 
 const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
   const [currentQ, setCurrentQ] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const quizStartTime = useRef(Date.now());
   const [balls, setBalls] = useState<BallItem[][]>(() =>
     questions.map((q) =>
       Array.from({ length: q.preFilledBalls || 0 }, (_, i) => ({ id: i })),
@@ -206,6 +209,14 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
   };
 }, []);
 
+useEffect(() => {
+  if (isFinished) return;
+  const timer = setInterval(() => {
+    setElapsedTime(Math.round((Date.now() - quizStartTime.current) / 1000));
+  }, 1000);
+  return () => clearInterval(timer);
+}, [isFinished]);
+
   const handleTryAgain = () => {
     const newFeedbacks = [...feedbacks];
     newFeedbacks[currentQ] = null;
@@ -270,41 +281,11 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
 
   const score = feedbacks.filter((f) => f === "correct").length;
 
-  // if (isFinished) {
-  //   return (
-  //     <div className="max-w-2xl mx-auto">
-  //       <motion.div
-  //         initial={{ opacity: 0, scale: 0.9 }}
-  //         animate={{ opacity: 1, scale: 1 }}
-  //         className="bg-card rounded-xl border border-border p-8 md:p-12 game-card-shadow text-center"
-  //       >
-  //         <Trophy className="w-16 h-16 text-game-done mx-auto mb-4" />
-  //         <h2 className="text-3xl font-display font-bold text-primary mb-2">
-  //           Challenge Complete!
-  //         </h2>
-  //         <p className="text-xl font-display font-semibold text-foreground mb-6">
-  //           Score: {score} / {TOTAL}
-  //         </p>
-  //         <div className="flex gap-4 justify-center">
-  //           <button
-  //             onClick={onBack}
-  //             className="px-6 py-3 bg-secondary text-secondary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
-  //           >
-  //             Go Back
-  //           </button>
-  //           <button
-  //             onClick={onComplete}
-  //             className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
-  //           >
-  //             Continue →
-  //           </button>
-  //         </div>
-  //       </motion.div>
-  //     </div>
-  //   );
-  // }
+
 
   if (isFinished) {
+      const totalMin = Math.floor(elapsedTime / 60);
+      const totalSec = elapsedTime % 60;
     return (
       <div className="max-w-3xl mx-auto px-4 py-6">
         <motion.div
@@ -319,6 +300,26 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
           <p className="text-3xl font-display font-semibold text-foreground mb-4">
             Score: {score} / {TOTAL}
           </p>
+
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Clock size={22} className="text-muted-foreground" />
+            <p className="text-2xl font-display font-semibold text-muted-foreground">
+              Total Time: {totalMin > 0 ? `${totalMin}m ` : ""}
+              {totalSec}s
+            </p>
+          </div>
+
+          {/* Celebration Video */}
+          <div className="mb-6 rounded-xl overflow-hidden max-w-sm mx-auto">
+            <video
+              src={celebrationVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full"
+            />
+          </div>
 
           {/* ===== QUESTION SUMMARY — same as PrePahalSkill ===== */}
           <div className="space-y-2 text-left max-w-2xl mx-auto mb-6">
@@ -395,9 +396,20 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
           <h2 className="text-2xl md:text-5xl font-display font-bold text-secondary">
             PAHAL Practice: Build and Break
           </h2>
-          <p className="text-muted-foreground font-bold text-2xl mt-1">
-            PAHAL Challenge: {currentQ + 1} of {TOTAL}
-          </p>
+          <div className="flex mx-auto items-center justify-center gap-32 mt-2">
+            <p className="text-muted-foreground font-bold text-2xl mt-1">
+              PAHAL Challenge: {currentQ + 1} of {TOTAL}
+            </p>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <Clock size={20} className="text-muted-foreground" />
+              <span className="text-xl font-display font-semibold text-muted-foreground">
+                {Math.floor(elapsedTime / 60) > 0
+                  ? `${Math.floor(elapsedTime / 60)}m `
+                  : ""}
+                {elapsedTime % 60}s
+              </span>
+            </div>
+          </div>
         </div>
 
         <div className="max-w-6xl mx-auto">
@@ -479,7 +491,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
                         {grouped.groups.map((group, gi) => (
                           <div key={gi} className="flex flex-col items-center">
                             <span className="text-2xl font-display font-semibold text-game-done mb-1">
-                              {gi + 1} Ten
+                              {gi + 1} {gi + 1 > 1 ? "Tens" : "Ten"}
                             </span>
                             <div className="flex gap-1 flex-wrap justify-center p-2 bg-game-done/10 rounded-lg border border-game-done/30">
                               {group.map((ball) => (

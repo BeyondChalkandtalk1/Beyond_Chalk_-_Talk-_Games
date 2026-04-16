@@ -22,6 +22,7 @@ import {
 } from "@/data/pahalGameData";
 import DragCountQuestion from "./DragCountQuestion";
 import bgVideo1 from "@/assets/pahal/bgVideo1.mp4"; // ✅ Doc1 ka original import
+import tropyVideo from "@/assets/Level2CompleteVideo.mp4";
 
 interface Props {
   onComplete: () => void;
@@ -29,7 +30,7 @@ interface Props {
 
 type SubPhase = "representation" | "quiz" | "results";
 
-const QUESTION_TIME = 30;
+// const QUESTION_TIME = 30;
 
 const PrePahalSkill = ({ onComplete }: Props) => {
   const [subPhase, setSubPhase] = useState<SubPhase>("representation");
@@ -52,7 +53,9 @@ const PrePahalSkill = ({ onComplete }: Props) => {
   const [answers, setAnswers] = useState<(string | null)[]>(
     Array(totalQuestions).fill(null),
   );
-  const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
+  // const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const quizStartTime = useRef(Date.now());
   const [showFeedback, setShowFeedback] = useState(false);
   const [droppedItem, setDroppedItem] = useState<DragOption | null>(null);
   const [selectedDragItem, setSelectedDragItem] = useState<DragOption | null>(
@@ -106,8 +109,11 @@ const PrePahalSkill = ({ onComplete }: Props) => {
     if (subPhase !== "representation" || isPaused) return;
     const timer = setTimeout(() => {
       if (showTenEquals) {
+        // setSubPhase("quiz");
+        // startTime.current = Date.now();
         setSubPhase("quiz");
         startTime.current = Date.now();
+        quizStartTime.current = Date.now();
         return;
       }
       if (showOneTen) {
@@ -168,15 +174,23 @@ const PrePahalSkill = ({ onComplete }: Props) => {
   // --- Quiz logic ---
   const question = questions[currentQ];
 
-  useEffect(() => {
-    if (subPhase !== "quiz" || showFeedback) return;
-    if (timeLeft <= 0) {
-      handleQuizNext();
-      return;
-    }
-    const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
-    return () => clearInterval(timer);
-  }, [timeLeft, subPhase, showFeedback]);
+  // useEffect(() => {
+  //   if (subPhase !== "quiz" || showFeedback) return;
+  //   if (timeLeft <= 0) {
+  //     handleQuizNext();
+  //     return;
+  //   }
+  //   const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
+  //   return () => clearInterval(timer);
+  // }, [timeLeft, subPhase, showFeedback]);
+
+ useEffect(() => {
+   if (subPhase !== "quiz") return;
+   const timer = setInterval(() => {
+     setElapsedTime(Math.round((Date.now() - quizStartTime.current) / 1000));
+   }, 1000);
+   return () => clearInterval(timer);
+ }, [subPhase]);
 
   const handleSelect = (option: string) => {
     if (showFeedback) return;
@@ -187,12 +201,25 @@ const PrePahalSkill = ({ onComplete }: Props) => {
     setShowFeedback(true);
   };
 
+  // const handleQuizNext = useCallback(() => {
+  //   if (currentQ < totalQuestions - 1) {
+  //     setCurrentQ((q) => q + 1);
+  //     setSelectedAnswer(null);
+  //     setShowFeedback(false);
+  //     setTimeLeft(QUESTION_TIME);
+  //     setDroppedItem(null);
+  //     setSelectedDragItem(null);
+  //   } else {
+  //     setSubPhase("results");
+  //   }
+  // }, [currentQ, totalQuestions]);
+
   const handleQuizNext = useCallback(() => {
     if (currentQ < totalQuestions - 1) {
       setCurrentQ((q) => q + 1);
       setSelectedAnswer(null);
       setShowFeedback(false);
-      setTimeLeft(QUESTION_TIME);
+      // REMOVE: setTimeLeft(QUESTION_TIME);
       setDroppedItem(null);
       setSelectedDragItem(null);
     } else {
@@ -200,12 +227,20 @@ const PrePahalSkill = ({ onComplete }: Props) => {
     }
   }, [currentQ, totalQuestions]);
 
+  // const handleQuizPrevious = () => {
+  //   if (currentQ > 0) {
+  //     setCurrentQ((q) => q - 1);
+  //     setSelectedAnswer(answers[currentQ - 1]);
+  //     setShowFeedback(!!answers[currentQ - 1]);
+  //     setTimeLeft(QUESTION_TIME);
+  //   }
+  // };
   const handleQuizPrevious = () => {
     if (currentQ > 0) {
       setCurrentQ((q) => q - 1);
       setSelectedAnswer(answers[currentQ - 1]);
       setShowFeedback(!!answers[currentQ - 1]);
-      setTimeLeft(QUESTION_TIME);
+      // REMOVE: setTimeLeft(QUESTION_TIME);
     }
   };
 
@@ -404,22 +439,18 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                 <span className="text-lg font-display font-semibold text-game-done">
                   Score: {score}
                 </span>
-                <span
+                {/* <span
                   className={`flex items-center gap-1 text-lg font-display font-semibold ${timeLeft <= 5 ? "text-destructive animate-pulse" : "text-muted-foreground"}`}
                 >
                   <Clock size={18} /> {timeLeft}s
+                </span> */}
+                <span className="flex items-center gap-1 text-lg font-display font-semibold text-muted-foreground">
+                  <Clock size={18} />{" "}
+                  {Math.floor(elapsedTime / 60) > 0
+                    ? `${Math.floor(elapsedTime / 60)}m `
+                    : ""}
+                  {elapsedTime % 60}s
                 </span>
-              </div>
-            </div>
-
-            <div className="max-w-2xl mx-auto px-4">
-              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-primary rounded-full"
-                  initial={{ width: "100%" }}
-                  animate={{ width: `${(timeLeft / QUESTION_TIME) * 100}%` }}
-                  transition={{ duration: 0.5 }}
-                />
               </div>
             </div>
 
@@ -433,9 +464,6 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                   transition={{ duration: 0.25 }}
                   className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 md:p-8 game-card-shadow"
                 >
-                  {/* {question.type === "drag-count" &&
-                  question.dragImage &&
-                  question.correctCount ? ( */}
                   {question.type === "drag-count" &&
                   question.dragImage &&
                   question.correctCount !== undefined ? (
@@ -445,13 +473,6 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                       correctCount={question.correctCount}
                       gridSize={question.gridSize || 24}
                       validateAnswer={question.validateAnswer}
-                      // onAnswer={(correct, answer) => {
-                      //   const newAnswers = [...answers];
-                      //   newAnswers[currentQ] = answer;
-                      //   setAnswers(newAnswers);
-                      //   setSelectedAnswer(answer);
-                      //   setShowFeedback(true);
-                      // }}
                       onAnswer={(correct, answer) => {
                         const newAnswers = [...answers];
                         // ✅ correct answer tab hi set karo jab actually correct ho
@@ -573,19 +594,6 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                           const isCorrectOpt = opt === question.correctAnswer;
                           let optClass =
                             "border-border bg-card text-foreground hover:border-primary/50 hover:scale-102";
-                          // if (showFeedback) {
-                          //   if (isCorrectOpt)
-                          //     optClass =
-                          //       "border-game-done bg-game-done/10 text-game-done scale-105";
-                          //   else if (isSelected && !isCorrectOpt)
-                          //     optClass =
-                          //       "border-destructive bg-destructive/10 text-destructive scale-95";
-                          //   else
-                          //     optClass =
-                          //       "border-border bg-card text-muted-foreground opacity-50";
-                          // } else if (isSelected)
-                          //   optClass =
-                          //     "border-primary bg-primary/10 text-primary scale-105";
                           if (showFeedback) {
                             if (isCorrectOpt)
                               optClass =
@@ -622,22 +630,6 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                     </>
                   )}
 
-                  {/* {showFeedback && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      // className={`mt-4 p-3 rounded-lg text-center font-display font-semibold ${isCorrect ? "bg-game-done/10 text-game-done" : "bg-destructive/10 text-destructive"}`}
-                      className={`mt-4 p-3 rounded-lg text-center text-2xl font-display font-semibold ${
-                        isCorrect
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {isCorrect
-                        ? "Well done!"
-                        : `❌ Wrong! Correct answer: ${question.correctAnswer}`}
-                    </motion.div>
-                  )} */}
                   {showFeedback && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
@@ -648,9 +640,7 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                           : "bg-red-100 text-red-700"
                       }`}
                     >
-                      {isCorrect
-                        ? "Well done!"
-                        : `❌ Incorrect! `}
+                      {isCorrect ? "Well done!" : `❌ Incorrect! `}
 
                       {/* Try Again button - sirf wrong answer pe */}
                       {!isCorrect && (
@@ -658,11 +648,11 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                           <button
                             onClick={() => {
                               setSelectedAnswer(null);
-                              setShowFeedback(false); 
+                              setShowFeedback(false);
                               setShowFeedback(false);
                               setDroppedItem(null);
                               setSelectedDragItem(null);
-                              setTimeLeft(QUESTION_TIME);
+                              // setTimeLeft(QUESTION_TIME);
                               // answers reset karo current question ke liye
                               const newAnswers = [...answers];
                               newAnswers[currentQ] = null;
@@ -722,7 +712,7 @@ const PrePahalSkill = ({ onComplete }: Props) => {
 
               <div className="mb-6 rounded-xl overflow-hidden max-w-sm mx-auto">
                 <video
-                  src="/videos/celebration.mp4"
+                  src={tropyVideo}
                   autoPlay
                   loop
                   muted

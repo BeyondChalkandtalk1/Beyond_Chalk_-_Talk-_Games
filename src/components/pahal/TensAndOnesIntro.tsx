@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gifVideo from "@/assets/pahal/ballCount.mp4";
 import blueBall from "@/assets/pahal/For_Ones.png"
+import onesSingleUnit from "@/assets/pahal/onesSingleUnit.png"
 
 interface Props {
   onStartQuiz: () => void;
@@ -200,7 +201,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                       <img
                         src={blueBall}
                         alt=""
-                        className="w-10 h-10 md:w-16 md:h-16 rounded-full shadow-lg animate-bounce"
+                        className="w-10 h-10 md:w-12 md:h-12 rounded-full shadow-lg animate-bounce"
                         style={{
                           animationDelay: `${i * 0.1}s`,
                           animationDuration: "1s",
@@ -216,17 +217,20 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
 
               {/* Now we have 10 Ones */}
               {step >= 13 && (
-                <motion.p
-                  {...fadeIn}
-                  className="text-5xl font-display font-bold text-game-done"
-                >
-                  Now we have 10 Ones 
-                </motion.p>
+                <>
+                  <motion.p
+                    {...fadeIn}
+                    className="text-5xl font-display font-bold text-game-done"
+                  >
+                    Now we have 10 Ones
+                  </motion.p>
+                  <img src={onesSingleUnit} alt="" className="w-76 h-96" />
+                </>
               )}
             </div>
 
             {/* RIGHT SECTION */}
-            <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow flex flex-col items-center justify-center gap-4">
+            <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow flex flex-col items-center  gap-4">
               {step >= 14 ? (
                 <>
                   <motion.h2
@@ -294,7 +298,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                 onClick={onStartQuiz}
                 className="px-10 py-4 bg-primary text-primary-foreground text-2xl rounded-xl font-display font-semibold hover:opacity-90 transition shadow-lg"
               >
-                Continue ➡️
+                Continue
               </button>
             </motion.div>
           )}
@@ -337,14 +341,14 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
               </button>
 
               <p className="text-2xl font-display font-bold text-foreground mb-6">
-               Are you ready to take PAHAL Practice Challenge!
+                Are you ready to take PAHAL Practice Challenge!
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   onClick={onStartQuiz}
                   className="px-6 py-3 bg-primary text-primary-foreground text-2xl rounded-xl font-display font-semibold hover:opacity-90 transition"
                 >
-                  Yes 
+                  Yes
                 </button>
                 <button
                   onClick={() => {
@@ -354,7 +358,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                   }}
                   className="px-6 py-3 bg-secondary text-secondary-foreground text-2xl rounded-xl font-display font-semibold hover:opacity-90 transition"
                 >
-                  I want to understand the concept again 
+                  I want to revisit the concept again
                 </button>
               </div>
             </motion.div>

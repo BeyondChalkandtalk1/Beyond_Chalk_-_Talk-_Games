@@ -113,7 +113,7 @@ const GAMES = [
         "Demonstrate improved conceptual understanding and confidence in performing basic arithmetic operations.",
       ],
     },
-    levels: 3,
+    levels: 2,
     age: "5+",
     path: "/games/pahal",
     color: "primary" as const,

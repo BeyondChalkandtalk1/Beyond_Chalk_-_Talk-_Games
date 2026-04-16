@@ -18,6 +18,9 @@ import bgVideo1 from "@/assets/pahal/bgVideo1.mp4";
 import TensAndOnesIntro from "./TensAndOnesIntro";
 import BuildAndBreakChallenge from "./BuildAndBreakChallenge";
 import HTOIntro from "./HTOIntro";
+import HTOBuildAndBreakChallenge from "./HTOBuildAndBreakChallenge";
+import THTOIntro from "./THTOIntro";
+import THTOBuildAndBreakChallenge from "./THTOBuildAndBreakChallenge";
 
 export type PlaceValueCategory = 'tens-ones' | 'hto' | 'thto';
 
@@ -40,7 +43,11 @@ const PahalPractice = ({
   onPlayAgain,
 }: Props) => {
   const [phase, setPhase] = useState<"intro" | "challenge" | "quiz">(
-    category === "tens-ones" || category === "hto" ? "intro" : "quiz",
+    category === "tens-ones" || category === "hto"
+      ? "intro"
+      : "quiz" || category === "thto"
+        ? "intro"
+        : "quiz",
   );
   const questions = useMemo(() => getPrePahalQuestions(), []);
   const [currentQ, setCurrentQ] = useState(0);
@@ -127,36 +134,7 @@ const PahalPractice = ({
   const totalTimeMin = Math.floor(totalTimeSec / 60);
   const totalTimeRemSec = totalTimeSec % 60;
 
-  // if (phase === "intro") {
-  //   return (
-  //     <>
-        // <div className="text-center mt-5">
-        //   <h2 className="text-2xl md:text-5xl font-display font-bold text-secondary">
-        //     Level 1
-        //   </h2>
-        //   <p className="text-muted-foreground font-bold text-2xl mt-1">
-        //     {category === "tens-ones"
-        //       ? "Place Value – Tens and Ones"
-        //       : category === "hto"
-        //         ? "Place Value – Hundreds, Tens, and Ones"
-        //         : "Place Value – Thousands, Hundreds, Tens, and Ones"}
-        //   </p>
-        // </div>
-  //       {/* <TensAndOnesIntro
-  //           onStartQuiz={() => {
-  //             setPhase("challenge");
-  //             startTime.current = Date.now();
-  //           }}
-  //         /> */}
-  //       <TensAndOnesIntro
-  //         onStartQuiz={() => {
-  //           setPhase("challenge");
-  //         }}
-  //       />
-  //       ;
-  //     </>
-  //   );
-  // }
+
 
     if (phase === "intro") {
       if (category === "hto") {
@@ -175,6 +153,29 @@ const PahalPractice = ({
               </p>
             </div>
             <HTOIntro
+              onStartQuiz={() => {
+                setPhase("challenge");
+              }}
+            />
+          </>
+        );
+      }
+      if (category === "thto") {
+        return (
+          <>
+            <div className="text-center mt-5">
+              <h2 className="text-2xl md:text-5xl font-display font-bold text-secondary">
+                Level 1
+              </h2>
+              <p className="text-muted-foreground font-bold text-2xl mt-1">
+                {category === "tens-ones"
+                  ? "Place Value – Tens and Ones"
+                  : category === "hto"
+                    ? "Place Value – Hundreds, Tens, and Ones"
+                    : "Place Value – Thousands, Hundreds, Tens, and Ones"}
+              </p>
+            </div>
+            <THTOIntro
               onStartQuiz={() => {
                 setPhase("challenge");
               }}
@@ -205,18 +206,53 @@ const PahalPractice = ({
       );
     }
 
-  if (phase === "challenge") {
-    return (
-      <BuildAndBreakChallenge
-        onComplete={() => {
-          setPhase("quiz");
-          startTime.current = Date.now();
-        }}
-        onBack={onBack}
-        onPlayAgain={onPlayAgain}
-      />
-    );
-  }
+  // if (phase === "challenge") {
+  //   return (
+  //     <BuildAndBreakChallenge
+  //       onComplete={() => {
+  //         setPhase("quiz");
+  //         startTime.current = Date.now();
+  //       }}
+  //       onBack={onBack}
+  //       onPlayAgain={onPlayAgain}
+  //     />
+  //   );
+  // }
+
+    if (phase === "challenge") {
+      if (category === "hto") {
+        return (
+          <HTOBuildAndBreakChallenge
+            onComplete={() => {
+              setPhase("quiz");
+              startTime.current = Date.now();
+            }}
+            onBack={onBack}
+          />
+        );
+      }
+      if (category === "thto") {
+        return (
+          <THTOBuildAndBreakChallenge
+            onComplete={() => {
+              setPhase("quiz");
+              startTime.current = Date.now();
+            }}
+            onBack={onBack}
+          />
+        );
+      }
+      return (
+        <BuildAndBreakChallenge
+          onComplete={() => {
+            setPhase("quiz");
+            startTime.current = Date.now();
+          }}
+          onBack={onBack}
+          onPlayAgain={onPlayAgain}
+        />
+      );
+    }
 
   if (isFinished) {
     return (

@@ -56,6 +56,7 @@ import SubtractionImage from "@/assets/pahal/Subtraction.png";
 import PlaceValueImage from "@/assets/pahal/Place_value.png";
 import AdditionImage from "@/assets/pahal/Addition.png";
 import levelBg from "@/assets/pahal/Bg_level_select.jpg"
+import blanksheetpaper from "@/assets/pahal/blank-sheet-paper.jpg"
 import {
   ArrowLeft,
   BookOpen,
@@ -104,22 +105,22 @@ const levels = [
     color: "bg-accent",
     locked: false,
   },
-  {
-    id: "practice" as Phase,
-    title: "Level 2",
-    description: "Addition",
-    icon: AdditionImage,
-    color: "bg-accent",
-    locked: false,
-  },
-  {
-    id: "practice" as Phase,
-    title: "Level 3",
-    description: "Subtraction",
-    icon: SubtractionImage,
-    color: "bg-accent",
-    locked: false,
-  },
+  // {
+  //   id: "practice" as Phase,
+  //   title: "Level 2",
+  //   description: "Addition",
+  //   icon: AdditionImage,
+  //   color: "bg-accent",
+  //   locked: false,
+  // },
+  // {
+  //   id: "practice" as Phase,
+  //   title: "Level 3",
+  //   description: "Subtraction",
+  //   icon: SubtractionImage,
+  //   color: "bg-accent",
+  //   locked: false,
+  // },
 ];
 
 const placeValueCategories = [
@@ -191,7 +192,7 @@ const PahalGame = () => {
                     Kindly select a level and begin your PAHAL Journey
                   </h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 max-w-8xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
                   {levels.map((level, index) => {
                     const Icon = level.icon;
                     return (
@@ -234,7 +235,7 @@ const PahalGame = () => {
             </div>
           )}
 
-          {phase === "level-1-select" && (
+          {/* {phase === "level-1-select" && (
             <motion.div
               key="level-1-select"
               initial={{ opacity: 0, y: 20 }}
@@ -274,6 +275,57 @@ const PahalGame = () => {
                 })}
               </div>
             </motion.div>
+          )} */}
+
+          {phase === "level-1-select" && (
+            <div className="relative w-full min-h-screen">
+              <img
+                src={blanksheetpaper}
+                alt="background"
+                className="absolute inset-0 w-full h-full object-cover z-0"
+              />
+
+              <motion.div
+                key="level-1-select"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="relative z-10"
+              >
+                <div className="text-center mb-8 mt-0">
+                  <h2 className="text-2xl md:text-5xl font-display font-bold text-primary">
+                    Level 1
+                  </h2>
+                  <p className="text-muted-foreground font-bold text-4xl mt-5">
+                    Choose the place value you want to explore!
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl mx-auto">
+                  {placeValueCategories.map((cat) => {
+                    const Icon = cat.icon;
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => setPhase(cat.phase)}
+                        className="relative p-6 rounded-xl border-2 border-border bg-card game-card-shadow flex flex-col items-center gap-3 transition-all hover:border-primary/50 hover:scale-105 cursor-pointer"
+                      >
+                        <div
+                          className={`w-14 h-14 rounded-full ${cat.color} flex items-center justify-center`}
+                        >
+                          <Icon size={28} className="text-secondary" />
+                        </div>
+                        <h3 className="text-4xl font-display font-bold text-foreground">
+                          {cat.title}
+                        </h3>
+                        <p className="text-2xl text-muted-foreground font-bold">
+                          {cat.description}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </div>
           )}
 
           {phase === "pre-pahal" && (
@@ -337,7 +389,10 @@ const PahalGame = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <PahalPractice onBack={() => setPhase("level-select")} />
+              <PahalPractice
+                onBack={() => setPhase("level-select")}
+                onPlayAgain={() => setPhase("level-1-select")}
+              />
             </motion.div>
           )}
 

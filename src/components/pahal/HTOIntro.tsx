@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import tenBallCount from "@/assets/pahal/ballCount.mp4";
 import blueBall from "@/assets/pahal/For_Ones.png";
 import SequentialGifGrid from "./SequentialGifGrid"
+import onesSingleUnit from "@/assets/pahal/onesSingleUnit.png";
+import groupHundred from "@/assets/pahal/groupHundred.png";
+import tenGroup from "@/assets/pahal/tenGroup.png";
 
 interface Props {
   onStartQuiz: () => void;
@@ -40,17 +43,40 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
   }, []);
 
   useEffect(() => {
+    // const delays: Record<number, number> = {
+    //   0: 2000,
+    //   1: 2000,
+    //   2: 2000,
+    //   13: 2000,
+    //   14: 2000, 
+    //   15: 6000,
+    //   16: 5000,
+    //   17: 2000,
+    //   18: 10000,
+    //   19: 2000, // first big idea shows, wait 2s
+    //   20: 2000,
+    // };
+
     const delays: Record<number, number> = {
       0: 2000,
       1: 2000,
       2: 2000,
+
       13: 2000,
       14: 2000,
       15: 6000,
-      16: 5000,
+      16: 3000,
+
       17: 2000,
-      18: 10000,
-      19: 2000,
+      18: 6000,
+      19: 3000,
+
+      // 👇 NEW (images / recap like THTO but no thousand)
+      20: 2000,
+      21: 2000,
+      22: 2000,
+      23: 4000,
+      24: 2000,
     };
 
     let delay: number;
@@ -60,10 +86,15 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
       delay = delays[step];
     }
 
-    if (step === 20) {
-      setShowPopup(true);
-      return;
-    }
+  //  if (step === 21) {
+  //    setShowPopup(true);
+  //    return;
+  //  }
+  if (step === 24) {
+    setShowPopup(true);
+    return;
+  }
+
 
     if (delay !== undefined) {
       timerRef.current = setTimeout(() => setStep((s) => s + 1), delay);
@@ -98,6 +129,9 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
     if (step === 17) speakText("Let's make a hundred");
     if (step === 19)
       speakText("One hundred equals ten tens. One ten equals ten ones.");
+    if (step === 21) speakText("This is one ones unit");
+    if (step === 22) speakText("This is one tens group");
+    if (step === 23) speakText("This is one hundreds group");
   }, [step, speakText]);
 
   const ballsVisible = step >= 3 ? Math.min(step - 2, 10) : 0;
@@ -136,7 +170,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
               {step >= 0 && (
                 <motion.h2
                   {...fadeIn}
-                  className="text-xl md:text-2xl font-display font-bold text-primary"
+                  className="text-2xl md:text-4xl font-display font-bold text-secondary"
                 >
                   Meet "One"
                 </motion.h2>
@@ -154,7 +188,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
               {step >= 2 && (
                 <motion.p
                   {...fadeIn}
-                  className="text-sm font-display font-semibold text-foreground"
+                  className="text-4xl font-display font-semibold text-foreground"
                 >
                   Let's Count Ones
                 </motion.p>
@@ -186,7 +220,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                       <img
                         src={blueBall}
                         alt=""
-                        className="w-10 h-10 md:w-10 md:h-10 rounded-full shadow-lg animate-bounce"
+                        className="w-10 h-10 md:w-8 md:h-8 rounded-full shadow-lg animate-bounce"
                         style={{
                           animationDelay: `${i * 0.1}s`,
                           animationDuration: "1s",
@@ -197,32 +231,30 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                 </div>
               )}
               {step >= 13 && (
-                <motion.p
-                  {...fadeIn}
-                  className="text-sm font-display font-bold text-game-done"
-                >
-                  Now we have 10 Ones
-                </motion.p>
+                <>
+                  <motion.p
+                    {...fadeIn}
+                    className="text-3xl font-display font-bold text-game-done"
+                  >
+                    Now we have 10 Ones
+                  </motion.p>
+                  {/* <img src={onesSingleUnit} alt="" className="w-76 h-96" /> */}
+                </>
               )}
             </div>
 
             {/* MIDDLE: Tens */}
-            <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-4 game-card-shadow flex flex-col items-center justify-center gap-3">
+            <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-4 game-card-shadow flex flex-col items-center gap-3">
               {step >= 14 ? (
                 <>
                   <motion.h2
                     {...fadeIn}
-                    className="text-xl md:text-2xl font-display font-bold text-primary"
+                    className="text-2xl md:text-4xl font-display font-bold text-secondary whitespace-nowrap"
                   >
                     Let's make a Ten
                   </motion.h2>
                   {step >= 15 && (
                     <motion.div {...fadeIn} className=" max-w-xs">
-                      {/* <img
-                        src="/images/tens-ones-gif.gif"
-                        alt="Making a ten"
-                        className="w-full rounded-lg"
-                      /> */}
                       <video
                         autoPlay
                         loop
@@ -239,7 +271,15 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                       {...fadeIn}
                       className="text-sm font-display font-bold text-game-done"
                     >
-                      1 Ten = 10 Ones ✅
+                      <p className="text-3xl font-display font-bold text-foreground mb-2 whitespace-nowrap">
+                        A "Ten" is a group of 10 Ones.
+                      </p>
+                      <h3 className="text-5xl font-display font-bold text-primary mb-4 text-center">
+                        Big Idea
+                      </h3>
+                      <p className="text-2xl md:text-4xl font-display font-bold text-game-done text-center">
+                        1 Ten = 10 Ones
+                      </p>
                     </motion.p>
                   )}
                 </>
@@ -251,53 +291,40 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
             </div>
 
             {/* RIGHT: Hundreds */}
-            <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-4 game-card-shadow flex flex-col items-center justify-center gap-3">
+            <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-4 game-card-shadow flex flex-col items-center  gap-3">
               {step >= 17 ? (
-                // (
-                //   <>
-                //     <motion.h2
-                //       {...fadeIn}
-                //       className="text-xl md:text-2xl font-display font-bold text-primary"
-                //     >
-                //       Let's make a Hundred
-                //     </motion.h2>
-                //     {step >= 18 && (
-                //       <motion.div {...fadeIn} className="w-full max-w-[200px]">
-                //         <img
-                //           src="/images/hto-hundred-gif.gif"
-                //           alt="Making a hundred"
-                //           className="w-full rounded-lg"
-                //         />
-                //       </motion.div>
-                //     )}
-                //   </>
-                // )
                 <>
                   <motion.h2
                     {...fadeIn}
-                    className="text-xl md:text-2xl font-display font-bold text-primary"
+                    className="text-xl md:text-4xl font-display font-bold text-secondary whitespace-nowrap"
                   >
                     Let's make a Hundred
                   </motion.h2>
 
-                  {/* {step >= 18 && (
-                    <motion.div {...fadeIn} className="w-full max-w-[200px]">
-                      <div className="grid grid-cols-2 gap-1.5">
-                        {Array.from({ length: 10 }).map((_, i) => (
-                          <img
-                            key={i}
-                            src={tenBallCount}
-                            alt={`Ten balls ${i + 1}`}
-                            className="w-full rounded-md"
-                          />
-                        ))}
-                      </div>
-                    </motion.div>
-                  )} */}
                   {step >= 18 && (
-                    <motion.div {...fadeIn} className="w-full max-w-[700px]">
-                      <SequentialGifGrid videoSrc={tenBallCount} />
-                      <p>A “Hundred” is a group of 10 Tens.</p>
+                    <motion.div {...fadeIn} className=" max-w-[700px]">
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-80 object-cover "
+                      >
+                        <source src={tenBallCount} type="video/mp4" />
+                      </video>
+                    </motion.div>
+                  )}
+                  {step >= 19 && (
+                    <motion.div {...fadeIn} className="text-center">
+                      <p className="text-2xl font-display font-bold text-foreground mb-2">
+                        A "Hundred" is a group of 10 Tens.
+                      </p>
+                      <h3 className="text-4xl font-display font-bold text-primary mb-2">
+                        Big Idea 💡
+                      </h3>
+                      <p className="text-3xl font-display font-bold text-game-done">
+                        1 Hundred = 10 Tens
+                      </p>
                     </motion.div>
                   )}
                 </>
@@ -310,17 +337,71 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
           </div>
 
           {/* BOTTOM: Big Idea */}
-          {step >= 19 && (
+          {step >= 20 && (
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* Big Idea 1 — 1 Ten = 10 Ones */}
+              {step >= 21 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center items-center flex flex-col gap-3"
+                >
+                  <img
+                    src={onesSingleUnit} // 👈 apni image ka path yahan daalo
+                    alt="A Hundred = 10 Tens"
+                    className="w-80 h-80 object-contain rounded-lg mt-2"
+                  />
+                </motion.div>
+              )}
+
+              {step >= 22 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center items-center flex flex-col gap-3"
+                >
+                  <img
+                    src={tenGroup} // 👈 apni image ka path yahan daalo
+                    alt="A Hundred = 10 Tens"
+                    className="w-80 h-80 object-contain rounded-lg mt-2"
+                  />
+                </motion.div>
+              )}
+
+              {/* Big Idea 2 — 1 Hundred = 10 Tens (shows 2s later at step 20) */}
+              {step >= 23 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center flex flex-col items-center gap-3"
+                >
+                  {/* Your hundred image */}
+                  <img
+                    src={groupHundred} // 👈 apni image ka path yahan daalo
+                    alt="A Hundred = 10 Tens"
+                    className="w-80 h-80 object-contain rounded-lg mt-2"
+                  />
+                </motion.div>
+              )}
+            </div>
+          )}
+
+          {showContinueButton && (
             <motion.div
-              {...fadeIn}
-              className="mt-6 bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="mt-6 flex justify-center"
             >
-              <h3 className="text-xl font-display font-bold text-primary mb-1">
-                Big Idea
-              </h3>
-              <p className="text-xl md:text-2xl font-display font-bold text-game-done">
-                1 Hundred = 10 Tens
-              </p>
+              <button
+                onClick={onStartQuiz}
+                className="px-10 py-4 bg-primary text-primary-foreground text-2xl rounded-xl font-display font-semibold hover:opacity-90 transition shadow-lg"
+              >
+                Continue
+              </button>
             </motion.div>
           )}
         </div>
@@ -402,7 +483,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                 ✕
               </button>
 
-              <p className="text-2xl font-display font-bold text-foreground mb-6">
+              <p className="text-3xl font-display font-bold text-foreground mb-6">
                 Are you ready to take PAHAL Practice Challenge!
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -420,7 +501,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                   }}
                   className="px-6 py-3 bg-secondary text-secondary-foreground text-2xl rounded-xl font-display font-semibold hover:opacity-90 transition"
                 >
-                  I want to understand the concept again
+                  I want to revisit the concept again
                 </button>
               </div>
             </motion.div>
