@@ -5,7 +5,10 @@ import blueBall from "@/assets/pahal/For_Ones.png";
 import SequentialGifGrid from "./SequentialGifGrid"
 import onesSingleUnit from "@/assets/pahal/onesSingleUnit.png";
 import groupHundred from "@/assets/pahal/groupHundred.png";
+import groupOfThousand from "@/assets/pahal/groupOfThousand.jpg";
 import tenGroup from "@/assets/pahal/tenGroup.png";
+import HundredBallGrid from "./HundredBallGrid";
+import ThousandBallGrid from "./ThousandBallGrid";
 
 interface Props {
   onStartQuiz: () => void;
@@ -177,6 +180,21 @@ useEffect(() => {
   if (step === 26) speakText("This is one thousands group");
 }, [step, speakText]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "e") {
+        e.preventDefault();
+        setShowPopup(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   const ballsVisible = step >= 3 ? Math.min(step - 2, 10) : 0;
 
   const fadeIn = {
@@ -329,19 +347,8 @@ useEffect(() => {
                     Let's make a Hundred
                   </motion.h2>
                   {step >= 18 && (
-                    // <motion.div {...fadeIn} className="w-full">
-                    //   <SequentialGifGrid videoSrc={tenBallCount} />
-                    // </motion.div>
-                    <motion.div {...fadeIn} className="max-w-xs">
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-96 object-cover"
-                      >
-                        <source src={tenBallCount} type="video/mp4" />
-                      </video>
+                    <motion.div {...fadeIn} className="flex justify-center">
+                      <HundredBallGrid totalVisible={100} />
                     </motion.div>
                   )}
                   {step >= 19 && (
@@ -376,19 +383,8 @@ useEffect(() => {
                     Let's make a Thousand
                   </motion.h2>
                   {step >= 21 && (
-                    // <motion.div {...fadeIn} className="w-full">
-                    //   <SequentialGifGrid videoSrc={tenBallCount} />
-                    // </motion.div>
-                    <motion.div {...fadeIn} className="max-w-xs">
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-96 object-cover"
-                      >
-                        <source src={tenBallCount} type="video/mp4" />
-                      </video>
+                    <motion.div {...fadeIn} className="flex w-full justify-center items-center">
+                      <ThousandBallGrid totalVisible={1000} />
                     </motion.div>
                   )}
                   {step >= 22 && (
@@ -493,7 +489,7 @@ useEffect(() => {
                   </p> */}
                   {/* 👈 apna thousands image import karke yahan daalo */}
                   <img
-                    src={groupHundred}
+                    src={groupOfThousand}
                     alt="Thousand"
                     className="w-80 h-80 object-contain"
                   />

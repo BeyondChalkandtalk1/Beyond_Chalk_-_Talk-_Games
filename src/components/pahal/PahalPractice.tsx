@@ -206,19 +206,6 @@ const PahalPractice = ({
       );
     }
 
-  // if (phase === "challenge") {
-  //   return (
-  //     <BuildAndBreakChallenge
-  //       onComplete={() => {
-  //         setPhase("quiz");
-  //         startTime.current = Date.now();
-  //       }}
-  //       onBack={onBack}
-  //       onPlayAgain={onPlayAgain}
-  //     />
-  //   );
-  // }
-
     if (phase === "challenge") {
       if (category === "hto") {
         return (
@@ -228,6 +215,7 @@ const PahalPractice = ({
               startTime.current = Date.now();
             }}
             onBack={onBack}
+            onPlayAgain={onPlayAgain}
           />
         );
       }
@@ -239,6 +227,7 @@ const PahalPractice = ({
               startTime.current = Date.now();
             }}
             onBack={onBack}
+            onPlayAgain={onPlayAgain}
           />
         );
       }

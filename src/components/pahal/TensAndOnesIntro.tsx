@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import gifVideo from "@/assets/pahal/ballCount.mp4";
 import blueBall from "@/assets/pahal/For_Ones.png"
 import onesSingleUnit from "@/assets/pahal/onesSingleUnit.png"
+import tenGroup from "@/assets/pahal/tenGroup.png";
 
 interface Props {
   onStartQuiz: () => void;
@@ -45,8 +46,10 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
       // 3-12: balls, each 2s
       13: 2000, // "Now we have 10 Ones" -> right side
       14: 9000, // "Let's make a Ten" -> GIF
-      15: 10000, // GIF plays for 10s -> bottom
+      15: 14000, // GIF plays for 10s -> bottom
       16: 5000, // Big Idea -> popup
+      17:4000, // popup -> show continue button
+      18:4000
     };
 
     // For ball steps (3-12), delay is BALL_DELAY
@@ -57,7 +60,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
       delay = delays[step];
     }
 
-    if (step === 17) {
+    if (step === 19) {
       setShowPopup(true);
       return;
     }
@@ -224,7 +227,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                   >
                     Now we have 10 Ones
                   </motion.p>
-                  <img src={onesSingleUnit} alt="" className="w-76 h-96" />
+                  {/* <img src={onesSingleUnit} alt="" className="w-76 h-96" /> */}
                 </>
               )}
             </div>
@@ -261,6 +264,17 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                       <p className="text-4xl font-display font-bold text-foreground mb-2">
                         A "Ten" is a group of 10 Ones.
                       </p>
+                      <motion.div
+                        {...fadeIn}
+                        className="mt-0 bg-card/90 backdrop-blur-sm rounded-xl  p-0 game-card-shadow text-center"
+                      >
+                        <h3 className="text-5xl font-display font-bold text-primary mb-4">
+                          Big Idea
+                        </h3>
+                        <p className="text-4xl md:text-3xl font-display font-bold text-game-done">
+                          1 Ten = 10 Ones
+                        </p>
+                      </motion.div>
                     </>
                   )}
                 </>
@@ -274,17 +288,33 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
 
           {/* BOTTOM SECTION */}
           {step >= 16 && (
-            <motion.div
-              {...fadeIn}
-              className="mt-6 bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center"
-            >
-              <h3 className="text-5xl font-display font-bold text-primary mb-4">
-                Big Idea
-              </h3>
-              <p className="text-4xl md:text-3xl font-display font-bold text-game-done">
-                1 Ten = 10 Ones
-              </p>
-            </motion.div>
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+             {step >= 17 && ( <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center items-center flex flex-col gap-3"
+              >
+                <img
+                  src={onesSingleUnit} // 👈 apni image ka path yahan daalo
+                  alt="A Hundred = 10 Tens"
+                  className="w-80 h-80 object-contain rounded-lg mt-2"
+                />
+              </motion.div>)}
+
+              {step >= 18 && ( <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center items-center flex flex-col gap-3"
+              >
+                <img
+                  src={tenGroup} // 👈 apni image ka path yahan daalo
+                  alt="A Hundred = 10 Tens"
+                  className="w-80 h-80 object-contain rounded-lg mt-2"
+                />
+              </motion.div>)}
+            </div>
           )}
 
           {showContinueButton && (

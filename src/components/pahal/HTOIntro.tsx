@@ -6,6 +6,7 @@ import SequentialGifGrid from "./SequentialGifGrid"
 import onesSingleUnit from "@/assets/pahal/onesSingleUnit.png";
 import groupHundred from "@/assets/pahal/groupHundred.png";
 import tenGroup from "@/assets/pahal/tenGroup.png";
+import HundredBallGrid from "./HundredBallGrid";
 
 interface Props {
   onStartQuiz: () => void;
@@ -134,6 +135,19 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
     if (step === 23) speakText("This is one hundreds group");
   }, [step, speakText]);
 
+    useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "e") {
+          e.preventDefault();
+          setShowPopup(true);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }, []);
+
   const ballsVisible = step >= 3 ? Math.min(step - 2, 10) : 0;
 
   const fadeIn = {
@@ -207,16 +221,6 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                       }}
                       className="flex flex-col items-center"
                     >
-                      {/* <div
-                        className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary shadow-lg animate-bounce"
-                        style={{
-                          animationDelay: `${i * 0.1}s`,
-                          animationDuration: "1s",
-                        }}
-                      />
-                      <span className="text-[10px] font-display font-semibold text-muted-foreground mt-0.5">
-                        {i + 1}
-                      </span> */}
                       <img
                         src={blueBall}
                         alt=""
@@ -301,7 +305,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                     Let's make a Hundred
                   </motion.h2>
 
-                  {step >= 18 && (
+                  {/* {step >= 18 && (
                     <motion.div {...fadeIn} className=" max-w-[700px]">
                       <video
                         autoPlay
@@ -313,14 +317,19 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                         <source src={tenBallCount} type="video/mp4" />
                       </video>
                     </motion.div>
+                  )} */}
+                  {step >= 18 && (
+                    <motion.div {...fadeIn} className="flex justify-center">
+                      <HundredBallGrid totalVisible={100} />
+                    </motion.div>
                   )}
                   {step >= 19 && (
                     <motion.div {...fadeIn} className="text-center">
-                      <p className="text-2xl font-display font-bold text-foreground mb-2">
+                      <p className="text-3xl font-display font-bold text-foreground mb-2">
                         A "Hundred" is a group of 10 Tens.
                       </p>
                       <h3 className="text-4xl font-display font-bold text-primary mb-2">
-                        Big Idea 💡
+                        Big Idea
                       </h3>
                       <p className="text-3xl font-display font-bold text-game-done">
                         1 Hundred = 10 Tens

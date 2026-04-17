@@ -9,6 +9,7 @@ import celebrationVideo from "@/assets/Level2CompleteVideo.mp4";
 interface Props {
   onComplete: () => void;
   onBack: () => void;
+  onPlayAgain:()=> void;
 }
 
 type PlaceValue = "hundreds" | "tens" | "ones";
@@ -44,7 +45,7 @@ const questions: QuestionDef[] = [
     correctInput: "300+40+2",
   },
   {
-    text: "Drag and drop Hundreds, Tens, and Ones to satisfy:\n• The number has 3 digits\n• Hundreds digit is 4\n• Tens digit is 2 more than Hundreds\n• Ones digit is double of Hundreds",
+    text: "Drag and drop Hundreds, Tens, and Ones to satisfy:\n(a) The number has 3 digits\n(b) Hundreds digit is 4\n(c) Tens digit is 2 more than Hundreds\n(d) Ones digit is double of Hundreds",
     type: "drag-input",
     correctDrop: { hundreds: 4, tens: 6, ones: 8 },
     inputLabel: "What is the number?",
@@ -115,7 +116,7 @@ const DRAG_ITEMS: {
   },
 ];
 
-const HTOBuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
+const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
   const [currentQ, setCurrentQ] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const quizStartTime = useRef(Date.now());
@@ -237,6 +238,21 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
     return () => clearInterval(timer);
   }, [isFinished]);
 
+    useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "e") {
+          e.preventDefault();
+          setIsFinished(true);
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }, []);
+
   if (isFinished) {
       const totalMin = Math.floor(elapsedTime / 60);
       const totalSec = elapsedTime % 60;
@@ -274,41 +290,41 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
             />
           </div>
 
-           <div className="space-y-3 text-left max-w-2xl mx-auto mb-6">
-          <h3 className="text-2xl font-display font-bold text-foreground text-center mb-3">
-            Summary
-          </h3>
-          {questions.map((ques, i) => {
-            const isCorrect = feedbacks[i] === "correct";
-            const userDrop = drops[i];
-            const correctDrop = ques.correctDrop;
+          <div className="space-y-3 text-left max-w-2xl mx-auto mb-6">
+            <h3 className="text-2xl font-display font-bold text-foreground text-center mb-3">
+              Summary
+            </h3>
+            {questions.map((ques, i) => {
+              const isCorrect = feedbacks[i] === "correct";
+              const userDrop = drops[i];
+              const correctDrop = ques.correctDrop;
 
-            return (
-              <div
-                key={i}
-                className={`rounded-xl  p-4 ${
-                  isCorrect
-                    ? "bg-green-50 "
-                    : "bg-red-50 "
-                }`}
-              >
-                {/* Question number + result */}
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xl font-display font-bold text-foreground">
-                    PC {i + 1}
-                  </span>
-                  <span className={`text-xl font-bold ${isCorrect ? "text-green-600" : "text-red-600"}`}>
-                    {isCorrect ? "✓ Correct" : "✗ Incorrect"}
-                  </span>
-                </div>
+              return (
+                <div
+                  key={i}
+                  className={`rounded-xl  p-4 ${
+                    isCorrect ? "bg-green-50 " : "bg-red-50 "
+                  }`}
+                >
+                  {/* Question number + result */}
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xl font-display font-bold text-foreground">
+                      PC {i + 1}
+                    </span>
+                    <span
+                      className={`text-xl font-bold ${isCorrect ? "text-green-600" : "text-red-600"}`}
+                    >
+                      {isCorrect ? "✓ Correct" : "✗ Incorrect"}
+                    </span>
+                  </div>
 
-                {/* Question text (truncated) */}
-                {/* <p className="text-lg font-display text-muted-foreground mb-3 line-clamp-2">
+                  {/* Question text (truncated) */}
+                  {/* <p className="text-lg font-display text-muted-foreground mb-3 line-clamp-2">
                   {ques.text}
                 </p> */}
 
-                {/* Drop comparison */}
-                {/* {correctDrop && (
+                  {/* Drop comparison */}
+                  {/* {correctDrop && (
                   <div className="grid grid-cols-2 gap-2 mb-2">
                     <div className="bg-white/70 rounded-lg p-2 text-center">
                       <p className="text-sm font-display text-muted-foreground mb-1">Your Answer</p>
@@ -334,10 +350,10 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
                     </div>
                   </div>
                 )} */}
-              </div>
-            );
-          })}
-        </div>
+                </div>
+              );
+            })}
+          </div>
 
           <div className="flex gap-4 justify-center">
             <button
@@ -347,7 +363,7 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
               Go Back
             </button>
             <button
-              onClick={onComplete}
+              onClick={onPlayAgain}
               className="px-6 py-3 bg-primary text-2xl text-primary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
             >
               Play again
@@ -477,15 +493,40 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack }: Props) => {
               className="bg-card/95 backdrop-blur-sm rounded-xl border border-border p-5 md:p-6 game-card-shadow"
             >
               {/* Question text */}
-              <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-4 mb-5">
+              {/* <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-4 mb-5">
                 <p className="text-lg md:text-4xl font-display font-bold text-foreground text-center whitespace-pre-line">
                   {q.text}
                 </p>
-                {/* {q.fixMistake && q.mistakeText && (
-                  <p className="text-sm font-display text-destructive mt-2 text-center">
-                    ❌ {q.mistakeText}
-                  </p>
-                )} */}
+              </div> */}
+              <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-4 mb-5">
+                {(() => {
+                  const lines = q.text.split("\n");
+                  const firstLine = lines[0];
+                  const points = lines.slice(1);
+
+                  return (
+                    <div className="flex flex-col items-center gap-2">
+                      {/* Main question - center */}
+                      <p className="text-lg md:text-4xl font-display font-bold text-foreground text-center">
+                        {firstLine}
+                      </p>
+
+                      {/* Points - left aligned, but contained */}
+                      {points.length > 0 && (
+                        <div className="flex flex-col gap-1 self-start md:self-center md:items-start">
+                          {points.map((point, i) => (
+                            <p
+                              key={i}
+                              className="text-lg md:text-3xl font-display font-bold text-foreground text-left"
+                            >
+                              {point}
+                            </p>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Main interaction area */}

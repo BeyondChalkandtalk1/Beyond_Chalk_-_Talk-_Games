@@ -495,19 +495,7 @@ useEffect(() => {
                             </span>
                             <div className="flex gap-1 flex-wrap justify-center p-2 bg-game-done/10 rounded-lg border border-game-done/30">
                               {group.map((ball) => (
-                                // <motion.div
-                                //   key={ball.id}
-                                //   initial={{ opacity: 0, scale: 0, y: -20 }}
-                                //   animate={{ opacity: 1, scale: 1, y: 0 }}
-                                //   transition={{
-                                //     type: "spring",
-                                //     stiffness: 400,
-                                //     damping: 15,
-                                //   }}
-                                //   onClick={() => removeBall(ball.id)}
-                                //   className="w-7 h-7 md:w-12 md:h-12 rounded-full bg-blue-700 shadow-md cursor-pointer hover:scale-110 transition-transform"
-                                //   title="Click to remove"
-                                // />
+                              
                                 <img
                                   src={blueBall}
                                   alt=""
@@ -534,19 +522,7 @@ useEffect(() => {
                             </span>
                             <div className="flex gap-1 flex-wrap justify-center p-2 bg-muted/20 rounded-lg border border-border">
                               {grouped.remainder.map((ball) => (
-                                // <motion.div
-                                //   key={ball.id}
-                                //   initial={{ opacity: 0, scale: 0, y: -20 }}
-                                //   animate={{ opacity: 1, scale: 1, y: 0 }}
-                                //   transition={{
-                                //     type: "spring",
-                                //     stiffness: 400,
-                                //     damping: 15,
-                                //   }}
-                                //   onClick={() => removeBall(ball.id)}
-                                //   className="w-7 h-7 md:w-12 md:h-12 rounded-full bg-blue-700 shadow-md cursor-pointer hover:scale-110 transition-transform"
-                                //   title="Click to remove"
-                                // />
+                               
                                 <img
                                   src={blueBall}
                                   alt=""
@@ -603,11 +579,7 @@ useEffect(() => {
                       </div>
                     )}
 
-                    {/* <div className="mt-5 text-center">
-                      <span className="bg-card rounded-lg px-3 py-1.5 border border-border text-2xl font-display font-bold text-foreground">
-                        Total: {currentBalls.length} Ones
-                      </span>
-                    </div> */}
+                   
                   </div>
 
                   {/* Right: Ball Source */}
@@ -616,14 +588,7 @@ useEffect(() => {
                       'Ones' Source
                     </p>
                     <div
-                    // draggable={!submitted[currentQ]}
-                    // onDragStart={handleDragStart}
-                    // onClick={addBall}
-                    // className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-700 shadow-lg flex items-center justify-center transition-all ${
-                    //   submitted[currentQ]
-                    //     ? "opacity-40 cursor-not-allowed"
-                    //     : "cursor-pointer hover:scale-110 active:scale-95"
-                    // }`}
+                
                     >
                       <img
                         src={blueBall}
@@ -637,9 +602,7 @@ useEffect(() => {
                             : "cursor-pointer hover:scale-110 active:scale-95"
                         }`}
                       />
-                      {/* <span className="text-primary-foreground font-display font-bold text-lg">
-                        1
-                      </span> */}
+                      
                     </div>
                     <p className="text-2xl font-display font-bold text-muted-foreground text-center">
                       Tap or drag
