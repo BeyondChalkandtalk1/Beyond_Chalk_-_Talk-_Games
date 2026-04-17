@@ -103,6 +103,7 @@
 // ThousandBallGrid.tsx
 import { motion } from "framer-motion";
 import redBall from "@/assets/pahal/redball.png";
+import { useState } from "react";
 
 interface Props {
   totalVisible?: number;
@@ -129,6 +130,8 @@ const ThousandBallGrid = ({
   const wrapperW = gridW + LAYERS * cellSize * 0.8;
   const wrapperH = gridH + LAYERS * cellSize * 0.6;
 
+   const [animKey, setAnimKey] = useState(0);
+
   return (
     /* 
       KEY FIX:
@@ -138,12 +141,14 @@ const ThousandBallGrid = ({
         → cube apne center pe render hoga, wrapper ke andar centered
     */
     <div
+      className="cursor-pointer"
       style={{
         width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
       }}
+      onClick={() => setAnimKey((k) => k + 1)}
     >
       <div
         style={{
@@ -178,7 +183,8 @@ const ThousandBallGrid = ({
 
               return (
                 <div
-                  key={layerIndex}
+                  // key={layerIndex}
+                  key={`${animKey}-${layerIndex}`}
                   style={{
                     position: "absolute",
                     top: 0,

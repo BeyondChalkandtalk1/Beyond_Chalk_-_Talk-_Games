@@ -47,12 +47,12 @@ const questions: QuestionDef[] = [
     correctInput: "4842",
   },
   {
-    text: "Fix the broken number by dragging the correct Hundreds and Ones in the drop zone. The number shown is wrong: 6 _ 5 _\n• The thousands digit is correct\n(a) Hundreds digit should be half of Thousands\n(b) Tens digit should be 1 less than Tens\n(c) Ones digit is 6",
+    text: "Fix the broken number by dragging the correct Hundreds and Ones in the drop zone. The number shown is wrong: 6_5_\n(a)The thousands digit is correct.\n(b)Hundreds digit should be half of Thousands.\n(c)Ones digit should be 1 less than Tens.",
     type: "drag-input",
-    correctDrop: { thousands: 6, hundreds: 3, tens: 5, ones: 6 },
+    correctDrop: { thousands: 6, hundreds: 3, tens: 5, ones: 4 },
     inputLabel: "The formed number is:",
     inputType: "number",
-    correctInput: "6356",
+    correctInput: "6354",
     lockedColumns: { thousands: 6, tens: 5 }, // pre-filled, can't drag
   },
   {

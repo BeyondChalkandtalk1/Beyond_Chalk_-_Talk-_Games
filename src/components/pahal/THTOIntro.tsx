@@ -9,6 +9,7 @@ import groupOfThousand from "@/assets/pahal/groupOfThousand.jpg";
 import tenGroup from "@/assets/pahal/tenGroup.png";
 import HundredBallGrid from "./HundredBallGrid";
 import ThousandBallGrid from "./ThousandBallGrid";
+import TenBallPole from "./TenBallPole";
 
 interface Props {
   onStartQuiz: () => void;
@@ -303,16 +304,8 @@ useEffect(() => {
                     Let's make a Ten
                   </motion.h2>
                   {step >= 15 && (
-                    <motion.div {...fadeIn} className="max-w-xs">
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-96 object-cover"
-                      >
-                        <source src={tenBallCount} type="video/mp4" />
-                      </video>
+                    <motion.div {...fadeIn} className="flex justify-center">
+                      <TenBallPole totalVisible={10} />
                     </motion.div>
                   )}
                   {step >= 16 && (
@@ -383,7 +376,10 @@ useEffect(() => {
                     Let's make a Thousand
                   </motion.h2>
                   {step >= 21 && (
-                    <motion.div {...fadeIn} className="flex w-full justify-center items-center">
+                    <motion.div
+                      {...fadeIn}
+                      className="flex w-full justify-center items-center"
+                    >
                       <ThousandBallGrid totalVisible={1000} />
                     </motion.div>
                   )}

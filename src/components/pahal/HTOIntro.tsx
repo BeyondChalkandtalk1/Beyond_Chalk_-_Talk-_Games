@@ -7,6 +7,7 @@ import onesSingleUnit from "@/assets/pahal/onesSingleUnit.png";
 import groupHundred from "@/assets/pahal/groupHundred.png";
 import tenGroup from "@/assets/pahal/tenGroup.png";
 import HundredBallGrid from "./HundredBallGrid";
+import TenBallPole from "./TenBallPole";
 
 interface Props {
   onStartQuiz: () => void;
@@ -258,16 +259,8 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                     Let's make a Ten
                   </motion.h2>
                   {step >= 15 && (
-                    <motion.div {...fadeIn} className=" max-w-xs">
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-80 object-cover "
-                      >
-                        <source src={tenBallCount} type="video/mp4" />
-                      </video>
+                    <motion.div {...fadeIn} className="flex justify-center">
+                      <TenBallPole totalVisible={10} />
                     </motion.div>
                   )}
                   {step >= 16 && (
@@ -305,19 +298,6 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                     Let's make a Hundred
                   </motion.h2>
 
-                  {/* {step >= 18 && (
-                    <motion.div {...fadeIn} className=" max-w-[700px]">
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-80 object-cover "
-                      >
-                        <source src={tenBallCount} type="video/mp4" />
-                      </video>
-                    </motion.div>
-                  )} */}
                   {step >= 18 && (
                     <motion.div {...fadeIn} className="flex justify-center">
                       <HundredBallGrid totalVisible={100} />

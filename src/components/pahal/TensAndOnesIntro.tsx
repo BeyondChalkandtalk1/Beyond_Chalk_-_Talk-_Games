@@ -4,6 +4,7 @@ import gifVideo from "@/assets/pahal/ballCount.mp4";
 import blueBall from "@/assets/pahal/For_Ones.png"
 import onesSingleUnit from "@/assets/pahal/onesSingleUnit.png"
 import tenGroup from "@/assets/pahal/tenGroup.png";
+import TenBallPole from "./TenBallPole";
 
 interface Props {
   onStartQuiz: () => void;
@@ -46,7 +47,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
       // 3-12: balls, each 2s
       13: 2000, // "Now we have 10 Ones" -> right side
       14: 9000, // "Let's make a Ten" -> GIF
-      15: 14000, // GIF plays for 10s -> bottom
+      15: 4000, // GIF plays for 10s -> bottom
       16: 5000, // Big Idea -> popup
       17:4000, // popup -> show continue button
       18:4000
@@ -245,21 +246,8 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
 
                   {step >= 15 && (
                     <>
-                      <motion.div {...fadeIn} className=" max-w-xs">
-                        {/* <img
-                        src={gifVideo}
-                        alt="Making a ten"
-                        className="w-full rounded-lg"
-                      /> */}
-                        <video
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          className="w-full h-96 object-cover "
-                        >
-                          <source src={gifVideo} type="video/mp4" />
-                        </video>
+                      <motion.div {...fadeIn} className="flex justify-center">
+                        <TenBallPole totalVisible={10} />
                       </motion.div>
                       <p className="text-4xl font-display font-bold text-foreground mb-2">
                         A "Ten" is a group of 10 Ones.
@@ -289,31 +277,35 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
           {/* BOTTOM SECTION */}
           {step >= 16 && (
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-             {step >= 17 && ( <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center items-center flex flex-col gap-3"
-              >
-                <img
-                  src={onesSingleUnit} // 👈 apni image ka path yahan daalo
-                  alt="A Hundred = 10 Tens"
-                  className="w-80 h-80 object-contain rounded-lg mt-2"
-                />
-              </motion.div>)}
+              {step >= 17 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center items-center flex flex-col gap-3"
+                >
+                  <img
+                    src={onesSingleUnit} // 👈 apni image ka path yahan daalo
+                    alt="A Hundred = 10 Tens"
+                    className="w-80 h-80 object-contain rounded-lg mt-2"
+                  />
+                </motion.div>
+              )}
 
-              {step >= 18 && ( <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center items-center flex flex-col gap-3"
-              >
-                <img
-                  src={tenGroup} // 👈 apni image ka path yahan daalo
-                  alt="A Hundred = 10 Tens"
-                  className="w-80 h-80 object-contain rounded-lg mt-2"
-                />
-              </motion.div>)}
+              {step >= 18 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-6 game-card-shadow text-center items-center flex flex-col gap-3"
+                >
+                  <img
+                    src={tenGroup} // 👈 apni image ka path yahan daalo
+                    alt="A Hundred = 10 Tens"
+                    className="w-80 h-80 object-contain rounded-lg mt-2"
+                  />
+                </motion.div>
+              )}
             </div>
           )}
 
