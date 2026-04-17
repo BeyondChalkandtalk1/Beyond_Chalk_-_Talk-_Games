@@ -45,19 +45,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
   }, []);
 
   useEffect(() => {
-    // const delays: Record<number, number> = {
-    //   0: 2000,
-    //   1: 2000,
-    //   2: 2000,
-    //   13: 2000,
-    //   14: 2000, 
-    //   15: 6000,
-    //   16: 5000,
-    //   17: 2000,
-    //   18: 10000,
-    //   19: 2000, // first big idea shows, wait 2s
-    //   20: 2000,
-    // };
+ 
 
     const delays: Record<number, number> = {
       0: 2000,
@@ -66,7 +54,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
 
       13: 2000,
       14: 2000,
-      15: 6000,
+      15: 2000,
       16: 3000,
 
       17: 2000,
@@ -75,10 +63,10 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
 
       // 👇 NEW (images / recap like THTO but no thousand)
       20: 2000,
-      21: 2000,
-      22: 2000,
+      21: 3000,
+      22: 3000,
       23: 4000,
-      24: 2000,
+      24: 7000,
     };
 
     let delay: number;
@@ -129,8 +117,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
     if (step === 14) speakText("Let's make a ten");
     if (step === 16) speakText("One ten equals ten ones");
     if (step === 17) speakText("Let's make a hundred");
-    if (step === 19)
-      speakText("One hundred equals ten tens. One ten equals ten ones.");
+    if (step === 19) speakText("One hundred equals ten tens.");
     if (step === 21) speakText("This is one ones unit");
     if (step === 22) speakText("This is one tens group");
     if (step === 23) speakText("This is one hundreds group");
@@ -263,7 +250,7 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
                       <TenBallPole totalVisible={10} />
                     </motion.div>
                   )}
-                  {step >= 16 && (
+                  {step >= 16 && ( 
                     <motion.p
                       {...fadeIn}
                       className="text-sm font-display font-bold text-game-done"
