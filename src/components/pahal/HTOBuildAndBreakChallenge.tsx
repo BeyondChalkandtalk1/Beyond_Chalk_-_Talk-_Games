@@ -5,6 +5,8 @@ import For_Hundreds_grid from "@/assets/pahal/For_Hundreds_grid.png"
 import For_Tens_grid from "@/assets/pahal/For_Tens_grid.png";
 import For_Ones_grid from "@/assets/pahal/For_Ones_grid.png";
 import celebrationVideo from "@/assets/Level2CompleteVideo.mp4";
+import correctDragSound from "@/assets/correctDargSound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
 
 interface Props {
   onComplete: () => void;
@@ -120,6 +122,7 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) =
   const [currentQ, setCurrentQ] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const quizStartTime = useRef(Date.now());
+  const dragSoundRef = useRef<HTMLAudioElement | null>(null);
   const [drops, setDrops] = useState<DropState[]>(() =>
     questions.map(() => ({ hundreds: 0, tens: 0, ones: 0 })),
   );
@@ -136,6 +139,7 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) =
   const q = questions[currentQ];
   const currentDrop = drops[currentQ];
   const feedback = feedbacks[currentQ];
+  const {playSound} = useSound();
 
   const addItem = useCallback(
     (type: PlaceValue) => {
@@ -148,6 +152,7 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) =
         };
         return updated;
       });
+      playSound(correctDragSound)
     },
     [currentQ, submitted],
   );
@@ -179,6 +184,7 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) =
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
   };
+
 
   const handleDrop = (e: React.DragEvent, column: PlaceValue) => {
     e.preventDefault();
@@ -252,6 +258,12 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) =
         window.removeEventListener("keydown", handleKeyDown);
       };
     }, []);
+
+    useEffect(() => {
+      dragSoundRef.current = new Audio(correctDragSound);
+    }, []);
+
+
 
   if (isFinished) {
       const totalMin = Math.floor(elapsedTime / 60);

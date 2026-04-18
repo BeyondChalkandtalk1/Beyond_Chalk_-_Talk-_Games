@@ -3,11 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Trophy, Clock } from "lucide-react";
 import blueBall from "@/assets/pahal/For_Ones.png";
 import celebrationVideo from "@/assets/Level2CompleteVideo.mp4";
+import correctDragSound from "@/assets/correctDargSound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
 
 interface Props {
   onComplete: () => void;
   onBack: () => void;
   onPlayAgain: () => void;
+  playSound: () => void;
 }
 
 interface BallItem {
@@ -92,6 +95,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
   const [currentQ, setCurrentQ] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const quizStartTime = useRef(Date.now());
+  const dragSoundRef = useRef<HTMLAudioElement | null>(null);
   const [balls, setBalls] = useState<BallItem[][]>(() =>
     questions.map((q) =>
       Array.from({ length: q.preFilledBalls || 0 }, (_, i) => ({ id: i })),
@@ -109,7 +113,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
   );
   const [isFinished, setIsFinished] = useState(false);
   const nextId = useRef(100);
-
+ const { playSound } = useSound();
   const q = questions[currentQ];
   const currentBalls = balls[currentQ];
   const feedback = feedbacks[currentQ];
@@ -148,9 +152,12 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
     e.dataTransfer.dropEffect = "copy";
   };
 
+
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     addBall();
+    playSound(correctDragSound);
   };
 
   // Submit answer
@@ -207,6 +214,10 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
   return () => {
     window.removeEventListener("keydown", handleKeyDown);
   };
+}, []);
+
+useEffect(() => {
+  dragSoundRef.current = new Audio(correctDragSound);
 }, []);
 
 useEffect(() => {
@@ -495,7 +506,6 @@ useEffect(() => {
                             </span>
                             <div className="flex gap-1 flex-wrap justify-center p-2 bg-game-done/10 rounded-lg border border-game-done/30">
                               {group.map((ball) => (
-                              
                                 <img
                                   src={blueBall}
                                   alt=""
@@ -522,7 +532,6 @@ useEffect(() => {
                             </span>
                             <div className="flex gap-1 flex-wrap justify-center p-2 bg-muted/20 rounded-lg border border-border">
                               {grouped.remainder.map((ball) => (
-                               
                                 <img
                                   src={blueBall}
                                   alt=""
@@ -578,8 +587,6 @@ useEffect(() => {
                         ))}
                       </div>
                     )}
-
-                   
                   </div>
 
                   {/* Right: Ball Source */}
@@ -587,22 +594,23 @@ useEffect(() => {
                     <p className="text-2xl font-display font-semibold text-foreground uppercase tracking-wide text-center">
                       'Ones' Source
                     </p>
-                    <div
-                
-                    >
+                    <div>
                       <img
                         src={blueBall}
                         alt=""
                         draggable={!submitted[currentQ]}
                         onDragStart={handleDragStart}
-                        onClick={addBall}
+                        // onClick={addBall}
+                        onClick={() => {
+                          addBall();
+                          playSound(correctDragSound);
+                        }}
                         className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-700 shadow-lg flex items-center justify-center transition-all ${
                           submitted[currentQ]
                             ? "opacity-40 cursor-not-allowed"
                             : "cursor-pointer hover:scale-110 active:scale-95"
                         }`}
                       />
-                      
                     </div>
                     <p className="text-2xl font-display font-bold text-muted-foreground text-center">
                       Tap or drag

@@ -6,6 +6,8 @@ import For_Tens_grid from "@/assets/pahal/For_Tens_grid.png";
 import For_Ones_grid from "@/assets/pahal/For_Ones_grid.png";
 import For_Thousands_grid from "@/assets/pahal/For_Thousands_grid.png"; // 👈 apni thousands image add karo
 import celebrationVideo from "@/assets/Level2CompleteVideo.mp4";
+import correctDragSound from "@/assets/correctDargSound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
 
 interface Props {
   onComplete: () => void;
@@ -129,6 +131,7 @@ const THTOBuildAndBreakChallenge = ({ onComplete, onBack , onPlayAgain }: Props)
   const [currentQ, setCurrentQ] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const quizStartTime = useRef(Date.now());
+const dragSoundRef = useRef<HTMLAudioElement | null>(null);
 
   const [drops, setDrops] = useState<DropState[]>(() =>
     questions.map((q) => ({
@@ -156,6 +159,8 @@ const THTOBuildAndBreakChallenge = ({ onComplete, onBack , onPlayAgain }: Props)
   const isColumnLocked = (type: PlaceValue) =>
     q.lockedColumns?.[type] !== undefined;
 
+  const {playSound} = useSound();
+
   const addItem = useCallback(
     (type: PlaceValue) => {
       if (submitted[currentQ]) return;
@@ -168,6 +173,7 @@ const THTOBuildAndBreakChallenge = ({ onComplete, onBack , onPlayAgain }: Props)
         };
         return updated;
       });
+      playSound(correctDragSound);
     },
     [currentQ, submitted],
   );
@@ -290,6 +296,10 @@ const THTOBuildAndBreakChallenge = ({ onComplete, onBack , onPlayAgain }: Props)
   return () => {
     window.removeEventListener("keydown", handleKeyDown);
   };
+}, []);
+
+useEffect(() => {
+  dragSoundRef.current = new Audio(correctDragSound);
 }, []);
 
   if (isFinished) {
