@@ -142,7 +142,7 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
     setSelected(idx);
     setAnswered(true);
     if (idx === mcq.correct) {
-      setTimeout(() => onCorrect(), 35000);
+      setTimeout(() => onCorrect(), 1500);
     } else {
       playSound(tryAgainSound); 
     }
