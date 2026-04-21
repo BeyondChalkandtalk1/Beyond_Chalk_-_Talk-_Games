@@ -19,27 +19,6 @@ import octopus from "../assets/Bharat/8_hands_of_octopus.png"
 import ticTac from "../assets/Bharat/9_squares_in_tic_tac_toe.png"
 import bowling from "../assets/Bharat/10_bowling_pins.png"
 
-
-// Graphical icons for each number (from counting document)
-// export const numberIcons: Record<number, { emoji: string; label: string }> = {
-//   1: { emoji: '☀️', label: 'sun' },
-//   2: { emoji: '🖐️', label: 'hand' },
-//   3: { emoji: '🚦', label: 'traffic light' },
-//   4: { emoji: '🚗', label: 'car wheel' },
-//   5: { emoji: '✋', label: 'fingers' },
-//   6: { emoji: '❄️', label: 'snowflake' },
-//   7: { emoji: '🌈', label: 'rainbow' },
-//   8: { emoji: '🐙', label: 'octopus' },
-//   9: { emoji: '🎯', label: 'tic-tac-toe' },
-//   10: { emoji: '🎳', label: 'bowling pins' },
-// };
-
-// Number words for constructing statements
-// const numberWords = [
-//   '', 'Ones', 'Two', 'Three', 'Four', 'Five', 
-//   'Six', 'Seven', 'Eight', 'Nine', 'Ten'
-// ];
-// ✅ Sahi
 const numberWords = [
   '', 'One', 'Two', 'Three', 'Four', 'Five', 
   'Six', 'Seven', 'Eight', 'Nine', 'Ten'
@@ -105,18 +84,7 @@ const pluralWords: Record<string, string> = {
   'Ten': 'Tens',
 };
 
-// export function getStatementText(tableOf: number, multipliedBy: number): string {
-//   const result = tableOf * multipliedBy;
-//   const tableWord = numberWords[tableOf];
-//   const multWord = numberWords[multipliedBy];
-//   const resultWord = resultWords[result] || result.toString();
-  
-//   // Format: "Three Ones are Three" or "Three One is Three"
-//   const pluralMult = tableOf === 1 ? multWord : multWord;
-//   const verb = tableOf === 1 ? 'is' : 'are';
-  
-//   return `${tableWord} ${pluralMult} ${verb} ${resultWord}`;
-// }
+
 
 export function getStatementText(tableOf: number, multipliedBy: number): string {
   const result = tableOf * multipliedBy;
@@ -131,14 +99,6 @@ export function getStatementText(tableOf: number, multipliedBy: number): string 
   return `${tableWord} ${pluralMult} ${verb} ${resultWord}`;
 }
 
-// export function getAdditionForm(tableOf: number, multipliedBy: number): string {
-//   const result = tableOf * multipliedBy;
-//   if (tableOf === 1) {
-//     return `${multipliedBy} = ${result}`;
-//   }
-//   const parts = Array(tableOf).fill(multipliedBy).join('+');
-//   return `${parts} = ${result}`;
-// }
 
 export function getAdditionForm(tableOf: number, multipliedBy: number): string {
   const result = tableOf * multipliedBy;

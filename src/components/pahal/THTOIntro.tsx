@@ -10,6 +10,8 @@ import tenGroup from "@/assets/pahal/tenGroup.png";
 import HundredBallGrid from "./HundredBallGrid";
 import ThousandBallGrid from "./ThousandBallGrid";
 import TenBallPole from "./TenBallPole";
+import howtoplaySound from "@/assets/howToPlaySound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
 
 interface Props {
   onStartQuiz: () => void;
@@ -36,6 +38,7 @@ const THTOIntro = ({ onStartQuiz }: Props) => {
   const [showPopup, setShowPopup] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showContinueButton, setShowContinueButton] = useState(false);
+  const { playSound } = useSound();
 
   const speakText = useCallback((text: string) => {
     speechSynthesis.cancel();
@@ -94,11 +97,11 @@ useEffect(() => {
     19: 3000,
     20: 2000,
     21: 6000,
-    22: 2000,
+    22: 6000,
     23: 3000,
     24: 3000,
     25: 3000,
-    26: 7000,
+    26: 9000,
   };
 
   let delay: number;
@@ -121,36 +124,8 @@ useEffect(() => {
   }
 }, [step]);
 
-//   useEffect(() => {
-//     if (step === 1) speakText("One ball");
-//     if (step >= 3 && step <= 12) {
-//       const n = step - 2;
-//       const words = [
-//         "",
-//         "one",
-//         "two",
-//         "three",
-//         "four",
-//         "five",
-//         "six",
-//         "seven",
-//         "eight",
-//         "nine",
-//         "ten",
-//       ];
-//       speakText(`${words[n]} ${n === 1 ? "one" : "ones"}`);
-//     }
-//     if (step === 13) speakText("Now we have ten ones");
-//     if (step === 14) speakText("Let's make a ten");
-//     if (step === 16) speakText("One ten equals ten ones");
-//     if (step === 17) speakText("Let's make a hundred");
-//     if (step === 19)
-//       speakText("One hundred equals ten tens. One ten equals ten ones.");
-//   }, [step, speakText]);
-
-
 useEffect(() => {
-  if (step === 1) speakText("One ball");
+  if (step === 1) speakText("One");
   if (step >= 3 && step <= 12) {
     const n = step - 2;
     const words = [
@@ -195,6 +170,12 @@ useEffect(() => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    if (showPopup) {
+      playSound(howtoplaySound);
+    }
+  }, [showPopup]);
 
   const ballsVisible = step >= 3 ? Math.min(step - 2, 10) : 0;
 
@@ -415,17 +396,13 @@ useEffect(() => {
                 transition={{ duration: 0.5 }}
                 className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-4 game-card-shadow text-center flex flex-col items-center gap-2"
               >
-                {/* <p className="text-4xl font-display font-bold text-secondary">
-                  Ones
-                </p> */}
+           
                 <img
                   src={onesSingleUnit}
                   alt="One"
                   className="w-80 h-80 object-contain"
                 />
-                {/* <p className="text-4xl font-display font-bold text-game-done">
-                  1 One
-                </p> */}
+               
               </motion.div>
 
               {/* Tens */}
@@ -436,17 +413,13 @@ useEffect(() => {
                   transition={{ duration: 0.5 }}
                   className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-4 game-card-shadow text-center flex flex-col items-center gap-2"
                 >
-                  {/* <p className="text-4xl font-display font-bold text-secondary">
-                    Tens
-                  </p> */}
+                
                   <img
                     src={tenGroup}
                     alt="Ten"
                     className="w-80 h-80 object-contain"
                   />
-                  {/* <p className="text-4xl font-display font-bold text-game-done">
-                    1 Ten = 10 Ones
-                  </p> */}
+               
                 </motion.div>
               )}
 
@@ -458,17 +431,13 @@ useEffect(() => {
                   transition={{ duration: 0.5 }}
                   className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-4 game-card-shadow text-center flex flex-col items-center gap-2"
                 >
-                  {/* <p className="text-xl font-display font-bold text-secondary">
-                    Hundreds
-                  </p> */}
+                
                   <img
                     src={groupHundred}
                     alt="Hundred"
                     className="w-80 h-80 object-contain"
                   />
-                  {/* <p className="text-lg font-display font-bold text-game-done">
-                    1 Hundred = 10 Tens
-                  </p> */}
+           
                 </motion.div>
               )}
 
@@ -480,18 +449,13 @@ useEffect(() => {
                   transition={{ duration: 0.5 }}
                   className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-4 game-card-shadow text-center flex flex-col items-center gap-2"
                 >
-                  {/* <p className="text-xl font-display font-bold text-secondary">
-                    Thousands
-                  </p> */}
-                  {/* 👈 apna thousands image import karke yahan daalo */}
+                  
                   <img
                     src={groupOfThousand}
                     alt="Thousand"
                     className="w-80 h-80 object-contain"
                   />
-                  {/* <p className="text-lg font-display font-bold text-game-done">
-                    1 Thousand = 10 Hundreds
-                  </p> */}
+            
                 </motion.div>
               )}
             </div>
@@ -517,48 +481,6 @@ useEffect(() => {
 
       {/* POPUP */}
       <AnimatePresence>
-        {/* {showPopup && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{
-                type: "spring" as const,
-                stiffness: 300,
-                damping: 20,
-              }}
-              className="bg-card rounded-2xl border border-border p-8 game-card-shadow max-w-md mx-4 text-center"
-            >
-              <p className="text-xl font-display font-bold text-foreground mb-6">
-                📌 Are you ready to take PAHAL Practice Challenge!
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <button
-                  onClick={onStartQuiz}
-                  className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
-                >
-                  Yes ✅
-                </button>
-                <button
-                  onClick={() => {
-                    setShowPopup(false);
-                    setStep(0);
-                    speechSynthesis.cancel();
-                  }}
-                  className="px-6 py-3 bg-secondary text-secondary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition text-sm"
-                >
-                  I want to understand the concept again 🔄
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )} */}
         {showPopup && (
           <motion.div
             initial={{ opacity: 0 }}

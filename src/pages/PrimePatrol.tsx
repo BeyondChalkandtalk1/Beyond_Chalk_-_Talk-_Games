@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import SpinWheel from '../components/prime-patrol/SpinWheel';
 import PrimeLevel1 from '../components/prime-patrol/PrimeLevel1';
 import PrimeLevel2 from '../components/prime-patrol/PrimeLevel2';
+import { useNavigate } from 'react-router-dom';
 
 type GamePhase = 'wheel' | 'level1' | 'level2' | 'complete';
 
 export default function PrimePatrol() {
   const [phase, setPhase] = useState<GamePhase>('wheel');
   const [luckyNumber, setLuckyNumber] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleLetsPlay = (number: number) => {
     setLuckyNumber(number);
@@ -36,6 +38,7 @@ export default function PrimePatrol() {
           luckyNumber={luckyNumber!}
           onComplete={handleLevel1Complete}
           onSpinAgain={handlePlayAgain}
+          onHome={() => navigate("/")}
         />
       );
     case 'level2':

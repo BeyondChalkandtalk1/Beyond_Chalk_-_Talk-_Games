@@ -22,7 +22,12 @@ import {
 } from "@/data/pahalGameData";
 import DragCountQuestion from "./DragCountQuestion";
 import bgVideo1 from "@/assets/pahal/bgVideo1.mp4"; // ✅ Doc1 ka original import
+import generalSound from "@/assets/general-sound.mpeg";
 import tropyVideo from "@/assets/Level2CompleteVideo.mp4";
+import correctSound from "@/assets/correctDargSound.mpeg";
+import incorrectSound from "@/assets/inCorrectDragSound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
+ 
 
 interface Props {
   onComplete: () => void;
@@ -34,6 +39,7 @@ type SubPhase = "representation" | "quiz" | "results";
 
 const PrePahalSkill = ({ onComplete }: Props) => {
   const [subPhase, setSubPhase] = useState<SubPhase>("representation");
+   const { playSound, isSoundEnabled } = useSound();
 
   // --- Representation state ---
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -41,6 +47,7 @@ const PrePahalSkill = ({ onComplete }: Props) => {
   const [showOneTen, setShowOneTen] = useState(false);
   const [showTenEquals, setShowTenEquals] = useState(false);
   const [hasSpoken, setHasSpoken] = useState(false);
+  const [imagesPreloaded, setImagesPreloaded] = useState(false);
 
   const totalItems = handRepresentations.length;
   const voiceGender = "male" as "male" | "female";
@@ -174,15 +181,35 @@ const PrePahalSkill = ({ onComplete }: Props) => {
   // --- Quiz logic ---
   const question = questions[currentQ];
 
-  // useEffect(() => {
-  //   if (subPhase !== "quiz" || showFeedback) return;
-  //   if (timeLeft <= 0) {
-  //     handleQuizNext();
-  //     return;
-  //   }
-  //   const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
-  //   return () => clearInterval(timer);
-  // }, [timeLeft, subPhase, showFeedback]);
+  useEffect(() => {
+    const imageUrls = handRepresentations.map((h) => h.image);
+    imageUrls.push(tenEqualsImage);
+
+    let loaded = 0;
+    const total = imageUrls.length;
+
+    imageUrls.forEach((url) => {
+      const img = new Image();
+      img.onload = img.onerror = () => {
+        loaded++;
+        if (loaded === total) setImagesPreloaded(true);
+      };
+      img.src = url;
+    });
+  }, []);
+
+  useEffect(() => {
+    if(subPhase === "results") {
+         const audio = new Audio(generalSound);
+         audio.play();
+
+         // Jab component unmount ho (dusre page pe jaao) tab sound band ho jaaye
+         return () => {
+           audio.pause();
+           audio.currentTime = 0;
+         };
+    }
+  },[subPhase]);
 
  useEffect(() => {
    if (subPhase !== "quiz") return;
@@ -199,20 +226,16 @@ const PrePahalSkill = ({ onComplete }: Props) => {
     newAnswers[currentQ] = option;
     setAnswers(newAnswers);
     setShowFeedback(true);
+
+  if (option === question.correctAnswer) {
+    playSound(correctSound);
+  } else {
+    playSound(incorrectSound);
+  }
+
   };
 
-  // const handleQuizNext = useCallback(() => {
-  //   if (currentQ < totalQuestions - 1) {
-  //     setCurrentQ((q) => q + 1);
-  //     setSelectedAnswer(null);
-  //     setShowFeedback(false);
-  //     setTimeLeft(QUESTION_TIME);
-  //     setDroppedItem(null);
-  //     setSelectedDragItem(null);
-  //   } else {
-  //     setSubPhase("results");
-  //   }
-  // }, [currentQ, totalQuestions]);
+
 
   const handleQuizNext = useCallback(() => {
     if (currentQ < totalQuestions - 1) {
@@ -227,14 +250,7 @@ const PrePahalSkill = ({ onComplete }: Props) => {
     }
   }, [currentQ, totalQuestions]);
 
-  // const handleQuizPrevious = () => {
-  //   if (currentQ > 0) {
-  //     setCurrentQ((q) => q - 1);
-  //     setSelectedAnswer(answers[currentQ - 1]);
-  //     setShowFeedback(!!answers[currentQ - 1]);
-  //     setTimeLeft(QUESTION_TIME);
-  //   }
-  // };
+
   const handleQuizPrevious = () => {
     if (currentQ > 0) {
       setCurrentQ((q) => q - 1);
@@ -258,6 +274,12 @@ const PrePahalSkill = ({ onComplete }: Props) => {
     setSelectedAnswer(selectedDragItem.label);
     setShowFeedback(true);
     setSelectedDragItem(null);
+
+      if (selectedDragItem.label === question.correctDragLabel) {
+        playSound(correctSound);
+      } else {
+        playSound(incorrectSound);
+      }
   };
 
   const score = answers.reduce((acc, ans, i) => {
@@ -285,10 +307,10 @@ const PrePahalSkill = ({ onComplete }: Props) => {
         ? selectedAnswer === question.correctDragLabel
         : selectedAnswer === question?.correctAnswer;
 
+
   return (
     <div className="relative min-h-[100vh] py-3">
-      {/* ✅ Doc1 ka original bgVideo1 import use ho raha hai */}
-      <video
+      {/* <video
         autoPlay
         loop
         muted
@@ -296,126 +318,139 @@ const PrePahalSkill = ({ onComplete }: Props) => {
         className="absolute inset-0 w-full h-full object-cover z-0"
       >
         <source src={bgVideo1} type="video/mp4" />
-      </video>
+      </video> */}
       <div className="absolute inset-0" />
 
       <div className="relative z-10 space-y-6">
         {/* ===== REPRESENTATION PHASE ===== */}
         {subPhase === "representation" && (
           <>
-            {/* ✅ Doc1 ka bada title style */}
-            <div className="text-center">
-              <h2 className="text-5xl md:text-5xl font-display font-bold text-secondary">
-                Pre-PAHAL Skill
-              </h2>
-              <p className="text-primary text-2xl font-bold mt-1">
-                Representation of numbers using hands
-              </p>
-            </div>
-
-            <div className="max-w-5xl mx-auto">
-              <AnimatePresence mode="wait">
-                {!showOneTen && !showTenEquals && (
-                  <motion.div
-                    key={currentIndex}
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.25 }}
-                    className="rounded-xl p-8 md:p-6 flex flex-col items-center"
-                  >
-                    <img
-                      src={current.image}
-                      alt={current.label}
-                      className="w-40 h-40 md:w-56 md:h-56 object-contain"
-                    />
-                    <p className="text-3xl md:text-4xl font-display font-bold text-primary mt-6">
-                      {current.label}
-                    </p>
-                  </motion.div>
-                )}
-                {showOneTen && (
-                  <motion.div
-                    key="one-ten"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="rounded-xl p-8 md:p-12 flex flex-col items-center"
-                  >
-                    <img
-                      src={tenEqualsImage}
-                      alt="1 Ten"
-                      className="w-40 h-40 md:w-56 md:h-56 object-contain"
-                    />
-                    <p className="text-3xl md:text-4xl font-display font-bold text-primary mt-6">
-                      1 Ten
-                    </p>
-                  </motion.div>
-                )}
-                {showTenEquals && (
-                  <motion.div
-                    key="ten-equals"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="rounded-xl p-8 md:p-12 game-card-shadow flex flex-col items-center"
-                  >
-                    <div className="flex items-center gap-6 flex-wrap justify-center">
-                      <img
-                        src={tenEqualsImage}
-                        alt="1 Ten"
-                        className="w-32 h-32 object-contain"
-                      />
-                      <p className="text-3xl md:text-4xl font-display font-bold text-primary">
-                        1 Ten = 10 Ones
-                      </p>
-                      <img
-                        src={handRepresentations[10].image}
-                        alt="10 Ones"
-                        className="w-32 h-32 object-contain"
-                      />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* ✅ Doc1 ke bade button fonts */}
-              <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
-                <button
-                  onClick={handlePrevious}
-                  disabled={currentIndex === 0 && !showOneTen && !showTenEquals}
-                  className="flex items-center gap-2 px-5 py-1.5 rounded-xl bg-secondary text-secondary-foreground font-display font-bold text-2xl hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  <SkipBack size={18} /> Previous
-                </button>
-                <button
-                  onClick={() => setIsPaused((p) => !p)}
-                  className="flex items-center gap-2 px-5 py-1.5 rounded-xl bg-primary text-primary-foreground font-display font-bold text-2xl hover:opacity-90 transition"
-                >
-                  {isPaused ? (
-                    <>
-                      <Play size={18} /> Play
-                    </>
-                  ) : (
-                    <>
-                      <Pause size={18} /> Pause
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={handleHearAgain}
-                  className="flex items-center gap-2 px-5 py-1.5 rounded-xl bg-accent text-accent-foreground font-display font-bold text-2xl hover:opacity-90 transition"
-                >
-                  <Volume2 size={18} /> Hear it again!
-                </button>
-                <button
-                  onClick={handleRepeat}
-                  className="flex items-center gap-2 px-5 py-1.5 rounded-xl bg-muted text-muted-foreground font-display font-bold text-2xl hover:opacity-90 transition"
-                >
-                  <RotateCcw size={18} /> Repeat
-                </button>
+            {!imagesPreloaded ? (
+              <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                <p className="text-xl font-display font-bold text-primary">
+                  Loading...
+                </p>
               </div>
-            </div>
+            ) : (
+              <>
+                {/* ✅ Doc1 ka bada title style */}
+                <div className="text-center">
+                  <h2 className="text-5xl md:text-5xl font-display font-bold text-secondary">
+                    Pre-PAHAL Skill
+                  </h2>
+                  <p className="text-primary text-2xl font-bold mt-1">
+                    Representation of numbers using hands
+                  </p>
+                </div>
+
+                <div className="max-w-5xl mx-auto">
+                  <AnimatePresence mode="wait">
+                    {!showOneTen && !showTenEquals && (
+                      <motion.div
+                        key={currentIndex}
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -30 }}
+                        transition={{ duration: 0.25 }}
+                        className="rounded-xl p-8 md:p-6 flex flex-col items-center"
+                      >
+                        <img
+                          src={current.image}
+                          alt={current.label}
+                          className="w-40 h-40 md:w-56 md:h-56 object-contain"
+                        />
+                        <p className="text-3xl md:text-4xl font-display font-bold text-primary mt-6">
+                          {current.label}
+                        </p>
+                      </motion.div>
+                    )}
+                    {showOneTen && (
+                      <motion.div
+                        key="one-ten"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="rounded-xl p-8 md:p-12 flex flex-col items-center"
+                      >
+                        <img
+                          src={tenEqualsImage}
+                          alt="1 Ten"
+                          className="w-40 h-40 md:w-56 md:h-56 object-contain"
+                        />
+                        <p className="text-3xl md:text-4xl font-display font-bold text-primary mt-6">
+                          1 Ten
+                        </p>
+                      </motion.div>
+                    )}
+                    {showTenEquals && (
+                      <motion.div
+                        key="ten-equals"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="rounded-xl p-8 md:p-12 game-card-shadow flex flex-col items-center"
+                      >
+                        <div className="flex items-center gap-6 flex-wrap justify-center">
+                          <img
+                            src={tenEqualsImage}
+                            alt="1 Ten"
+                            className="w-32 h-32 object-contain"
+                          />
+                          <p className="text-3xl md:text-4xl font-display font-bold text-primary">
+                            1 Ten = 10 Ones
+                          </p>
+                          <img
+                            src={handRepresentations[10].image}
+                            alt="10 Ones"
+                            className="w-32 h-32 object-contain"
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* ✅ Doc1 ke bade button fonts */}
+                  <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
+                    <button
+                      onClick={handlePrevious}
+                      disabled={
+                        currentIndex === 0 && !showOneTen && !showTenEquals
+                      }
+                      className="flex items-center gap-2 px-5 py-1.5 rounded-xl bg-secondary text-secondary-foreground font-display font-bold text-2xl hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      <SkipBack size={18} /> Previous
+                    </button>
+                    <button
+                      onClick={() => setIsPaused((p) => !p)}
+                      className="flex items-center gap-2 px-5 py-1.5 rounded-xl bg-primary text-primary-foreground font-display font-bold text-2xl hover:opacity-90 transition"
+                    >
+                      {isPaused ? (
+                        <>
+                          <Play size={18} /> Play
+                        </>
+                      ) : (
+                        <>
+                          <Pause size={18} /> Pause
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={handleHearAgain}
+                      className="flex items-center gap-2 px-5 py-1.5 rounded-xl bg-accent text-accent-foreground font-display font-bold text-2xl hover:opacity-90 transition"
+                    >
+                      <Volume2 size={18} /> Hear it again!
+                    </button>
+                    <button
+                      onClick={handleRepeat}
+                      className="flex items-center gap-2 px-5 py-1.5 rounded-xl bg-muted text-muted-foreground font-display font-bold text-2xl hover:opacity-90 transition"
+                    >
+                      <RotateCcw size={18} /> Repeat
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </>
         )}
 
@@ -439,11 +474,7 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                 <span className="text-lg font-display font-semibold text-game-done">
                   Score: {score}
                 </span>
-                {/* <span
-                  className={`flex items-center gap-1 text-lg font-display font-semibold ${timeLeft <= 5 ? "text-destructive animate-pulse" : "text-muted-foreground"}`}
-                >
-                  <Clock size={18} /> {timeLeft}s
-                </span> */}
+           
                 <span className="flex items-center gap-1 text-lg font-display font-semibold text-muted-foreground">
                   <Clock size={18} />{" "}
                   {Math.floor(elapsedTime / 60) > 0
@@ -484,6 +515,12 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                           correct ? question.correctAnswer : answer,
                         );
                         setShowFeedback(true);
+
+                        if (correct) {
+                          playSound(correctSound);
+                        } else {
+                          playSound(incorrectSound);
+                        }
                       }}
                       showFeedback={showFeedback}
                     />
@@ -652,8 +689,7 @@ const PrePahalSkill = ({ onComplete }: Props) => {
                               setShowFeedback(false);
                               setDroppedItem(null);
                               setSelectedDragItem(null);
-                              // setTimeLeft(QUESTION_TIME);
-                              // answers reset karo current question ke liye
+                              
                               const newAnswers = [...answers];
                               newAnswers[currentQ] = null;
                               setAnswers(newAnswers);

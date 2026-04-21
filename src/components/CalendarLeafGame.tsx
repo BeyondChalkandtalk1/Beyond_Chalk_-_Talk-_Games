@@ -213,9 +213,9 @@ const MCQPopup = ({ monthIndex, onCorrect }: { monthIndex: number; onCorrect: ()
           <div
             className={`rounded-xl p-3 text-center text-2xl font-semibold font-body animate-fade-in ${selected === mcq.correct ? "bg-green-50 text-green-700 border border-green-300" : "bg-orange-50 text-orange-700 border border-orange-300"}`}
           >
-            {selected === mcq.correct ? "✅ " : "❌ "}
-            <p className="text-black">Did you know?</p>
-            {mcq.fact}
+            {selected === mcq.correct ? "✅ Well done!" : ""}
+            {/* <p className="text-black">Fun Facts</p>
+            {mcq.fact} */}
             {selected !== mcq.correct && (
               <button
                 onClick={() => {
@@ -378,7 +378,12 @@ const CalendarLeafGame = ({
     shuffle([...Array(12).keys()]).map((i) => MONTH_COLORS[i]),
   );
 
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
+  const [countdown, setCountdown] = useState(30);
+
   const [mcqMonthIndex, setMcqMonthIndex] = useState<number | null>(null);
+  // State add karo (top mein baaki states ke saath)
+  const [showDidYouKnow, setShowDidYouKnow] = useState(false);
   const [pendingPlaced, setPendingPlaced] = useState<{
     slotMonthIndex: number;
     leafId: number;
@@ -475,6 +480,22 @@ const CalendarLeafGame = ({
 
     return () => clearTimeout(timeout);
   }, [lastInteraction, gameStarted, done]);
+
+  useEffect(() => {
+    if (!done || showLevelComplete) return;
+    if (showDidYouKnow) return; // Fun Facts open hai — ruko
+
+    if (countdown <= 0) {
+      setShowLevelComplete(true);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCountdown((c) => c - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [done, countdown, showDidYouKnow, showLevelComplete]);
 
   useEffect(() => {
     if (showHowToPlay) {
@@ -575,7 +596,7 @@ const CalendarLeafGame = ({
       </div>
 
       {/* Done — show timer quiz first, then next level */}
-      {done ? (
+      {showLevelComplete ? (
         <div className="text-center py-2 animate-bounce-in">
           <div className="text-6xl mb-2">🏆</div>
           <h3 className="font-display text-3xl font-bold text-primary mb-1">
@@ -785,7 +806,7 @@ const CalendarLeafGame = ({
               })}
             </div>
           </div>
-          <div className="flex justify-center mt-6 mb-4">
+          {/* <div className="flex justify-center mt-6 mb-4">
             <button
               onClick={() => setShowHelpVideo(true)}
               className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-display font-bold text-xl shadow-xl hover:scale-105 transition-transform"
@@ -793,7 +814,16 @@ const CalendarLeafGame = ({
             >
               🎥 Do you need a solution?
             </button>
-          </div>
+          </div> */}
+
+          {/* Did You Know Button */}
+          <button
+            onClick={() => setShowDidYouKnow(true)}
+            className="flex items-center justify-center mx-auto mt-5 gap-2 px-6 py-3 rounded-full text-white font-display font-bold text-xl shadow-xl hover:scale-105 transition-transform"
+            style={{ backgroundColor: "#2563eb" }}
+          >
+            📖 Fun Facts
+          </button>
         </>
       )}
 
@@ -933,8 +963,81 @@ const CalendarLeafGame = ({
           </div>
         </div>
       )}
+      {showDidYouKnow && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: "rgba(0,0,0,0.55)" }}
+          onClick={() => setShowDidYouKnow(false)}
+        >
+          <div
+            className="relative bg-white rounded-3xl p-6 max-w-[850px] max-h-[85vh] overflow-y-auto hide-scrollbar w-full shadow-2xl border-4 border-blue-400 animate-bounce-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowDidYouKnow(false)}
+              className="absolute top-4 right-4 w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-red-100 hover:text-red-500 transition-all text-3xl font-bold"
+            >
+              ✕
+            </button>
+
+            <div className="text-center mb-5">
+              {/* <div className="text-5xl mb-2">📖</div> */}
+              <h3 className="font-display text-4xl font-bold text-blue-600">
+                Fun Fact
+              </h3>
+              <p className="text-3xl font-bold text-gray-500 mt-1">
+                Facts about months you've completed!
+              </p>
+            </div>
+
+            {/* Completed months list */}
+            {Object.keys(placed).length === 0 ? (
+              <div className="text-center py-8 text-gray-400 text-2xl">
+                No month has been completed yet!
+                <br />
+                <span className="text-2xl">
+                  Do Drag & Drop for a month first.
+                </span>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {Object.keys(placed).map((slotIdx) => {
+                  const monthIndex = parseInt(slotIdx);
+                  const mcq = MONTH_MCQ[monthIndex];
+                  return (
+                    <div
+                      key={monthIndex}
+                      className="rounded-2xl p-4 border-2"
+                      style={{
+                        background: MONTH_COLORS[monthIndex].bg,
+                        borderColor: MONTH_COLORS[monthIndex].border,
+                      }}
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-3xl">
+                          {MONTH_EMOJIS[monthIndex]}
+                        </span>
+                        <span
+                          className="font-display font-bold text-4xl"
+                          style={{ color: MONTH_COLORS[monthIndex].header }}
+                        >
+                          {MONTHS[monthIndex]}
+                        </span>
+                      </div>
+                      <p className="text-gray-700 font-body text-3xl leading-relaxed">
+                        💡 {mcq.fact}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
-};;
+};;;
 
 export default CalendarLeafGame;

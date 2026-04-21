@@ -7,7 +7,9 @@ import For_Ones_grid from "@/assets/pahal/For_Ones_grid.png";
 import For_Thousands_grid from "@/assets/pahal/For_Thousands_grid.png"; // 👈 apni thousands image add karo
 import celebrationVideo from "@/assets/Level2CompleteVideo.mp4";
 import correctDragSound from "@/assets/correctDargSound.mpeg";
+import incorrectSound from "@/assets/inCorrectDragSound.mpeg";
 import { useSound } from "@/contexts/SoundContext";
+import generalSound from "@/assets/general-sound.mpeg";
 
 interface Props {
   onComplete: () => void;
@@ -297,6 +299,28 @@ const dragSoundRef = useRef<HTMLAudioElement | null>(null);
     window.removeEventListener("keydown", handleKeyDown);
   };
 }, []);
+
+useEffect(() => {
+  if (feedback === "correct") {
+    playSound(correctDragSound);
+  } else if (feedback === "wrong") {
+    playSound(incorrectSound);
+  }
+}, [feedback]);
+
+useEffect(() => {
+  if (isFinished === true) {
+    const audio = new Audio(generalSound);
+    audio.play();
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }
+}, [isFinished]);
+
+
 
 useEffect(() => {
   dragSoundRef.current = new Audio(correctDragSound);

@@ -13,15 +13,13 @@ const GAMES = [
     description: "Paw made the mess, smart minds patch the calendar.  🏆",
     emoji: "🐾",
     about_game:
-      "To help children understand the structure and order of a calendar by arranging mixed calendar pages and solving simple logic-based questions related to days, weeks, and months.",
+      "To help the player understand the structure and order of a calendar by arranging mixed calendar pages and solving simple logic-based questions related to days, weeks, and months.",
     learning_object: {
       heading: "After playing the game, learners will be able to:",
       points: [
-        "Sequence the months of the year correctly.",
-        "Interpret basic calendar information (days, dates, weeks, months).",
-        "Use reasoning to answer calendar-based questions (before–after days, order of months, simple event timing).",
-        "Apply calendar knowledge to everyday contexts such as holidays, routines, and festivals.",
-        "Develop logical thinking and sequencing skills through a problem-solving task.",
+        "Sequence the months of the year in the correct order.",
+        "Interpret basic calendar information (days, dates, weeks, and months).",
+        "Develop logical thinking and sequencing skills through problem-solving tasks.",
       ],
     },
     levels: 2,
@@ -34,14 +32,14 @@ const GAMES = [
     description: "Investigate numbers, discover their secrets! 🏆",
     emoji: "🐾",
     about_game:
-      "The aim of this game is to help children understand the difference between prime numbers and composite numbers through visual and hands-on exploration using arrays on a grid. Children arrange a given number of icons on the grid to form rows and columns. If the icons can be organised into different rectangular arrays, the number is identified as a composite number. If no such rectangular arrangement can be formed (other than the trivial arrangement), the number is identified as a prime number. In the advanced level, children further explore factors of composite numbers through different array formations and identify perfect square numbers by recognising square arrays, without relying on rote memorisation of divisibility rules.",
+      "To help the player distinguish between prime and composite numbers by arranging arrays on a grid. By forming rows and columns, composite numbers show multiple rectangular arrays, while prime numbers do not. At advanced levels, the player explores factors and identifies perfect square numbers through square arrays.",
     learning_object: {
       heading: "After playing the game, learners will be able to:",
       points: [
         "Distinguish between prime and composite numbers through array formation on a grid.",
-        "Identify factors and factor pairs of numbers through different rectangular arrangements.",
+        "Identify factors and factor pairs through different rectangular arrangements.",
         "Recognise perfect square numbers by observing square arrays (equal rows and columns).",
-        "Develop reasoning and conceptual understanding of number relationships without relying on rote memorisation of divisibility rules.",
+        "Develop reasoning and conceptual understanding of number relationships without relying on memorisation of divisibility rules.",
       ],
     },
     levels: 1,
@@ -54,16 +52,14 @@ const GAMES = [
     description: "Math Comes Alive with Every Clue Card! 🎫",
     emoji: "🎲",
     about_game:
-      "To help the learners develop a comprehensive understanding of mathematical concepts such as number, operations, patterns, and spatial relationships by interpreting and applying them in real-life contexts through interactive, game-based experiences.",
+      "To help the player develop a comprehensive understanding of mathematical concepts such as number, operations, patterns, and spatial relationships, through ‘MathBola’, a Tambola-inspired game that engages the player in interpreting and applying concepts in real-life contexts.",
     learning_object: {
       heading: "After playing the game, learners will be able to:",
       points: [
         "Demonstrate understanding of mathematical concepts in real-life contexts.",
-        "Use logical reasoning to make decisions and justify their thinking.",
-        "Recognize patterns, relationships, and structures in different situations.",
-        "Connect different mathematical ideas and apply them flexibly.",
-        "Reflect on their thinking and identify errors to improve solutions.",
-        "Show confidence and persistence while engaging with mathematical tasks.",
+        "Use logical reasoning to make decisions and justify thinking.",
+        "Recognise patterns, relationships, and structures across different situations.",
+        "Reflect on thinking and identify errors to improve solutions.",
       ],
     },
     levels: 1,
@@ -77,18 +73,14 @@ const GAMES = [
     description: "  From Representation to Real Understanding.",
     emoji: "🎲",
     about_game:
-      "To help learners develop a deep and holistic understanding of times tables by connecting it with multiple representations such as verbal statements, repeated addition, visual models, arrays, and symbolic notation. ",
+      "To help the player develop a deep and holistic understanding of times tables using multiple representations such as verbal statements, repeated addition, visual models, arrays, and symbolic notation.",
     learning_object: {
       heading: "After playing the game, learners will be able to:",
       points: [
-        "Read and understand the multiplication statement (e.g., “Three ones are three”).",
-        "Speak the statement aloud with clarity and confidence.",
-        "Express the situation as repeated addition.",
-        "Visualize the quantity using pictorial representations.",
-        "Represent the situation using arrays or grouping.",
-        "Relate the array to multiplication form.",
-        "Connect all representations to build a complete understanding of a multiplication fact.",
-        "Recall multiplication facts with meaning rather than rote memorization.",
+        "Read, understand, and verbally express multiplication statements with clarity.",
+        "Represent multiplication through repeated addition, visual models, and grouping/arrays.",
+        "Relate arrays and visual models to symbolic multiplication forms.",
+        "Connect multiple representations to build conceptual understanding and recall multiplication facts meaningfully.",
       ],
     },
     levels: 1,
@@ -101,16 +93,13 @@ const GAMES = [
     description: "Laying the Foundation for Arithmetic.",
     emoji: "🎲",
     about_game:
-      "To help learners develop a deep understanding of Place value, Addition with regrouping, and Subtraction with borrowing, this game uses interactive visual representations to make abstract mathematical concepts more concrete and meaningful. It enables learners to clearly distinguish between Place values, and to understand what is carried over or borrowed during operations through engaging, hands-on experiences. Designed across progressive levels, the game supports the gradual development of conceptual clarity and strengthens learners’ confidence in performing arithmetic operations. ",
+      "To help the player develop a clear understanding of place value up to thousands through interactive visual representations that make abstract concepts concrete, with progressive levels that build conceptual clarity and confidence.",
     learning_object: {
       heading: "After playing the game, learners will be able to:",
       points: [
-        "Identify and represent numbers based on place values using visual models.",
-        "Explain the value of a digit according to its position in a number.",
-        "Perform addition of two-digit numbers with regrouping and explain the concept of carrying over.",
-        "Solve subtraction problems with borrowing and explain the process of decomposing place values.",
-        "Use visual representations to model and solve addition and subtraction problems accurately.",
-        "Demonstrate improved conceptual understanding and confidence in performing basic arithmetic operations.",
+        "Identify and represent numbers up to thousands using place value models.",
+        "Explain the value of a digit based on its position in a number.",
+        "Compose and decompose numbers using place value understanding.",
       ],
     },
     levels: 2,

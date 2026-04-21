@@ -65,6 +65,8 @@ export default function MathBolaGame({
   const early5TimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const historyEndRef = useRef<HTMLDivElement>(null);
 
+  
+
   const { ticket, clues } = gameData;
 
   // Count total cells on ticket
@@ -99,18 +101,7 @@ export default function MathBolaGame({
 
   // Add PREVIOUS clue to history when moving to next clue
   const prevClueRef = useRef<GameClue | null>(null);
-  // useEffect(() => {
-  //   if (phase === "playing" && currentClue) {
-  //     if (
-  //       prevClueRef.current &&
-  //       prevClueRef.current.id !== currentClue.id &&
-  //       !announcementHistory.find((c) => c.id === prevClueRef.current!.id)
-  //     ) {
-  //       setAnnouncementHistory((prev) => [prevClueRef.current!, ...prev]);
-  //     }
-  //     prevClueRef.current = currentClue;
-  //   }
-  // }, [currentClueIndex, phase]);
+
   useEffect(() => {
     if (phase !== "playing" && phase !== "tryAgain") return;
     if (!currentClue) return;
@@ -166,20 +157,6 @@ export default function MathBolaGame({
     }
   }, [markedCells.size, early5Shown, phase]);
 
-  // const moveToNextClue = useCallback(() => {
-  //   if (currentClueIndex + 1 < clues.length) {
-  //     setCurrentClueIndex((prev) => prev + 1);
-  //     startAnnouncementTimer();
-  //   } else {
-  //     if (allMarked) {
-        
-  //       setPhase("complete");
-  //     } else {
-  //       setCurrentClueIndex(0);
-  //       startAnnouncementTimer();
-  //     }
-  //   }
-  // }, [currentClueIndex, clues.length, allMarked, startAnnouncementTimer]);
 
   const moveToNextClue = useCallback(() => {
     // Already marked clueIds
@@ -334,11 +311,19 @@ export default function MathBolaGame({
             📖 How to Play — MathBola
           </h2>
           <div className="max-h-[500px]  overflow-y-auto pr-2">
-            <ul className="space-y-3 text-foreground text-2xl leading-relaxed">
+          
+            <ul
+              className="space-y-3 text-foreground text-2xl leading-relaxed"
+              style={{ listStyleType: "none", paddingLeft: 0, margin: 0 }}
+            >
               {mathBolaInstructions.map((item, i) => (
-                <li key={i} className="flex gap-2">
-                  {/* <span>{item.emoji}</span> */}
-                  {item.text}
+                <li
+                  key={i}
+                  className="flex gap-2"
+                  style={{ listStyleType: "none" }}
+                >
+                  <span>{item.emoji}</span>
+                  <span>{item.text}</span>
                 </li>
               ))}
             </ul>

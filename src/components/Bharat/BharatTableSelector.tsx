@@ -32,22 +32,6 @@ const BharatTableSelector = ({
         </p>
       </div>
 
-      {/* Level selector */}
-      {/* <div className="flex justify-center gap-3">
-        {[1, 2].map((l) => (
-          <button
-            key={l}
-            onClick={() => onLevelChange(l as 1 | 2)}
-            className={`px-6 py-2 rounded-lg font-display font-semibold text-sm transition-all ${
-              level === l
-                ? "bg-primary text-primary-foreground shadow-lg"
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
-            }`}
-          >
-            Level {l}
-          </button>
-        ))}
-      </div> */}
 
       {/* Table grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-8xl mx-auto">

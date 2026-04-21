@@ -8,6 +8,8 @@ import groupHundred from "@/assets/pahal/groupHundred.png";
 import tenGroup from "@/assets/pahal/tenGroup.png";
 import HundredBallGrid from "./HundredBallGrid";
 import TenBallPole from "./TenBallPole";
+import howtoplaySound from "@/assets/howToPlaySound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
 
 interface Props {
   onStartQuiz: () => void;
@@ -31,6 +33,7 @@ const BALL_DELAY = 4000;
 
 const HTOIntro = ({ onStartQuiz }: Props) => {
   const [step, setStep] = useState(0);
+  const {playSound} = useSound();
   const [showPopup, setShowPopup] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [showContinueButton, setShowContinueButton] = useState(false);
@@ -149,6 +152,12 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
     animate: { opacity: 1, scale: 1 },
     transition: { type: "spring" as const, stiffness: 300, damping: 15 },
   };
+
+    useEffect(() => {
+      if (showPopup) {
+        playSound(howtoplaySound);
+      }
+    }, [showPopup]);
 
   return (
     <div className="relative min-h-[80vh]">
@@ -385,48 +394,6 @@ const HTOIntro = ({ onStartQuiz }: Props) => {
 
       {/* POPUP */}
       <AnimatePresence>
-        {/* {showPopup && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{
-                type: "spring" as const,
-                stiffness: 300,
-                damping: 20,
-              }}
-              className="bg-card rounded-2xl border border-border p-8 game-card-shadow max-w-md mx-4 text-center"
-            >
-              <p className="text-xl font-display font-bold text-foreground mb-6">
-                📌 Are you ready to take PAHAL Practice Challenge!
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <button
-                  onClick={onStartQuiz}
-                  className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition"
-                >
-                  Yes ✅
-                </button>
-                <button
-                  onClick={() => {
-                    setShowPopup(false);
-                    setStep(0);
-                    speechSynthesis.cancel();
-                  }}
-                  className="px-6 py-3 bg-secondary text-secondary-foreground rounded-xl font-display font-semibold hover:opacity-90 transition text-sm"
-                >
-                  I want to understand the concept again 🔄
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )} */}
         {showPopup && (
           <motion.div
             initial={{ opacity: 0 }}

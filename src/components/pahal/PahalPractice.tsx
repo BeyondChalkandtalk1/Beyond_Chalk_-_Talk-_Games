@@ -317,12 +317,6 @@ const PahalPractice = ({
     );
   }
 
-  // const isCorrect =
-  //   question.type === "drag-count"
-  //     ? selectedAnswer === String(question.correctCount)
-  //     : question.type === "drag-drop"
-  //       ? selectedAnswer === question.correctDragLabel
-  //       : selectedAnswer === question.correctAnswer;
   const isCorrect =
     question?.type === "drag-count"
       ? selectedAnswer === question.correctAnswer // ✅ ab yeh match karega
@@ -412,9 +406,6 @@ const PahalPractice = ({
               className=" rounded-xl  p-6 md:p-8 "
             >
               {/* Drag-count question type (grid-based) */}
-              {/* {question.type === "drag-count" &&
-              question.dragImage &&
-              question.correctCount ? ( */}
               {question.type === "drag-count" &&
               question.dragImage &&
               question.correctCount !== undefined ? (
@@ -424,13 +415,7 @@ const PahalPractice = ({
                   correctCount={question.correctCount}
                   gridSize={question.gridSize || 24}
                   validateAnswer={question.validateAnswer}
-                  // onAnswer={(correct, answer) => {
-                  //   const newAnswers = [...answers];
-                  //   newAnswers[currentQ] = answer;
-                  //   setAnswers(newAnswers);
-                  //   setSelectedAnswer(answer);
-                  //   setShowFeedback(true);
-                  // }}
+               
                   onAnswer={(correct, answer) => {
                     const newAnswers = [...answers];
                     // ✅ correct answer tab hi set karo jab actually correct ho
@@ -599,21 +584,6 @@ const PahalPractice = ({
               )}
 
               {/* Feedback message */}
-              {/* {showFeedback && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`mt-4 p-3 rounded-lg text-center text-2xl font-display font-bold ${
-                    isCorrect
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {isCorrect
-                    ? "Well done!"
-                    : `❌ Wrong! Correct answer: ${question.correctAnswer}`}
-                </motion.div>
-              )} */}
             </motion.div>
           </AnimatePresence>
 

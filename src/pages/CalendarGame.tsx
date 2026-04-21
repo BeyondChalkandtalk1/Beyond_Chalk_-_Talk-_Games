@@ -123,14 +123,11 @@ const CARD_STYLES = {
 
 const CARD_STYLE_OPTIONS = [
   { type: "week", label: "Week & Day", emoji: "📆" },
-  // { type: "date", label: "Date & Day", emoji: "📅" },
-  // { type: "season", label: "Season", emoji: "🌤️" },
-  // { type: "festival", label: "Festival", emoji: "🎉" },
+
 ];
 
 const LAYOUT_OPTIONS = [
   { type: "dice", label: "Dice", emoji: "🎲" },
-  // { type: "zodiac", label: "Zodiac", emoji: "♈" },
 ];
 
 const shuffleArray = (array) => {

@@ -330,38 +330,7 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) =
                     </span>
                   </div>
 
-                  {/* Question text (truncated) */}
-                  {/* <p className="text-lg font-display text-muted-foreground mb-3 line-clamp-2">
-                  {ques.text}
-                </p> */}
-
-                  {/* Drop comparison */}
-                  {/* {correctDrop && (
-                  <div className="grid grid-cols-2 gap-2 mb-2">
-                    <div className="bg-white/70 rounded-lg p-2 text-center">
-                      <p className="text-sm font-display text-muted-foreground mb-1">Your Answer</p>
-                      <p className="text-lg font-display font-bold text-foreground">
-                        H:{userDrop.hundreds} T:{userDrop.tens} O:{userDrop.ones}
-                      </p>
-                      {inputs[i] && (
-                        <p className="text-base font-display text-foreground mt-1">
-                          Input: "{inputs[i]}"
-                        </p>
-                      )}
-                    </div>
-                    <div className="bg-white/70 rounded-lg p-2 text-center">
-                      <p className="text-sm font-display text-muted-foreground mb-1">Correct Answer</p>
-                      <p className="text-lg font-display font-bold text-green-600">
-                        H:{correctDrop.hundreds} T:{correctDrop.tens} O:{correctDrop.ones}
-                      </p>
-                      {ques.correctInput && (
-                        <p className="text-base font-display text-green-600 mt-1">
-                          Input: "{ques.correctInput}"
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                )} */}
+           
                 </div>
               );
             })}
@@ -415,9 +384,7 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) =
         <p className="text-2xl font-display font-bold text-foreground uppercase tracking-wide mb-2">
           {label}
         </p>
-        {/* <p className="text-xs font-display text-muted-foreground mb-3">
-          Count: {count}
-        </p> */}
+  
 
         <div className="flex gap-1.5 items-start flex-wrap justify-center w-full overflow-hidden">
  
@@ -504,12 +471,7 @@ const HTOBuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) =
               transition={{ duration: 0.25 }}
               className="bg-card/95 backdrop-blur-sm rounded-xl border border-border p-5 md:p-6 game-card-shadow"
             >
-              {/* Question text */}
-              {/* <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-4 mb-5">
-                <p className="text-lg md:text-4xl font-display font-bold text-foreground text-center whitespace-pre-line">
-                  {q.text}
-                </p>
-              </div> */}
+         
               <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-4 mb-5">
                 {(() => {
                   const lines = q.text.split("\n");

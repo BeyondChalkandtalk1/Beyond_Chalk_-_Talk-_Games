@@ -5,6 +5,8 @@ import blueBall from "@/assets/pahal/For_Ones.png"
 import onesSingleUnit from "@/assets/pahal/onesSingleUnit.png"
 import tenGroup from "@/assets/pahal/tenGroup.png";
 import TenBallPole from "./TenBallPole";
+import howtoplaySound from "@/assets/howToPlaySound.mpeg";
+import { useSound } from "@/contexts/SoundContext";
 
 interface Props {
   onStartQuiz: () => void;
@@ -29,6 +31,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [showContinueButton, setShowContinueButton] = useState(false);
+  const { playSound} = useSound();
 
   const speakText = useCallback((text: string) => {
     speechSynthesis.cancel();
@@ -97,6 +100,9 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
     if (step === 13) speakText("Now we have ten ones");
     if (step === 14) speakText("Let's make a ten");
     if (step === 16) speakText("One ten equals ten ones");
+
+     if (step === 17) speakText("This is one ones unit"); 
+     if (step === 18) speakText("This is one tens group");
   }, [step, speakText]);
 
   const ballsVisible = step >= 3 ? Math.min(step - 2, 10) : 0;
@@ -112,6 +118,12 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
     animate: { opacity: 1, scale: 1 },
     transition: { type: "spring" as const, stiffness: 300, damping: 15 },
   };
+
+    useEffect(() => {
+      if (showPopup) {
+        playSound(howtoplaySound);
+      }
+    }, [showPopup]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -195,13 +207,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                       }}
                       className="flex flex-col items-center"
                     >
-                      {/* <div
-                        className="w-10 h-10 md:w-16 md:h-16 rounded-full bg-blue-700 shadow-lg animate-bounce"
-                        style={{
-                          animationDelay: `${i * 0.1}s`,
-                          animationDuration: "1s",
-                        }}
-                      /> */}
+                   
                       <img
                         src={blueBall}
                         alt=""
@@ -211,9 +217,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                           animationDuration: "1s",
                         }}
                       />
-                      {/* <span className="text-xs font-display font-semibold text-muted-foreground mt-1">
-                        {i + 1}
-                      </span> */}
+                    
                     </motion.div>
                   ))}
                 </div>
@@ -228,7 +232,7 @@ const TensAndOnesIntro = ({ onStartQuiz }: Props) => {
                   >
                     Now we have 10 Ones
                   </motion.p>
-                  {/* <img src={onesSingleUnit} alt="" className="w-76 h-96" /> */}
+                 
                 </>
               )}
             </div>

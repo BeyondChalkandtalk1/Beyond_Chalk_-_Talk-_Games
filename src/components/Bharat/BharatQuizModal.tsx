@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSound } from "@/contexts/SoundContext";
+import incorrectSound from "@/assets/inCorrectDragSound.mpeg";
+import correctSound from "@/assets/correctDargSound.mpeg";
+import Level1CompleteVideo from "../../assets/Level1CompleteVideo.mp4";
+import generalSound from "../../assets/general-sound.mpeg";
 
 // ─── helpers ────────────────────────────────────────────────
 
@@ -39,7 +44,7 @@ function EmojiGrid({ count, emoji }: { count: number; emoji: string }) {
         </span>
       ))}
       {count > 20 && (
-        <span className="text-lg text-gray-400 self-center">
+        <span className="text-2xl text-gray-400 self-center">
           …+{count - 20}
         </span>
       )}
@@ -80,13 +85,6 @@ function buildQuestion(
   };
 
   switch (type) {
-    // Q1: Repeated addition → product
-    // case 1: {
-    //   const addends = Array(multiplier).fill(tableOf).join(" + ");
-    //   const correct = product;
-    //   const options = shuffle([correct, ...wrongs4(correct)]);
-    //   return { type, tableOf, multiplier, product, answer: correct, options };
-    // }
     case 1: {
       const addends = Array(multiplier).fill(tableOf).join(" + ");
       const correct = product;
@@ -323,55 +321,6 @@ function buildQuestion(
         options,
       };
     }
-
-    // Q10: Which one does NOT belong?
-    // case 10: {
-    //   const addStr = Array(multiplier).fill(tableOf).join("+");
-    //   // The odd one out: multiplier×tableOf (same value but different expression)
-    //   // We mark tableOf+multiplier as the one that does NOT belong
-    //   const doesNotBelong = `${tableOf}+${multiplier}`;
-    //   const rest = [
-    //     `${tableOf}×${multiplier}`,
-    //     addStr,
-    //     `${multiplier}×${tableOf}`,
-    //   ];
-    //   const options = shuffle([doesNotBelong, ...rest]);
-    //   return {
-    //     type,
-    //     tableOf,
-    //     multiplier,
-    //     product,
-    //     answer: doesNotBelong,
-    //     options,
-    //   };
-    // }
-    // case 10: {
-    //   const addStr = Array(multiplier).fill(tableOf).join("+");
-    //   const doesNotBelong = `${tableOf}+${multiplier}`;
-
-    //   const allOptions = [
-    //     doesNotBelong,
-    //     `${tableOf}×${multiplier}`,
-    //     addStr,
-    //     `${multiplier}×${tableOf}`,
-    //     String(product),
-    //   ];
-
-    //   // Duplicates hatao, doesNotBelong + 3 unique rest lo
-    //   const rest = [...new Set(allOptions)]
-    //     .filter((o) => o !== doesNotBelong)
-    //     .slice(0, 3);
-
-    //   const options = shuffle([doesNotBelong, ...rest]);
-    //   return {
-    //     type,
-    //     tableOf,
-    //     multiplier,
-    //     product,
-    //     answer: doesNotBelong,
-    //     options,
-    //   };
-    // }
     case 10: {
       const addStr = Array(multiplier).fill(tableOf).join("+");
       const doesNotBelong = `${tableOf}+${multiplier}`;
@@ -465,7 +414,7 @@ function TimerRing({ seconds, total }: { seconds: number; total: number }) {
           style={{ transition: "stroke-dashoffset 1s linear, stroke 0.5s" }}
         />
       </svg>
-      <span className="text-lg font-bold" style={{ color }}>
+      <span className="text-2xl font-bold" style={{ color }}>
         {seconds}
       </span>
     </div>
@@ -515,140 +464,16 @@ function OptionButton({
 
 // ─── Question Body ───────────────────────────────────────────
 
-// function QuestionBody({ q }: { q: Question }) {
-//   const emoji = getEmoji(q.tableOf);
-//   switch (q.type) {
-//     case 1:
-//       return (
-//         <div className="text-center">
-//           <p className="text-lg text-gray-600 mb-1 font-semibold">
-//             Look at the picture. What multiplication does this show?
-//           </p>
-//           <EmojiGrid count={q.product} emoji={emoji} />
-//           <p className="text-base text-gray-500 mt-1">
-//             ({q.multiplier} groups of {q.tableOf})
-//           </p>
-//         </div>
-//       );
-//     case 2:
-//       return (
-//         <div className="text-center">
-//           <p className="text-lg text-gray-600 mb-2 font-semibold">
-//             Which picture shows this expression?
-//           </p>
-//           <div className="text-5xl font-black text-[#8F2424] my-3">
-//             {q.tableOf} × {q.multiplier}
-//           </div>
-//           <p className="text-base text-gray-500">
-//             Pick the option with the correct number of {emoji}
-//           </p>
-//         </div>
-//       );
-//     case 3: {
-//       const left = q.missingSlot === "left" ? "?" : q.tableOf;
-//       const right = q.missingSlot === "right" ? "?" : q.multiplier;
-//       const prod = q.missingSlot === "product" ? "?" : q.product;
-//       return (
-//         <div className="text-center">
-//           <p className="text-lg text-gray-600 mb-3 font-semibold">
-//             Fill in the missing number
-//           </p>
-//           <div className="text-5xl font-black text-[#8F2424] my-3 tracking-wide">
-//             <span
-//               className={
-//                 q.missingSlot === "left"
-//                   ? "text-orange-500 underline underline-offset-4"
-//                   : ""
-//               }
-//             >
-//               {left}
-//             </span>
-//             {" × "}
-//             <span
-//               className={
-//                 q.missingSlot === "right"
-//                   ? "text-orange-500 underline underline-offset-4"
-//                   : ""
-//               }
-//             >
-//               {right}
-//             </span>
-//             {" = "}
-//             <span
-//               className={
-//                 q.missingSlot === "product"
-//                   ? "text-orange-500 underline underline-offset-4"
-//                   : ""
-//               }
-//             >
-//               {prod}
-//             </span>
-//           </div>
-//         </div>
-//       );
-//     }
-//     case 4: {
-//       const addends = Array(q.multiplier).fill(q.tableOf).join(" + ");
-//       return (
-//         <div className="text-center">
-//           <p className="text-lg text-gray-600 mb-2 font-semibold">
-//             Repeated Addition — what is the answer?
-//           </p>
-//           <div className="text-3xl font-black text-[#8F2424] my-3 break-words leading-snug">
-//             {addends} = ?
-//           </div>
-//         </div>
-//       );
-//     }
-//     case 5:
-//       return (
-//         <div className="text-center">
-//           <p className="text-lg text-gray-600 mb-1 font-semibold">
-//             What expression matches this picture?
-//           </p>
-//           <EmojiGrid count={q.product} emoji={emoji} />
-//           <p className="text-base text-gray-500 mt-1">
-//             There are {q.multiplier} rows of {q.tableOf} {emoji}
-//           </p>
-//         </div>
-//       );
-//     case 6:
-//       return (
-//         <div className="text-center">
-//           <p className="text-lg text-gray-600 mb-3 font-semibold">
-//             True or False?
-//           </p>
-//           <div className="text-4xl font-black text-[#8F2424] my-3">
-//             {q.tableOf} × {q.multiplier} = {q.product}
-//           </div>
-//         </div>
-//       );
-//   }
-// }
 
 function QuestionBody({ q }: { q: Question }) {
   const emoji = getEmoji(q.tableOf);
 
   switch (q.type) {
-    // Q1: Repeated addition
-    // case 1: {
-    //   const addends = Array(q.multiplier).fill(q.tableOf).join(" + ");
-    //   return (
-    //     <div className="text-center">
-    //       <p className="text-lg text-gray-600 mb-3 font-semibold">
-    //         What is the answer?
-    //       </p>
-    //       <div className="text-3xl font-black text-[#8F2424] my-3 break-words leading-snug">
-    //         {addends} = ?
-    //       </div>
-    //     </div>
-    //   );
-    // }
     case 1: {
       const addends = Array(q.multiplier).fill(q.tableOf).join(" + ");
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-3 font-semibold">
+          <p className="text-2xl text-gray-600 mb-3 font-semibold">
             What is the answer?
           </p>
           <div className="text-3xl font-black text-[#8F2424] my-3 break-words leading-snug">
@@ -664,7 +489,7 @@ function QuestionBody({ q }: { q: Question }) {
     case 2: {
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-2 font-semibold">
+          <p className="text-2xl text-gray-600 mb-2 font-semibold">
             What is the correct statement for this?
           </p>
           <div className="text-5xl font-black text-[#8F2424] my-3">
@@ -679,7 +504,7 @@ function QuestionBody({ q }: { q: Question }) {
     case 3: {
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-1 font-semibold">
+          <p className="text-2xl text-gray-600 mb-1 font-semibold">
             There are {q.tableOf} rows and {q.multiplier} columns of objects.
             What does this show?
           </p>
@@ -694,7 +519,7 @@ function QuestionBody({ q }: { q: Question }) {
     case 4: {
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-3 font-semibold">
+          <p className="text-2xl text-gray-600 mb-3 font-semibold">
             Fill in the missing number
           </p>
           <div className="text-5xl font-black text-[#8F2424] my-3 tracking-wide">
@@ -712,7 +537,7 @@ function QuestionBody({ q }: { q: Question }) {
     case 5: {
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-2 font-semibold">
+          <p className="text-2xl text-gray-600 mb-2 font-semibold">
             Which of these are the same as{" "}
             <span className="text-[#8F2424]">
               {q.tableOf} × {q.multiplier}
@@ -727,7 +552,7 @@ function QuestionBody({ q }: { q: Question }) {
     case 6: {
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-2 font-semibold">
+          <p className="text-2xl text-gray-600 mb-2 font-semibold">
             Which shows{" "}
             <span className="text-[#8F2424]">
               {q.tableOf} × {q.multiplier}
@@ -746,7 +571,7 @@ function QuestionBody({ q }: { q: Question }) {
     case 7: {
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-3 font-semibold">
+          <p className="text-2xl text-gray-600 mb-3 font-semibold">
             Your friend says{" "}
             <span className="text-[#8F2424] font-black">
               {q.tableOf} × {q.multiplier}
@@ -765,7 +590,7 @@ function QuestionBody({ q }: { q: Question }) {
     case 8: {
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-3 font-semibold">
+          <p className="text-2xl text-gray-600 mb-3 font-semibold">
             True or False?
           </p>
           <div className="text-3xl font-black text-[#8F2424] my-3 leading-snug">
@@ -781,7 +606,7 @@ function QuestionBody({ q }: { q: Question }) {
       const missing = q.multiplier * (q.tableOf - 1);
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-3 font-semibold">
+          <p className="text-2xl text-gray-600 mb-3 font-semibold">
             Complete the equation
           </p>
           <div className="text-4xl font-black text-[#8F2424] my-3 tracking-wide">
@@ -798,7 +623,7 @@ function QuestionBody({ q }: { q: Question }) {
     case 10: {
       return (
         <div className="text-center">
-          <p className="text-lg text-gray-600 mb-2 font-semibold">
+          <p className="text-2xl text-gray-600 mb-2 font-semibold">
             Which one does <span className="text-red-500 font-black">NOT</span>{" "}
             belong?
           </p>
@@ -872,6 +697,7 @@ export default function BharatQuizModal({
 
   const q = questions[qIndex];
   const emoji = getEmoji(tableOf);
+    const { playSound, isSoundEnabled } = useSound();
 
   const goNext = useCallback(() => {
     setSelected(null);
@@ -898,6 +724,14 @@ export default function BharatQuizModal({
     timerRef.current = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearTimeout(timerRef.current);
   }, [timeLeft, done, selected, handleTimeout]);
+
+  useEffect(() => {
+    if (isCorrect == false) {
+      playSound(incorrectSound);
+    }else if(isCorrect==true){
+      playSound(correctSound);
+    }
+  }, [isCorrect]);
 
   const handleSelect = (option: string | number | boolean) => {
     if (selected !== null || done) return;
@@ -934,6 +768,19 @@ export default function BharatQuizModal({
     setTimeLeft(TRY_AGAIN_TIME);
   };
 
+  useEffect(() => {
+    if(done==true) {
+          const audio = new Audio(generalSound);
+          audio.play();
+
+          // Jab component unmount ho (dusre page pe jaao) tab sound band ho jaaye
+          return () => {
+            audio.pause();
+            audio.currentTime = 0;
+          };
+    }
+  }, [done]);
+
   // ── Results screen ───────────────────────────────────────
   if (done) {
     const pct = Math.round((score / questions.length) * 100);
@@ -944,13 +791,13 @@ export default function BharatQuizModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 "
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden"
+            className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl mt-24 overflow-hidden max-h-[70vh] overflow-y-auto hide-scrollbar"
           >
             {/* Yellow header */}
             <div className="bg-primary px-6 py-5 text-center">
@@ -968,11 +815,13 @@ export default function BharatQuizModal({
                 <p className="text-6xl font-black text-[#8F2424]">
                   {score}/{questions.length}
                 </p>
-                <p className="text-[#8F2424] font-bold mt-1 text-2xl">{pct}% correct</p>
+                <p className="text-[#8F2424] font-bold mt-1 text-2xl">
+                  {pct}% correct
+                </p>
               </div>
 
               {/* Dynamic message */}
-              <p className="text-black font-black text-xl mb-2 leading-snug">
+              <p className="text-black font-black text-2xl mb-2 leading-snug">
                 {headline}
               </p>
               {/* <p className="text-gray-600 text-base mb-6 leading-relaxed">
@@ -985,6 +834,16 @@ export default function BharatQuizModal({
               >
                 Back to Menu
               </button>
+
+              <div className="flex justify-center mt-10">
+                <video
+                  src={Level1CompleteVideo}
+                  autoPlay
+                  loop
+                  muted
+                  className="w-full max-w-xl rounded-xl shadow-lg"
+                />
+              </div>
             </div>
           </motion.div>
         </motion.div>
@@ -1049,7 +908,7 @@ export default function BharatQuizModal({
               className="p-5 space-y-4"
             >
               {/* Question box */}
-              <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 min-h-[120px] flex items-center justify-center">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 min-h-[120px] flex items-center justify-center text-2xl">
                 <QuestionBody q={q} />
               </div>
 
@@ -1062,7 +921,7 @@ export default function BharatQuizModal({
                     exit={{ opacity: 0 }}
                     className="bg-red-50 border border-red-200 rounded-xl px-4 py-2.5"
                   >
-                    <p className="text-red-700 font-semibold text-xl">
+                    <p className="text-red-700 font-semibold text-2xl">
                       Oops! The correct answer is{" "}
                       <strong>{String(q.answer)}</strong>
                     </p>
@@ -1092,17 +951,6 @@ export default function BharatQuizModal({
                     <OptionButton
                       key={i}
                       label={opt}
-                      // display={
-                      //   q.type === 2
-                      //     ? `${emoji.repeat(Math.min(Number(opt), 5))}… (${opt})`
-                      //     : q.type == 6
-                      //       ? typeof opt === "boolean"
-                      //         ? opt
-                      //           ? "True"
-                      //           : "False"
-                      //         : String(opt)
-                      //       : String(opt)
-                      // }
                       display={
                         q.type === 6
                           ? typeof opt === "boolean"
@@ -1138,7 +986,7 @@ export default function BharatQuizModal({
                 >
                   <button
                     onClick={handleTryAgain}
-                    className="flex-1 py-3 rounded-2xl bg-[#8F2424] hover:bg-[#7a1f1f] text-white font-bold text-lg transition"
+                    className="flex-1 py-3 rounded-2xl bg-[#8F2424] hover:bg-[#7a1f1f] text-white font-bold text-2xl transition"
                   >
                     Try Again ({tryTime}s)
                   </button>

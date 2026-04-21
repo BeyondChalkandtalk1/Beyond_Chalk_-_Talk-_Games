@@ -195,11 +195,7 @@ const BuildAndBreakChallenge = ({ onComplete, onBack, onPlayAgain }: Props) => {
     setSubmitted(newSubmitted);
   };
 
-  // const handleTryAgain = () => {
-  //   const newFeedbacks = [...feedbacks];
-  //   newFeedbacks[currentQ] = null;
-  //   setFeedbacks(newFeedbacks);
-  // };
+
 
   useEffect(() => {
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -556,19 +552,7 @@ useEffect(() => {
                       /* Simple vertical stack */
                       <div className="flex flex-wrap gap-1.5 justify-center">
                         {currentBalls.map((ball) => (
-                          // <motion.div
-                          //   key={ball.id}
-                          //   initial={{ opacity: 0, scale: 0, y: -20 }}
-                          //   animate={{ opacity: 1, scale: 1, y: 0 }}
-                          //   transition={{
-                          //     type: "spring",
-                          //     stiffness: 400,
-                          //     damping: 15,
-                          //   }}
-                          //   onClick={() => removeBall(ball.id)}
-                          //   className="w-7 h-7 md:w-12 md:h-12 rounded-full bg-blue-700 shadow-md cursor-pointer hover:scale-110 transition-transform"
-                          //   title="Click to remove"
-                          // />
+                        
                           <img
                             src={blueBall}
                             alt=""

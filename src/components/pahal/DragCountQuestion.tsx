@@ -59,13 +59,6 @@ const DragCountQuestion = ({
     e.dataTransfer.dropEffect = "copy";
   };
 
-  // const addHand = (hand: (typeof allHands)[0]) => {
-  //   if (submitted || hand.number === 0) return;
-  //   setDroppedHands((prev) => [
-  //     ...prev,
-  //     { id: Date.now() + Math.random(), ...hand },
-  //   ]);
-  // };
 
   const addHand = (hand: (typeof allHands)[0]) => {
     if (submitted) return;
@@ -97,13 +90,7 @@ const DragCountQuestion = ({
     setDroppedHands((prev) => prev.filter((h) => h.id !== id));
   };
 
-  // const handleSubmit = () => {
-  //   if (submitted || droppedHands.length === 0) return;
-  //   const correct = totalValue === correctCount;
-  //   setIsCorrect(correct);
-  //   setSubmitted(true);
-  //   onAnswer(correct, totalValue.toString());
-  // };
+
 
 const handleSubmit = () => {
   if (submitted || droppedHands.length === 0) return;
@@ -195,11 +182,7 @@ const handleSubmit = () => {
           )}
 
           {/* Total value */}
-          {/* <div className="mt-3 text-center">
-            <span className="bg-card rounded-lg px-3 py-1.5 border border-border text-sm font-display font-bold text-foreground">
-              Total: {totalValue} Ones
-            </span>
-          </div> */}
+         
 
           {!submitted && droppedHands.length > 0 && (
             <div className="text-center mt-2">
@@ -222,7 +205,6 @@ const handleSubmit = () => {
             {allHands.map((hand, i) => (
               <div
                 key={i}
-                // draggable={!submitted && hand.number > 0}
                 onDragStart={(e) => handleDragStart(e, hand)}
                 onDragEnd={handleDragEnd}
                 onClick={() => handleTapGridItem(hand)}
@@ -237,9 +219,7 @@ const handleSubmit = () => {
                   alt={hand.label}
                   className="w-20 h-20 md:w-32 md:h-32 object-contain"
                 />
-                {/* <span className="text-[10px] font-display font-semibold text-muted-foreground mt-0.5">
-                  {hand.label}
-                </span> */}
+               
               </div>
             ))}
           </div>
@@ -260,49 +240,6 @@ const handleSubmit = () => {
       )}
 
       {/* Feedback */}
-      {/* {submitted && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`p-4 rounded-xl text-center font-display font-semibold ${
-            isCorrect
-              ? "bg-game-done/10 text-game-done"
-              : "bg-destructive/10 text-destructive"
-          }`}
-        >
-          {isCorrect ? (
-            <span className="flex items-center justify-center gap-2">
-              <CheckCircle size={20} /> 🎉 Correct! Total: {totalValue} Ones
-            </span>
-          ) : (
-            <span className="flex items-center justify-center gap-2 text-2xl">
-              <XCircle size={28} /> You placed {totalValue} Ones. Correct
-              answer: {correctCount} Ones
-            </span>
-          )}
-        </motion.div>
-      )} */}
-      {/* {submitted && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`p-4 rounded-xl text-center font-display font-semibold ${
-            isCorrect
-              ? "bg-game-done/10 text-game-done"
-              : "bg-destructive/10 text-destructive"
-          }`}
-        >
-          {isCorrect ? (
-            <span className="flex items-center justify-center gap-2">
-              <CheckCircle size={20} /> 🎉 Correct!
-            </span>
-          ) : (
-            <span className="flex items-center justify-center gap-2 text-2xl">
-              <XCircle size={28} /> Wrong combination! Use the correct hands.
-            </span>
-          )}
-        </motion.div>
-      )} */}
     </div>
   );
 };
